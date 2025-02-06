@@ -1,6 +1,6 @@
 ## Welcome of Ableron - The Distributed Server Side UI Composition Library
 
-Find documentation at [http://ableron.github.io/](http://ableron.github.io/)
+Find documentation at [ableron.github.io](http://ableron.github.io/)
 
 ### Contributing
 
