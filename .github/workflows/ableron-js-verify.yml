@@ -15,18 +15,17 @@ jobs:
       run:
         working-directory: ableron-js
     steps:
-      - name: Stop GitHub from converting line endings from lf to crlf on windows which breaks prettier code style check
-        run: |
-          git config --global core.autocrlf false
-          git config --global core.eol lf
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.nodeVersion }}
           cache: npm
           cache-dependency-path: ableron-js/package-lock.json
-      - run: cd ableron-js
       - run: npm ci
+      - name: Stop GitHub from converting line endings from lf to crlf on windows which breaks prettier code style check
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
       - name: Run prettier code style check
         run: npx prettier ./ableron-js --check
       - run: npm run test
