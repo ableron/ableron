@@ -21,8 +21,9 @@ jobs:
         with:
           node-version: ${{ matrix.nodeVersion }}
           cache: npm
+          cache-dependency-path: ableron-js/package-lock.json
       - run: cd ableron-js
-      - run: npm install
+      - run: npm ci
       - name: Run prettier code style check
         run: npx prettier ./ableron-js --check
       - run: npm run test
