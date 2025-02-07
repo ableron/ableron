@@ -27,5 +27,5 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
       - name: Run prettier code style check
-        run: npx prettier ./ableron-js --check
-      - run: npm run test
+        run: npx prettier . --check
+      - run: npm test
