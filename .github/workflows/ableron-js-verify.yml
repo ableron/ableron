@@ -11,6 +11,9 @@ jobs:
           - ubuntu-latest
           - windows-latest
         nodeVersion: [18.x, 19.x, 20.x, 21.x, 22.x]
+    defaults:
+      run:
+        working-directory: ./ableron-js
     steps:
       - name: Stop GitHub from converting line endings from lf to crlf on windows which breaks prettier code style check
         run: |
