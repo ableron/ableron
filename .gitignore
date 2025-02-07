@@ -8,3 +8,8 @@
 *.iml
 .classpath
 .project
+
+# Build JS
+coverage/
+dist/
+node_modules/

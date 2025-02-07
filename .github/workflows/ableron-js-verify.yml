@@ -1,0 +1,28 @@
+name: ableron-js Verify
+
+on: push
+
+jobs:
+  test-ableron-js:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+        nodeVersion: [18.x, 19.x, 20.x, 21.x, 22.x]
+    steps:
+      - name: Stop GitHub from converting line endings from lf to crlf on windows which breaks prettier code style check
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.nodeVersion }}
+          cache: npm
+      - run: cd ableron-js
+      - run: npm install
+      - name: Run prettier code style check
+        run: npx prettier ./ableron-js --check
+      - run: npm run test
