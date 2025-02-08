@@ -19,6 +19,7 @@ jobs:
           java-version: ${{ matrix.javaVersion }}
           distribution: temurin
           cache: maven
+          cache-dependency-path: ableron-java/pom.xml
       - run: mvn -V --batch-mode --update-snapshots verify
   release:
     if: github.ref == 'refs/heads/main'
@@ -33,6 +34,8 @@ jobs:
         with:
           java-version: 21
           distribution: temurin
+          cache: maven
+          cache-dependency-path: ableron-java/pom.xml
       - name: Build with Maven
         run: mvn -B package --file pom.xml -DskipTests
       - name: Set up Apache Maven Central
@@ -41,6 +44,7 @@ jobs:
           java-version: 21
           distribution: temurin
           cache: maven
+          cache-dependency-path: ableron-java/pom.xml
           server-id: ossrh # value of the distributionManagement/repository/id field of the pom.xml
           server-username: OSSRH_USERNAME # env variable for username in deploy
           server-password: OSSRH_PASSWORD # env variable for password in deploy
