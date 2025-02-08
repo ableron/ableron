@@ -4,11 +4,14 @@ on: push
 
 jobs:
   build_and_test:
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest]
         javaVersion: [11, 17, 21, 22]
-    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: ableron-java
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -21,6 +24,9 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs: build_and_test
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ableron-java
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
