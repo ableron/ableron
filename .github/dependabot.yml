@@ -8,3 +8,7 @@ updates:
     directory: '/ableron-js'
     schedule:
       interval: 'monthly'
+  - package-ecosystem: 'maven'
+    directory: '/ableron-java'
+    schedule:
+      interval: 'monthly'
