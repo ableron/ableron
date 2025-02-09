@@ -62,75 +62,43 @@ To use `ableron-java` directly, follow these steps:
 
 ### Configuration
 
-#### `enabled`
-
-Default: `true`
-
-Whether to enable UI composition.
-
-#### `fragmentRequestTimeout`
-
-Default: `3 seconds`
-
-Timeout for requesting fragments.
-
-#### `fragmentRequestHeadersToPass`
-
-Default: `[Correlation-ID, X-Correlation-ID, X-Request-ID]`
-
-Request headers that are passed to fragment requests, if present.
-
-#### `primaryFragmentResponseHeadersToPass`
-
-Default: `[Content-Language, Location, Refresh]`
-
-Response headers of primary fragments to pass to the page response, if present.
-
-#### `cacheMaxSizeInBytes`
-
-Default: `1024 * 1024 * 50` (`50 MiB`)
-
-Maximum size in bytes the fragment cache may have.
-
-#### `cacheVaryByRequestHeaders`
-
-Default: `empty list`
-
-Fragment request headers which influence the requested fragment aside from its URL. Used to create fragment cache keys.
-Must be a subset of `fragmentRequestHeadersToPass`. Common example are headers used for steering A/B-tests.
-
-#### `cacheAutoRefreshEnabled`
-
-Default: `false`
-
-Whether to enable auto-refreshing of cached fragments, before they expire.
-If set to `true`, cached fragments are getting asynchronously refreshed before they expire. This reduces the cache miss
-rate and thus have a positive impact on latency. On the other hand, additional traffic is introduced, because the cached
-fragments are loaded again even before their actual expiration time.
-Fragments are tried to be refreshed when only 15% of their initial time to live remains. In case of failure, refresh is
-repeated three times with a static delay of one second.
-
-#### `cacheAutoRefreshMaxAttempts`
-
-Default: `3`
-
-Maximum number of attempts to refresh a cached fragment.
-
-#### `cacheAutoRefreshInactiveFragmentsMaxRefreshs`
-
-Default: `2`
-
-Maximum number of consecutive refreshs of inactive cached fragments.
-Fragments are considered inactive, if they have not been read from cache between writing to cache and a refresh attempt.
-
-#### `statsAppendToContent`
-
-Default: `false`
-
-Whether to append UI composition stats as HTML comment to the content.
-
-#### `statsExposeFragmentUrl`
-
-Default: `false`
-
-Whether to expose fragment URLs in the stats appended to the content.
+- `enabled`
+  - Default: `true`
+  - Whether to enable UI composition.
+- `fragmentRequestTimeout`
+  - Default: `3 seconds`
+  - Timeout for requesting fragments.
+- `fragmentRequestHeadersToPass`
+  - Default: `[Correlation-ID, X-Correlation-ID, X-Request-ID]`
+  - Request headers that are passed to fragment requests, if present.
+- `primaryFragmentResponseHeadersToPass`
+  - Default: `[Content-Language, Location, Refresh]`
+  - Response headers of primary fragments to pass to the page response, if present.
+- `cacheMaxSizeInBytes`
+  - Default: `1024 * 1024 * 50` (`50 MiB`)
+  - Maximum size in bytes the fragment cache may have.
+- `cacheVaryByRequestHeaders`
+  - Default: `empty list`
+  - Fragment request headers which influence the requested fragment aside from its URL. Used to create fragment cache keys.<br>
+    Must be a subset of `fragmentRequestHeadersToPass`. Common example are headers used for steering A/B-tests.
+- `cacheAutoRefreshEnabled`
+  - Default: `false`
+  - Whether to enable auto-refreshing of cached fragments, before they expire.<br>
+    If set to `true`, cached fragments are getting asynchronously refreshed before they expire. This reduces the cache miss
+    rate and thus have a positive impact on latency. On the other hand, additional traffic is introduced, because the cached
+    fragments are loaded again even before their actual expiration time.<br>
+    Fragments are tried to be refreshed when only 15% of their initial time to live remains. In case of failure, refresh is
+    repeated three times with a static delay of one second.
+- `cacheAutoRefreshMaxAttempts`
+  - Default: `3`
+  - Maximum number of attempts to refresh a cached fragment.
+- `cacheAutoRefreshInactiveFragmentsMaxRefreshs`
+  - Default: `2`
+  - Maximum number of consecutive refreshs of inactive cached fragments.<br>
+    Fragments are considered inactive, if they have not been read from cache between writing to cache and a refresh attempt.
+- `statsAppendToContent`
+  - Default: `false`
+  - Whether to append UI composition stats as HTML comment to the content.
+- `statsExposeFragmentUrl`
+  - Default: `false`
+  - Whether to expose fragment URLs in the stats appended to the content.
