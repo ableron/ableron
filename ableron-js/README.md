@@ -68,7 +68,7 @@ try {
 
 Default: `true`
 
-Whether UI composition is enabled.
+Whether to enable UI composition.
 
 #### `fragmentRequestTimeoutMillis`
 
@@ -78,17 +78,13 @@ Timeout in milliseconds for requesting fragments.
 
 #### `fragmentRequestHeadersToPass`
 
-Default:
-
-```js
-['Correlation-ID', 'X-Correlation-ID', 'X-Request-ID'];
-```
+Default: `[Correlation-ID, X-Correlation-ID, X-Request-ID]`
 
 Request headers that are passed to fragment requests, if present.
 
 #### `primaryFragmentResponseHeadersToPass`
 
-Default: `['Content-Language', 'Location', 'Refresh']`
+Default: `[Content-Language, Location, Refresh]`
 
 Response headers of primary fragments to pass to the page response, if present.
 
@@ -100,7 +96,7 @@ Maximum number of items, the fragment cache may hold.
 
 #### `cacheVaryByRequestHeaders`
 
-Default: `[]`
+Default: `empty list`
 
 Fragment request headers which influence the requested fragment aside from its URL. Used to create fragment cache keys.
 Must be a subset of `fragmentRequestHeadersToPass`. Common example are headers used for steering A/B-tests.

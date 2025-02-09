@@ -1,4 +1,4 @@
-## Welcome of Ableron - The Distributed Server Side UI Composition Library
+## Welcome to Ableron - The Distributed Server Side UI Composition Library
 
 Find documentation at [ableron.github.io](http://ableron.github.io/)
 
