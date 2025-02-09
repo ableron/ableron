@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        javaVersion: [11, 17, 21, 22]
+        javaVersion: [11, 17, 21, 22, 23]
     defaults:
       run:
         working-directory: ableron-java
@@ -37,7 +37,7 @@ jobs:
           cache: maven
           cache-dependency-path: ableron-java/pom.xml
       - name: Build with Maven
-        run: mvn -B package --file pom.xml -DskipTests
+        run: mvn -B package --file pom.xml -DskipTests=true
       - name: Set up Apache Maven Central
         uses: actions/setup-java@v4
         with:
