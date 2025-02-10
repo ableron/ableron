@@ -85,7 +85,7 @@ To use `ableron-java` directly, follow these steps:
   - Default: `false`
   - Whether to enable auto-refreshing of cached fragments, before they expire.<br>
     If set to `true`, cached fragments are getting asynchronously refreshed before they expire. This reduces the cache miss
-    rate and thus have a positive impact on latency. On the other hand, additional traffic is introduced, because the cached
+    rate and thus has a positive impact on latency. On the other hand, additional traffic is introduced, because the cached
     fragments are loaded again even before their actual expiration time.<br>
     Fragments are tried to be refreshed when only 15% of their initial time to live remains. In case of failure, refresh is
     repeated three times with a static delay of one second.

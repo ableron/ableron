@@ -141,6 +141,18 @@
       </ul>
       </p>
     </div>
+    <h3 class="display-7 fw-bold text-center text-body-emphasis">Cache Auto Refresh</h3>
+    <div class="col-lg-8 mx-auto">
+      <p class="mb-4">Cached fragments are being refreshed automatically, if enabled. By default, auto refreshing is disabled.<br>
+        If auto refresh is enabled, cached fragments are getting asynchronously refreshed before they expire. This reduces the cache miss
+        rate and thus has a positive impact on latency. On the other hand, additional traffic is introduced, because the cached
+        fragments are loaded again even before their actual expiration time<br>
+        Fragments are tried to be refreshed when only 15% of their initial time to live remains. In case of failure, refresh is
+        repeated three times with a static delay of one second.<br><br>
+        The maximum number of consecutive refreshs of inactive cached fragments can be configured. Fragments are considered inactive,
+        if they have not been read from cache between writing to cache and a refresh attempt.
+      </p>
+    </div>
   </div>
 
   <div class="px-4 pt-3 border-bottom">
