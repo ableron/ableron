@@ -1,14 +1,29 @@
-## Welcome to Ableron - The Distributed Server Side UI Composition Library
+## <p align="center">Ableron - The Distributed Server Side UI Composition Library</p>
 
-Find documentation at [ableron.github.io](http://ableron.github.io/)
+## Description
+
+Ableron is a library (or a set of libraries) which glues together your micro frontends using distributed
+server side UI composition.<br>
+It does the job via intercepting the output of your microservice and resolving <code>&lt;ableron-include&gt;</code>-tags
+used to load content from remote sources and substitute the <code>&lt;ableron-include&gt;</code>-tags with
+the remote content.
+
+This leads to
+- Lean Infrastructure: No need to route all your traffic through the infrastructure component which is performing the UI composition
+- Easy Local Development: Includes are resolved directly in your service. This works fine for local development and increases developer experience.
+- Easy Configuration: Your can easily define different timeouts, fallback fragments or static fallback content for each of your includes.
+- Local Caching: All fragments are cached in memory directly within your service according to the cache policy of the fragments. This saves HTTP calls and thus money as well as latency.
 
 ## Getting Started
 
-- with the [Java Library](https://github.com/ableron/ableron/tree/main/ableron-java)
-- with the [JavaScript Library](https://github.com/ableron/ableron/tree/main/ableron-js)
-- with the [Spring Boot Plugin](https://github.com/ableron/ableron-spring-boot)
-- with the [express Plugin](https://github.com/ableron/ableron-express)
-- with the [fastify Plugin](https://github.com/ableron/ableron-fastify)
+Find documentation at [ableron.github.io](http://ableron.github.io/)
+
+The technical libs you may want to start with, are:
+- the [Java Library](https://github.com/ableron/ableron/tree/main/ableron-java)
+- the [JavaScript Library](https://github.com/ableron/ableron/tree/main/ableron-js)
+- the [Spring Boot Plugin](https://github.com/ableron/ableron-spring-boot)
+- the [express Plugin](https://github.com/ableron/ableron-express)
+- the [fastify Plugin](https://github.com/ableron/ableron-fastify)
 
 ### Contributing
 
