@@ -76,7 +76,7 @@ describe('Include', () => {
   it.each([
     [new Include(''), undefined],
     [new Include('', new Map([['src', 'https://example.com']])), 'https://example.com']
-  ])('should set src attribute in constructor', (include: Include, expectedSrc?: string) => {
+  ])('should parse src attribute', (include: Include, expectedSrc?: string) => {
     expect(include.getSrc()).toBe(expectedSrc);
   });
 
@@ -90,14 +90,14 @@ describe('Include', () => {
     [new Include('', new Map([['src-timeout', '2000 ']])), undefined],
     [new Include('', new Map([['src-timeout', '2m']])), undefined],
     [new Include('', new Map([['src-timeout', '2\ns']])), undefined]
-  ])('should set src timeout attribute in constructor', (include: Include, expectedSrcTimeout?: number) => {
+  ])('should parse src timeout attribute', (include: Include, expectedSrcTimeout?: number) => {
     expect(include.getSrcTimeoutMillis()).toBe(expectedSrcTimeout);
   });
 
   it.each([
     [new Include(''), undefined],
     [new Include('', new Map([['fallback-src', 'https://example.com']])), 'https://example.com']
-  ])('should set fallback-src attribute in constructor', (include: Include, expectedFallbackSrc?: string) => {
+  ])('should parse fallback-src attribute', (include: Include, expectedFallbackSrc?: string) => {
     expect(include.getFallbackSrc()).toBe(expectedFallbackSrc);
   });
 
@@ -112,7 +112,7 @@ describe('Include', () => {
     [new Include('', new Map([['fallback-src-timeout', '2m']])), undefined],
     [new Include('', new Map([['fallback-src-timeout', '2\ns']])), undefined]
   ])(
-    'should set fallback-src timeout attribute in constructor',
+    'should parse fallback-src timeout attribute',
     (include: Include, expectedFallbackSrcTimeout?: number) => {
       expect(include.getFallbackSrcTimeoutMillis()).toBe(expectedFallbackSrcTimeout);
     }
@@ -124,8 +124,34 @@ describe('Include', () => {
     [new Include('', new Map([['primary', 'primary']])), true],
     [new Include('', new Map([['primary', 'PRIMARY']])), true],
     [new Include('', new Map([['primary', 'nope']])), false]
-  ])('should set primary attribute in constructor', (include: Include, expectedPrimary: boolean) => {
+  ])('should parse primary attribute', (include: Include, expectedPrimary: boolean) => {
     expect(include.isPrimary()).toBe(expectedPrimary);
+  });
+
+  it.each([
+    [new Include(''), []],
+    [new Include('', new Map([['headers', '']])), []],
+    [new Include('', new Map([['headers', 'test']])), ['test']],
+    [new Include('', new Map([['headers', 'TEST']])), ['test']],
+    [
+      new Include('', new Map([['headers', ' test1,test2  ,, TEST3 ,\nTest4,,test4  ']])),
+      ['test1', 'test2', 'test3', 'test4']
+    ]
+  ])('should parse headers attribute', (include: Include, expectedHeadersToPass: string[]) => {
+    expect(include.getHeadersToPass()).toStrictEqual(expectedHeadersToPass);
+  });
+
+  it.each([
+    [new Include(''), []],
+    [new Include('', new Map([['cookies', '']])), []],
+    [new Include('', new Map([['cookies', 'test']])), ['test']],
+    [new Include('', new Map([['cookies', 'TEST']])), ['TEST']],
+    [
+      new Include('', new Map([['cookies', ' test1,test2  ,, TEST3 ,\nTest4,,test4  ']])),
+      ['test1', 'test2', 'TEST3', 'Test4', 'test4']
+    ]
+  ])('should parse cookies attribute', (include: Include, expectedCookiesToPass: string[]) => {
+    expect(include.getCookiesToPass()).toStrictEqual(expectedCookiesToPass);
   });
 
   it('should resolve with src', async () => {

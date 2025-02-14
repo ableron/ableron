@@ -13,40 +13,53 @@ import java.util.concurrent.ExecutorService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Include {
 
   /**
-   * Name of the attribute which contains the ID of the include - an optional unique name.
+   * Name of the optional attribute which contains the ID of the include - an optional unique name.
    */
   private static final String ATTR_ID = "id";
 
   /**
-   * Name of the attribute which contains the source URl to resolve the include to.
+   * Name of the optional attribute which contains the source URl to resolve the include to.
    */
   private static final String ATTR_SOURCE = "src";
 
   /**
-   * Name of the attribute which contains the timeout for requesting the src URL.
+   * Name of the optional attribute which contains the timeout for requesting the src URL.
    */
   private static final String ATTR_SOURCE_TIMEOUT = "src-timeout";
 
   /**
-   * Name of the attribute which contains the fallback URL to resolve the include to in case the
+   * Name of the optional attribute which contains the fallback URL to resolve the include to in case the
    * source URL could not be loaded.
    */
   private static final String ATTR_FALLBACK_SOURCE = "fallback-src";
 
   /**
-   * Name of the attribute which contains the timeout for requesting the fallback-src URL.
+   * Name of the optional attribute which contains the timeout for requesting the fallback-src URL.
    */
   private static final String ATTR_FALLBACK_SOURCE_TIMEOUT = "fallback-src-timeout";
 
   /**
-   * Name of the attribute which denotes a fragment whose response code is set as response code
+   * Name of the optional attribute which denotes a fragment whose response code is set as response code
    * for the page.
    */
   private static final String ATTR_PRIMARY = "primary";
+
+  /**
+   * Name of the optional attribute which contains a comma separated list of HTTP header names that shall
+   * be passed from the parent request to fragment requests.
+   */
+  private static final String ATTR_HEADERS = "headers";
+
+  /**
+   * Name of the optional attribute which contains a comma separated list of HTTP cookie names that shall
+   * be passed from the parent request to fragment requests.
+   */
+  private static final String ATTR_COOKIES = "cookies";
 
   /**
    * Regular expression for parsing timeouts.<br>
@@ -108,6 +121,16 @@ public class Include {
   private final boolean primary;
 
   /**
+   * List of HTTP header names that shall be passed from the parent request to fragment requests.
+   */
+  private final List<String> headersToPass = new ArrayList<>();
+
+  /**
+   * List of HTTP cookie names that shall be passed from the parent request to fragment requests.
+   */
+  private final List<String> cookiesToPass = new ArrayList<>();
+
+  /**
    * Fallback content to use in case the include could not be resolved.
    */
   private final String fallbackContent;
@@ -162,6 +185,8 @@ public class Include {
     this.fallbackSrc = this.rawAttributes.get(ATTR_FALLBACK_SOURCE);
     this.fallbackSrcTimeout = parseTimeout(this.rawAttributes.get(ATTR_FALLBACK_SOURCE_TIMEOUT));
     this.primary = hasBooleanAttribute(ATTR_PRIMARY);
+    this.headersToPass.addAll(parseCommaSeparatedList(this.rawAttributes.get(ATTR_HEADERS), true));
+    this.cookiesToPass.addAll(parseCommaSeparatedList(this.rawAttributes.get(ATTR_COOKIES), false));
     this.fallbackContent = Optional.ofNullable(fallbackContent).orElse("");
   }
 
@@ -221,6 +246,14 @@ public class Include {
     return primary;
   }
 
+  public List<String> getHeadersToPass() {
+    return headersToPass;
+  }
+
+  public List<String> getCookiesToPass() {
+    return cookiesToPass;
+  }
+
   /**
    * @return Fallback content to use in case the include could not be resolved
    */
@@ -256,12 +289,12 @@ public class Include {
    */
   public CompletableFuture<Include> resolve(HttpClient httpClient, Map<String, List<String>> parentRequestHeaders, FragmentCache fragmentCache, AbleronConfig config, ExecutorService resolveThreadPool) {
     var resolveStartTime = System.nanoTime();
-    var fragmentRequestHeaders = filterHeaders(parentRequestHeaders, config.getFragmentRequestHeadersToPass());
+    var requestHeaders = filterHeaders(parentRequestHeaders, Stream.concat(config.getFragmentRequestHeadersToPass().stream(), headersToPass.stream()).collect(Collectors.toList()));
     erroredPrimaryFragment = null;
 
     return CompletableFuture.supplyAsync(
-      () -> load(src, httpClient, fragmentRequestHeaders, fragmentCache, config, getRequestTimeout(srcTimeout, config), ATTR_SOURCE)
-        .or(() -> load(fallbackSrc, httpClient, fragmentRequestHeaders, fragmentCache, config, getRequestTimeout(fallbackSrcTimeout, config), ATTR_FALLBACK_SOURCE))
+      () -> load(src, httpClient, requestHeaders, fragmentCache, config, getRequestTimeout(srcTimeout, config), ATTR_SOURCE)
+        .or(() -> load(fallbackSrc, httpClient, requestHeaders, fragmentCache, config, getRequestTimeout(fallbackSrcTimeout, config), ATTR_FALLBACK_SOURCE))
         .or(() -> {
           resolvedFragmentSource = erroredPrimaryFragmentSource;
           return Optional.ofNullable(erroredPrimaryFragment);
@@ -387,6 +420,18 @@ public class Include {
           return null;
       })
       .orElse(null);
+  }
+
+  private List<String> parseCommaSeparatedList(String entriesAsString, boolean toLowerCase) {
+    return Optional.ofNullable(entriesAsString)
+      .map(entries -> Arrays.stream(entries.split(","))
+          .map(String::trim)
+          .map(entry -> toLowerCase ? entry.toLowerCase() : entry)
+          .filter(entry -> !entry.isEmpty())
+          .distinct()
+          .collect(Collectors.toList())
+      )
+      .orElse(List.of());
   }
 
   private Duration getRequestTimeout(Duration localTimeout, AbleronConfig config) {

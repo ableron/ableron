@@ -100,6 +100,8 @@
               <code>2s</code> - treated as seconds)
             </li>
             <li><code>primary</code>: Denotes a fragment whose response code is set as response code for the page</li>
+            <li><code>headers</code>: List of HTTP header names that shall be passed from the parent request to fragment requests</li>
+            <li><code>cookies</code>: List of HTTP cookie names that shall be passed from the parent request to fragment requests</li>
           </ul>
         </li>
         <li>Precedence for resolving: <code>src</code> → <code>fallback-src</code> → fallback content</li>
@@ -108,7 +110,9 @@
       <pre><code>&lt;ableron-include
         id="header"
         src="https://example.com/api/fragments/header"
-        fallback-src="https://cdn.example.com/static/fallback-header"&gt;
+        fallback-src="https://cdn.example.com/static/fallback-header"
+        headers="x-ab-test-groups,x-country"
+        cookies="device,consent"&gt;
         &lt;header&gt;Static fallback header&lt;/header&gt;&lt;/ableron-include&gt;</code></pre>
       <pre><code>&lt;ableron-include id="header" src="https://example.com/api/fragments/header" src-timeout="2s" /&gt;</code></pre>
     </div>

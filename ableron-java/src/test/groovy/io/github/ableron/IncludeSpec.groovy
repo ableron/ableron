@@ -71,7 +71,7 @@ class IncludeSpec extends Specification {
     new Include("zzzzzz")                      | "685785664"
   }
 
-  def "constructor should set src attribute"() {
+  def "should parse src attribute"() {
     expect:
     include.src == expectedSrc
 
@@ -82,7 +82,7 @@ class IncludeSpec extends Specification {
     new Include("", ["SRC": "https://example.com"]) | "https://example.com"
   }
 
-  def "constructor should set src timeout attribute"() {
+  def "should parse src timeout attribute"() {
     expect:
     include.srcTimeout == expectedSrcTimeout
 
@@ -99,7 +99,7 @@ class IncludeSpec extends Specification {
     new Include("", ["src-timeout": "2\ns"])   | null
   }
 
-  def "constructor should set fallback-src attribute"() {
+  def "should parse fallback-src attribute"() {
     expect:
     include.fallbackSrc == expectedFallbackSrc
 
@@ -109,7 +109,7 @@ class IncludeSpec extends Specification {
     new Include(null, ["fallback-src": "https://example.com"]) | "https://example.com"
   }
 
-  def "constructor should set fallback src timeout attribute"() {
+  def "should parse fallback src timeout attribute"() {
     expect:
     include.fallbackSrcTimeout == expectedFallbackSrcTimeout
 
@@ -126,7 +126,7 @@ class IncludeSpec extends Specification {
     new Include("", ["fallback-src-timeout": "2\ns"])   | null
   }
 
-  def "constructor should set primary attribute"() {
+  def "should parse primary attribute"() {
     expect:
     include.primary == expectedPrimary
 
@@ -139,6 +139,32 @@ class IncludeSpec extends Specification {
     new Include(null, ["primary": "PRIMARY"]) | true
     new Include(null, ["priMARY": "PRImary"]) | true
     new Include(null, ["primary": "nope"])    | false
+  }
+
+  def "should parse headers attribute"() {
+    expect:
+    include.headersToPass == expectedHeadersToPass
+
+    where:
+    include                                                                    | expectedHeadersToPass
+    new Include(null)                                                          | []
+    new Include(null, ["headers": ""])                                         | []
+    new Include(null, ["headers": "test"])                                     | ["test"]
+    new Include(null, ["headers": "TEST"])                                     | ["test"]
+    new Include(null, ["headers": " test1,test2  ,, TEST3 ,\nTest4,,test4  "]) | ["test1", "test2", "test3", "test4"]
+  }
+
+  def "should parse cookies attribute"() {
+    expect:
+    include.cookiesToPass == expectedCookiesToPass
+
+    where:
+    include                                                                    | expectedCookiesToPass
+    new Include(null)                                                          | []
+    new Include(null, ["cookies": ""])                                         | []
+    new Include(null, ["cookies": "test"])                                     | ["test"]
+    new Include(null, ["cookies": "TEST"])                                     | ["TEST"]
+    new Include(null, ["cookies": " test1,test2  ,, TEST3 ,\nTest4,,test4  "]) | ["test1", "test2", "TEST3", "Test4", "test4"]
   }
 
   def "should consider include objects with identical include string as equal"() {
