@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ableron - Distributed Server Side UI Composition</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
   <script>hljs.highlightAll();</script>
 </head>
 <body>
@@ -100,8 +100,8 @@
               <code>2s</code> - treated as seconds)
             </li>
             <li><code>primary</code>: Denotes a fragment whose response code is set as response code for the page</li>
-            <li><code>headers</code>: List of HTTP header names that shall be passed from the parent request to fragment requests</li>
-            <li><code>cookies</code>: List of HTTP cookie names that shall be passed from the parent request to fragment requests</li>
+            <li><code>headers</code>: Comma-separated list of names of HTTP headers that shall be passed from the parent request to fragment requests. These Headers become part of the cache key for the requested URL.</li>
+            <li><code>cookies</code>: Comma-separated list of names of HTTP cookies that shall be passed from the parent request to fragment requests. These Cookies become part of the cache key for the requested URL.</li>
           </ul>
         </li>
         <li>Precedence for resolving: <code>src</code> → <code>fallback-src</code> → fallback content</li>

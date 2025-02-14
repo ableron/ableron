@@ -214,10 +214,10 @@ export default class Include {
 
   resolve(config: AbleronConfig, fragmentCache: FragmentCache, parentRequestHeaders?: Headers): Promise<Include> {
     const resolveStartTime = Date.now();
-    const requestHeaders = this.filterHeaders(
-      parentRequestHeaders || new Headers(),
-      [...config.fragmentRequestHeadersToPass, ...this.headersToPass]
-    );
+    const requestHeaders = this.filterHeaders(parentRequestHeaders || new Headers(), [
+      ...config.fragmentRequestHeadersToPass,
+      ...this.headersToPass
+    ]);
     this.erroredPrimaryFragment = undefined;
 
     return this.load(

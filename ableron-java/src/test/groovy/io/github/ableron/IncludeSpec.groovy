@@ -894,42 +894,42 @@ class IncludeSpec extends Specification {
     "fallback-src"   | ["src-timeout": "2s"]          | ""
   }
 
-  def "should pass allowed request headers to fragment requests"() {
+  def "should pass headers defined via fragmentRequestHeadersToPass to fragment requests"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(204))
     def config = AbleronConfig.builder()
-      .fragmentRequestHeadersToPass(["X-Default", "X-Additional"])
+      .fragmentRequestHeadersToPass(["X-Header1", "X-Header2", "x-hEADEr3"])
       .build()
 
     when:
     new Include("", ["src": mockWebServer.url("/").toString()])
-      .resolve(httpClient, ["X-Default": ["Foo"], "X-Additional": ["Bar"]], cache, config, supplyPool).get()
+      .resolve(httpClient, ["X-Header1": ["header1"], "X-Header2": ["header2"], "X-HeadeR3": ["header3"]], cache, config, supplyPool).get()
     def fragmentRequest = mockWebServer.takeRequest()
 
     then:
-    fragmentRequest.getHeader("X-default") == "Foo"
-    fragmentRequest.getHeader("X-additional") == "Bar"
+    fragmentRequest.getHeader("X-header1") == "header1"
+    fragmentRequest.getHeader("X-header2") == "header2"
+    fragmentRequest.getHeader("X-header3") == "header3"
 
     cleanup:
     mockWebServer.shutdown()
   }
 
-  def "should treat fragment request headers allow list as case insensitive"() {
+  def "should pass headers defined via ableron-include headers-attribute to fragment requests"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(204))
-    def config = AbleronConfig.builder()
-      .fragmentRequestHeadersToPass(["X-TeSt"])
-      .build()
 
     when:
-    new Include("", ["src": mockWebServer.url("/").toString()])
-      .resolve(httpClient, ["x-tEsT":["Foo"]], cache, config, supplyPool).get()
+    new Include("", ["src": mockWebServer.url("/").toString(), headers: "X-Header1,X-Header2,x-hEADEr3"])
+      .resolve(httpClient, ["X-Header1": ["header1"], "X-Header2": ["header2"], "X-HEADER3": ["header3"]], cache, config, supplyPool).get()
     def fragmentRequest = mockWebServer.takeRequest()
 
     then:
-    fragmentRequest.getHeader("X-Test") == "Foo"
+    fragmentRequest.getHeader("X-header1") == "header1"
+    fragmentRequest.getHeader("X-header2") == "header2"
+    fragmentRequest.getHeader("X-header3") == "header3"
 
     cleanup:
     mockWebServer.shutdown()

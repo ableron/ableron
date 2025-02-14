@@ -111,12 +111,9 @@ describe('Include', () => {
     [new Include('', new Map([['fallback-src-timeout', '2000 ']])), undefined],
     [new Include('', new Map([['fallback-src-timeout', '2m']])), undefined],
     [new Include('', new Map([['fallback-src-timeout', '2\ns']])), undefined]
-  ])(
-    'should parse fallback-src timeout attribute',
-    (include: Include, expectedFallbackSrcTimeout?: number) => {
-      expect(include.getFallbackSrcTimeoutMillis()).toBe(expectedFallbackSrcTimeout);
-    }
-  );
+  ])('should parse fallback-src timeout attribute', (include: Include, expectedFallbackSrcTimeout?: number) => {
+    expect(include.getFallbackSrcTimeoutMillis()).toBe(expectedFallbackSrcTimeout);
+  });
 
   it.each([
     [new Include(''), false],
@@ -810,7 +807,7 @@ describe('Include', () => {
     }
   );
 
-  it('should pass allowed request headers to fragment requests', async () => {
+  it('should pass headers defined via fragmentRequestHeadersToPass to fragment requests', async () => {
     // given
     server = Fastify();
     let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
@@ -823,21 +820,23 @@ describe('Include', () => {
     // when
     await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
       new AbleronConfig({
-        fragmentRequestHeadersToPass: ['X-Default', 'X-Additional']
+        fragmentRequestHeadersToPass: ['X-Header1', 'X-Header2', 'x-hEADEr3']
       }),
       fragmentCache,
       new Headers([
-        ['X-Default', 'Foo'],
-        ['X-Additional', 'Bar']
+        ['X-Header1', 'header1'],
+        ['X-Header2', 'header2'],
+        ['X-HeadeR3', 'header3']
       ])
     );
 
     // then
-    expect(lastRecordedRequestHeaders['x-default']).toBe('Foo');
-    expect(lastRecordedRequestHeaders['x-additional']).toBe('Bar');
+    expect(lastRecordedRequestHeaders['x-header1']).toBe('header1');
+    expect(lastRecordedRequestHeaders['x-header2']).toBe('header2');
+    expect(lastRecordedRequestHeaders['x-header3']).toBe('header3');
   });
 
-  it('should treat fragment request headers allow list as case insensitive', async () => {
+  it('should pass headers defined via ableron-include headers-attribute to fragment requests', async () => {
     // given
     server = Fastify();
     let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
@@ -848,14 +847,26 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
-      new AbleronConfig({ fragmentRequestHeadersToPass: ['X-TeSt'] }),
+    await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Header1,X-Header2,x-hEADEr3']
+      ])
+    ).resolve(
+      config,
       fragmentCache,
-      new Headers([['x-tEsT', 'Foo']])
+      new Headers([
+        ['X-Header1', 'header1'],
+        ['X-Header2', 'header2'],
+        ['X-HEADER3', 'header3']
+      ])
     );
 
     // then
-    expect(lastRecordedRequestHeaders['x-test']).toBe('Foo');
+    expect(lastRecordedRequestHeaders['x-header1']).toBe('header1');
+    expect(lastRecordedRequestHeaders['x-header2']).toBe('header2');
+    expect(lastRecordedRequestHeaders['x-header3']).toBe('header3');
   });
 
   it('should not pass non-allowed request headers to fragment requests', async () => {
