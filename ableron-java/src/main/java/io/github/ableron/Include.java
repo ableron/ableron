@@ -289,7 +289,7 @@ public class Include {
    */
   public CompletableFuture<Include> resolve(HttpClient httpClient, Map<String, List<String>> parentRequestHeaders, FragmentCache fragmentCache, AbleronConfig config, ExecutorService resolveThreadPool) {
     var resolveStartTime = System.nanoTime();
-    var requestHeaders = filterHeaders(parentRequestHeaders, Stream.concat(config.getFragmentRequestHeadersToPass().stream(), headersToPass.stream()).collect(Collectors.toList()));
+    var requestHeaders = buildRequestHeaders(parentRequestHeaders, config);
     erroredPrimaryFragment = null;
 
     return CompletableFuture.supplyAsync(
@@ -321,6 +321,33 @@ public class Include {
     this.resolveTimeMillis = resolveTimeMillis;
     this.logger.debug("[Ableron] Resolved include '{}' in {}ms", this.id, this.resolveTimeMillis);
     return this;
+  }
+
+  private Map<String, List<String>> buildRequestHeaders(Map<String, List<String>> parentRequestHeaders, AbleronConfig config) {
+    var requestHeaders = filterHeaders(parentRequestHeaders, Stream.concat(config.getFragmentRequestHeadersToPass().stream(), headersToPass.stream()).collect(Collectors.toList()));
+
+    if (!this.cookiesToPass.isEmpty() && parentRequestHeaders.containsKey("Cookie")) {
+      var cookies = new ArrayList<String>();
+
+      parentRequestHeaders.get("Cookie").stream()
+        .findFirst()
+        .map(cookieHeader -> cookieHeader.split(";"))
+        .stream()
+        .flatMap(Stream::of)
+        .forEach(cookie -> {
+          var cookieName = cookie.split("=", 2)[0].trim();
+
+          if (this.cookiesToPass.contains(cookieName)) {
+            cookies.add(cookie);
+          }
+        });
+
+      if (!cookies.isEmpty()) {
+        requestHeaders.put("Cookie", List.of(String.join(";", cookies)));
+      }
+    }
+
+    return requestHeaders;
   }
 
   private Optional<Fragment> load(

@@ -214,10 +214,7 @@ export default class Include {
 
   resolve(config: AbleronConfig, fragmentCache: FragmentCache, parentRequestHeaders?: Headers): Promise<Include> {
     const resolveStartTime = Date.now();
-    const requestHeaders = this.filterHeaders(parentRequestHeaders || new Headers(), [
-      ...config.fragmentRequestHeadersToPass,
-      ...this.headersToPass
-    ]);
+    const requestHeaders = this.buildRequestHeaders(config, parentRequestHeaders);
     this.erroredPrimaryFragment = undefined;
 
     return this.load(
@@ -277,6 +274,33 @@ export default class Include {
     this.resolveTimeMillis = resolveTimeMillis || 0;
     this.logger.debug("[Ableron] Resolved include '%s' in %dms", this.id, this.resolveTimeMillis);
     return this;
+  }
+
+  private buildRequestHeaders(config: AbleronConfig, parentRequestHeaders?: Headers): Headers {
+    const requestHeaders = this.filterHeaders(parentRequestHeaders || new Headers(), [
+      ...config.fragmentRequestHeadersToPass,
+      ...this.headersToPass
+    ]);
+
+    if (this.cookiesToPass.length > 0 && parentRequestHeaders && parentRequestHeaders.has('Cookie')) {
+      let cookies: string[] = [];
+      parentRequestHeaders
+        .get('Cookie')!
+        .split(';')
+        .forEach((cookie) => {
+          const cookieName = cookie.split('=', 1)[0].trim();
+
+          if (this.cookiesToPass.indexOf(cookieName) !== -1) {
+            cookies.push(cookie);
+          }
+        });
+
+      if (cookies.length > 0) {
+        requestHeaders.set('Cookie', cookies.join(';'));
+      }
+    }
+
+    return requestHeaders;
   }
 
   private async load(

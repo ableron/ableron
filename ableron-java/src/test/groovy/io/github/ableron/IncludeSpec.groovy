@@ -935,6 +935,23 @@ class IncludeSpec extends Specification {
     mockWebServer.shutdown()
   }
 
+  def "should pass cookies defined via ableron-include cookies-attribute to fragment requests"() {
+    given:
+    def mockWebServer = new MockWebServer()
+    mockWebServer.enqueue(new MockResponse().setResponseCode(204))
+
+    when:
+    new Include("", ["src": mockWebServer.url("/").toString(), cookies: "UID,selected_tab, cID "])
+      .resolve(httpClient, ["Cookie": ["foo=bar;  UID=user1 ; Uid=user%3B2; SELECTED_TAB=home; cID = 123"]], cache, config, supplyPool).get()
+    def fragmentRequest = mockWebServer.takeRequest()
+
+    then:
+    fragmentRequest.getHeader("Cookie") == "UID=user1 ; cID = 123"
+
+    cleanup:
+    mockWebServer.shutdown()
+  }
+
   def "should not pass non-allowed request headers to fragment requests"() {
     given:
     def mockWebServer = new MockWebServer()

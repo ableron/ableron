@@ -869,6 +869,33 @@ describe('Include', () => {
     expect(lastRecordedRequestHeaders['x-header3']).toBe('header3');
   });
 
+  it('should pass cookies defined via ableron-include cookies-attribute to fragment requests', async () => {
+    // given
+    server = Fastify();
+    let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
+    server.get('/src', function (request, reply) {
+      lastRecordedRequestHeaders = request.headers;
+      reply.status(204).send();
+    });
+    await server.listen();
+
+    // when
+    await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['cookies', 'UID,selected_tab, cID ']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([['Cookie', 'foo=bar;  UID=user1 ; Uid=user%3B2; SELECTED_TAB=home; cID = 123']])
+    );
+
+    // then
+    expect(lastRecordedRequestHeaders['cookie']).toBe('UID=user1 ; cID = 123');
+  });
+
   it('should not pass non-allowed request headers to fragment requests', async () => {
     // given
     server = Fastify();
