@@ -212,9 +212,9 @@ export default class Include {
     return this.resolveTimeMillis;
   }
 
-  resolve(config: AbleronConfig, fragmentCache: FragmentCache, parentRequestHeaders?: Headers): Promise<Include> {
+  resolve(config: AbleronConfig, fragmentCache: FragmentCache, parentRequestHeaders: Headers): Promise<Include> {
     const resolveStartTime = Date.now();
-    const requestHeaders = this.buildRequestHeaders(config, parentRequestHeaders);
+    const requestHeaders = this.buildRequestHeaders(parentRequestHeaders!, config.fragmentRequestHeadersToPass);
     this.erroredPrimaryFragment = undefined;
 
     return this.load(
@@ -276,28 +276,15 @@ export default class Include {
     return this;
   }
 
-  private buildRequestHeaders(config: AbleronConfig, parentRequestHeaders?: Headers): Headers {
-    const requestHeaders = this.filterHeaders(parentRequestHeaders || new Headers(), [
-      ...config.fragmentRequestHeadersToPass,
+  private buildRequestHeaders(parentRequestHeaders: Headers, requestHeadersToPass: string[]): Headers {
+    const requestHeaders = this.filterHeaders(parentRequestHeaders, [
+      ...requestHeadersToPass,
       ...this.headersToPass
     ]);
+    const cookieHeaderValue = HttpUtil.getCookieHeaderValue(parentRequestHeaders, this.cookiesToPass);
 
-    if (this.cookiesToPass.length > 0 && parentRequestHeaders && parentRequestHeaders.has('Cookie')) {
-      let cookies: string[] = [];
-      parentRequestHeaders
-        .get('Cookie')!
-        .split(';')
-        .forEach((cookie) => {
-          const cookieName = cookie.split('=', 1)[0].trim();
-
-          if (this.cookiesToPass.indexOf(cookieName) !== -1) {
-            cookies.push(cookie);
-          }
-        });
-
-      if (cookies.length > 0) {
-        requestHeaders.set('Cookie', cookies.join(';'));
-      }
+    if (cookieHeaderValue !== null) {
+      requestHeaders.set(HttpUtil.HEADER_COOKIE, cookieHeaderValue);
     }
 
     return requestHeaders;

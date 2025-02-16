@@ -9,11 +9,12 @@ export default abstract class HttpUtil {
    */
   public static readonly HTTP_STATUS_CODES_CACHEABLE: number[] = [200, 203, 204, 206, 300, 404, 405, 410, 414, 501];
 
-  private static readonly HEADER_AGE: string = 'Age';
-  private static readonly HEADER_CACHE_CONTROL: string = 'Cache-Control';
-  private static readonly HEADER_DATE: string = 'Date';
-  private static readonly HEADER_EXPIRES: string = 'Expires';
-  private static readonly HEADER_USER_AGENT: string = 'User-Agent';
+  public static readonly HEADER_AGE: string = 'Age';
+  public static readonly HEADER_CACHE_CONTROL: string = 'Cache-Control';
+  public static readonly HEADER_COOKIE: string = 'Cookie';
+  public static readonly HEADER_DATE: string = 'Date';
+  public static readonly HEADER_EXPIRES: string = 'Expires';
+  public static readonly HEADER_USER_AGENT: string = 'User-Agent';
 
   public static async loadUrl(
     url: string,
@@ -139,7 +140,7 @@ export default abstract class HttpUtil {
     return isNaN(expires.getTime()) ? null : expires;
   }
 
-  static normalizeHeaders(
+  public static normalizeHeaders(
     headers: Headers | IncomingHttpHeaders | OutgoingHttpHeaders | { [key: string]: string | string[] | number }
   ): Headers {
     if (typeof headers.entries === 'function') {
@@ -161,5 +162,21 @@ export default abstract class HttpUtil {
     }
 
     return transformedHeaders;
+  }
+
+  public static getCookieHeaderValue(headers: Headers, cookieNameAllowlist: string[]): string | null {
+    if (!headers || !cookieNameAllowlist || cookieNameAllowlist.length === 0 || !headers.has(this.HEADER_COOKIE)) {
+      return null;
+    }
+
+    const cookies = headers
+      .get(this.HEADER_COOKIE)!
+      .split(';')
+      .filter((cookie) => {
+        const cookieName = cookie.split('=', 1)[0].trim();
+        return cookieNameAllowlist.includes(cookieName);
+      })
+      .join(';');
+    return cookies.length === 0 ? null : cookies;
   }
 }

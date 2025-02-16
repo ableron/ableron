@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 
 public class HttpUtil {
@@ -43,11 +44,12 @@ public class HttpUtil {
     501
   );
 
-  private static final String HEADER_AGE = "Age";
-  private static final String HEADER_CACHE_CONTROL = "Cache-Control";
-  private static final String HEADER_DATE = "Date";
-  private static final String HEADER_EXPIRES = "Expires";
-  private static final String HEADER_USER_AGENT = "User-Agent";
+  public static final String HEADER_AGE = "Age";
+  public static final String HEADER_CACHE_CONTROL = "Cache-Control";
+  public static final String HEADER_COOKIE = "Cookie";
+  public static final String HEADER_DATE = "Date";
+  public static final String HEADER_EXPIRES = "Expires";
+  public static final String HEADER_USER_AGENT = "User-Agent";
 
   private static final Pattern CHARSET_PATTERN = Pattern.compile("(?i)\\bcharset\\s*=\\s*\"?([^\\s;\"]+)");
 
@@ -181,5 +183,28 @@ public class HttpUtil {
     }
 
     return StandardCharsets.UTF_8;
+  }
+
+  public static Optional<String> getCookieHeaderValue(Map<String, List<String>> headers, List<String> cookieNameAllowlist) {
+    if (headers == null
+      || cookieNameAllowlist == null
+      || cookieNameAllowlist.isEmpty()
+      || !headers.containsKey(HEADER_COOKIE)) {
+      return Optional.empty();
+    }
+
+    var cookies = headers.get(HEADER_COOKIE)
+      .stream()
+      .findFirst()
+      .map(cookieHeader -> cookieHeader.split(";"))
+      .stream()
+      .flatMap(Stream::of)
+      .filter(cookie -> {
+        var cookieName = cookie.split("=", 2)[0].trim();
+        return cookieNameAllowlist.contains(cookieName);
+      })
+      .collect(Collectors.joining(";"));
+
+    return cookies.isEmpty() ? Optional.empty() : Optional.of(cookies);
   }
 }

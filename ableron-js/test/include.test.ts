@@ -160,7 +160,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -188,7 +192,7 @@ describe('Include', () => {
         ['src', serverAddress('/src')],
         ['fallback-src', serverAddress('/fallback-src')]
       ])
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -217,7 +221,7 @@ describe('Include', () => {
         ['fallback-src', serverAddress('/fallback-src')]
       ]),
       'fallback content'
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -229,7 +233,7 @@ describe('Include', () => {
 
   it('should resolve to empty string if src, fallback src and fallback content are not present', async () => {
     // when
-    const include = await new Include('').resolve(config, fragmentCache);
+    const include = await new Include('').resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -253,7 +257,7 @@ describe('Include', () => {
         ['src', serverAddress('/src')],
         ['primary', 'primary']
       ])
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -278,7 +282,7 @@ describe('Include', () => {
         ['fallback-src', serverAddress('/fallback-src-503')],
         ['primary', 'primary']
       ])
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -307,7 +311,7 @@ describe('Include', () => {
         ['fallback-src', serverAddress('/fallback-src')],
         ['primary', '']
       ])
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -336,7 +340,7 @@ describe('Include', () => {
         ['fallback-src', serverAddress('/fallback-src')],
         ['primary', '']
       ])
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -371,7 +375,7 @@ describe('Include', () => {
     );
 
     // when
-    await include.resolve(config, fragmentCache);
+    await include.resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -381,7 +385,7 @@ describe('Include', () => {
     expect(include.getResolveTimeMillis()).toBeGreaterThan(0);
 
     // when
-    await include.resolve(config, fragmentCache);
+    await include.resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -406,7 +410,7 @@ describe('Include', () => {
         ['primary', '']
       ]),
       'fallback content'
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -430,7 +434,8 @@ describe('Include', () => {
     // when
     const include = await new Include('', new Map([['src', serverAddress('/src')]]), 'fallback content').resolve(
       config,
-      fragmentCache
+      fragmentCache,
+      new Headers()
     );
 
     // then
@@ -457,7 +462,11 @@ describe('Include', () => {
       // when
       fragmentCache.set(serverAddress('/src'), new Fragment(200, 'fragment from cache', undefined, expirationTime));
       await sleep(2);
-      const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+      const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+        config,
+        fragmentCache,
+        new Headers()
+      );
 
       // then
       expect(include.isResolved()).toBe(true);
@@ -513,7 +522,8 @@ describe('Include', () => {
       // when
       const include = await new Include('', new Map([['src', serverAddress('/src')]]), ':(').resolve(
         config,
-        fragmentCache
+        fragmentCache,
+        new Headers()
       );
 
       // then
@@ -543,7 +553,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -567,7 +581,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -587,7 +605,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -611,7 +633,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -635,7 +661,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -658,7 +688,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -676,7 +710,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
 
     // then
     expect(include.getResolvedFragment()?.content).toBe('fragment from src');
@@ -696,7 +734,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -715,7 +757,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
 
     // then
     expect(include.getResolvedFragment()?.content).toBe('fragment from src');
@@ -739,7 +785,11 @@ describe('Include', () => {
       await server.listen();
 
       // when
-      const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+      const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+        config,
+        fragmentCache,
+        new Headers()
+      );
 
       // then
       expect(include.getResolvedFragment()?.content).toBe('fragment from src');
@@ -755,7 +805,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
 
     // then
     expect(include.getResolvedFragment()?.content).toBe('fragment from src');
@@ -773,7 +827,8 @@ describe('Include', () => {
     // when
     const include = await new Include('', new Map([['src', serverAddress('/src')]]), 'fallback content').resolve(
       config,
-      fragmentCache
+      fragmentCache,
+      new Headers()
     );
 
     // then
@@ -800,7 +855,7 @@ describe('Include', () => {
       // when
       const rawAttributes = new Map([[srcAttributeName, serverAddress('/')]]);
       timeoutAttribute.forEach((value, key) => rawAttributes.set(key, value));
-      const include = await new Include('', rawAttributes).resolve(config, fragmentCache);
+      const include = await new Include('', rawAttributes).resolve(config, fragmentCache, new Headers());
 
       // then
       expect(include.getResolvedFragment()?.content).toBe(expectedFragmentContent);
@@ -928,7 +983,7 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(lastRecordedRequestHeaders['user-agent']).toBe('Ableron/2.0');
@@ -966,7 +1021,8 @@ describe('Include', () => {
     // when
     const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
       new AbleronConfig({ primaryFragmentResponseHeadersToPass: ['X-Test'] }),
-      fragmentCache
+      fragmentCache,
+      new Headers()
     );
 
     // then
@@ -982,7 +1038,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
 
     // then
     expect(include.getResolvedFragment()?.responseHeaders).toEqual(new Headers());
@@ -1003,7 +1063,7 @@ describe('Include', () => {
         ['src', serverAddress('/src')],
         ['primary', '']
       ])
-    ).resolve(new AbleronConfig({ primaryFragmentResponseHeadersToPass: ['X-TeSt'] }), fragmentCache);
+    ).resolve(new AbleronConfig({ primaryFragmentResponseHeadersToPass: ['X-TeSt'] }), fragmentCache, new Headers());
 
     // then
     expect(include.getResolvedFragment()?.responseHeaders.get('x-test')).toBe('Test');
@@ -1025,12 +1085,13 @@ describe('Include', () => {
     const include = new Include('', new Map([['src', serverAddress('/src')]]));
 
     // when
-    const fragment1 = include.resolve(config, fragmentCache);
-    const fragment2 = include.resolve(config, fragmentCache);
-    const fragment3 = include.resolve(config, fragmentCache);
+    const fragment1 = include.resolve(config, fragmentCache, new Headers());
+    const fragment2 = include.resolve(config, fragmentCache, new Headers());
+    const fragment3 = include.resolve(config, fragmentCache, new Headers());
     const fragment4 = new Include('', new Map([['src', serverAddress('/404')]]), '404 not found').resolve(
       config,
-      fragmentCache
+      fragmentCache,
+      new Headers()
     );
 
     // and
@@ -1090,7 +1151,8 @@ describe('Include', () => {
     );
     const resolvedInclude5 = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
       config,
-      fragmentCache
+      fragmentCache,
+      new Headers()
     );
     const resolvedInclude6 = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
       config,
@@ -1206,7 +1268,7 @@ describe('Include', () => {
     // when
     for (let i = 0; i < 4; i++) {
       await new Include('', new Map([['src', serverAddress('/')]]))
-        .resolve(new AbleronConfig({ cacheAutoRefreshEnabled: true }), fragmentCache)
+        .resolve(new AbleronConfig({ cacheAutoRefreshEnabled: true }), fragmentCache, new Headers())
         .then(() => sleep(1000));
     }
 
