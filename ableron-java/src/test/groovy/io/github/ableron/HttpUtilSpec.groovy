@@ -179,6 +179,22 @@ class HttpUtilSpec extends Specification {
     mockWebServer.shutdown()
   }
 
+  def "getCookieHeaderValue() should extract cookie header value"() {
+    expect:
+    HttpUtil.getCookieHeaderValue(headers, cookieNameAllowlist) == expectedResult
+
+    where:
+    headers                                      | cookieNameAllowlist    | expectedResult
+    null                                         | null                   | Optional.empty()
+    ["Cookie": ["uid=1"]]                        | null                   | Optional.empty()
+    null                                         | ["uid"]                | Optional.empty()
+    ["Cookie": ["uid=1"]]                        | []                     | Optional.empty()
+    [:]                                          | ["uid"]                | Optional.empty()
+    ["Cookie": ["uid=1;TEST=A; Foo=Bar"]]        | ["test"]               | Optional.empty()
+    ["Cookie": ["uid=1;TEST=A; Foo=Bar"]]        | ["TEST"]               | Optional.of("TEST=A")
+    ["Cookie": [" uid=1  ;TEST=A;  Foo=Bar  ;"]] | ["TEST", "Foo", "uid"] | Optional.of("uid=1  ;TEST=A;  Foo=Bar  ")
+  }
+
   private byte[] gzip(String data) {
     def bos = new ByteArrayOutputStream(data.length())
     def gzipOutputStream = new GZIPOutputStream(bos)

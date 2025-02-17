@@ -277,10 +277,7 @@ export default class Include {
   }
 
   private buildRequestHeaders(parentRequestHeaders: Headers, requestHeadersToPass: string[]): Headers {
-    const requestHeaders = this.filterHeaders(parentRequestHeaders, [
-      ...requestHeadersToPass,
-      ...this.headersToPass
-    ]);
+    const requestHeaders = this.filterHeaders(parentRequestHeaders, [...requestHeadersToPass, ...this.headersToPass]);
     const cookieHeaderValue = HttpUtil.getCookieHeaderValue(parentRequestHeaders, this.cookiesToPass);
 
     if (cookieHeaderValue !== null) {

@@ -203,7 +203,8 @@ public class HttpUtil {
         var cookieName = cookie.split("=", 2)[0].trim();
         return cookieNameAllowlist.contains(cookieName);
       })
-      .collect(Collectors.joining(";"));
+      .collect(Collectors.joining(";"))
+      .stripLeading();
 
     return cookies.isEmpty() ? Optional.empty() : Optional.of(cookies);
   }
