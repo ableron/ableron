@@ -1189,6 +1189,45 @@ class IncludeSpec extends Specification {
     mockWebServer.shutdown()
   }
 
+  def "should consider request headers defined in headers attribute for cache key generation"() {
+    given:
+    def mockWebServer = new MockWebServer()
+    mockWebServer.enqueue(new MockResponse()
+      .setResponseCode(200)
+      .setHeader("Cache-Control", "max-age=30")
+      .setBody("A,B,C"))
+    mockWebServer.enqueue(new MockResponse()
+      .setResponseCode(200)
+      .setHeader("Cache-Control", "max-age=30")
+      .setBody("B"))
+    mockWebServer.enqueue(new MockResponse()
+      .setResponseCode(200)
+      .setHeader("Cache-Control", "max-age=30")
+      .setBody("A,B,B"))
+
+    when:
+    def include1 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Test-A,X-Test-B,X-Test-C"])
+      .resolve(httpClient, ["X-TEST-B": ["B"], "X-Test-C": ["C"], "X-Test-A": ["A"]], cache, config, supplyPool).get()
+    def include2 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Test-A,X-Test-B,X-Test-C"])
+      .resolve(httpClient, ["X-TEST-B": ["B"], "X-TEST-A": ["A"], "X-Test-C": ["C"]], cache, config, supplyPool).get()
+    def include3 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "x-test-b"])
+      .resolve(httpClient, ["X-TEST-C": ["C"], "X-test-B": ["B"], "X-Test-A": ["A"]], cache, config, supplyPool).get()
+    def include4 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Test-B,X-Test-C,X-Test-A"])
+      .resolve(httpClient, ["x-test-c": ["B"], "x-test-b": ["B"], "x-test-a": ["A"]], cache, config, supplyPool).get()
+    def include5 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Test-A,X-Test-B,X-Test-C"])
+      .resolve(httpClient, ["X-TEST-B": ["B"], "X-Test-C": ["C"], "X-Test-A": ["A"], "X-Test-D": ["D"]], cache, config, supplyPool).get()
+
+    then:
+    include1.resolvedFragment.content == "A,B,C"
+    include2.resolvedFragment.content == "A,B,C"
+    include3.resolvedFragment.content == "B"
+    include4.resolvedFragment.content == "A,B,B"
+    include5.resolvedFragment.content == "A,B,C"
+
+    cleanup:
+    mockWebServer.shutdown()
+  }
+
   def "should configure auto refresh for cached Fragments"() {
     given:
     def mockWebServer = new MockWebServer()

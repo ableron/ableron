@@ -1253,6 +1253,104 @@ describe('Include', () => {
     expect(resolvedInclude4.getResolvedFragment()?.content).toBe('request 2');
   });
 
+  it('should consider request headers defined in headers attribute for cache key generation', async () => {
+    // given
+    server = Fastify();
+    let reqCounter = 0;
+    server.get('/src', function (request, reply) {
+      reply
+        .status(200)
+        .header('Cache-Control', 'max-age=30')
+        .send('request ' + ++reqCounter);
+    });
+    await server.listen();
+
+    // when
+    const resolvedInclude1 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A,X-Test-B,X-Test-C']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-TEST-B', 'B'],
+        ['X-Test-C', 'C'],
+        ['X-Test-A', 'A']
+      ])
+    );
+    const resolvedInclude2 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A,X-Test-B,X-Test-C']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-TEST-B', 'B'],
+        ['X-TEST-A', 'A'],
+        ['X-Test-C', 'C']
+      ])
+    );
+    const resolvedInclude3 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'x-test-b']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-TEST-C', 'C'],
+        ['X-test-B', 'B'],
+        ['X-Test-A', 'A']
+      ])
+    );
+    const resolvedInclude4 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-B,X-Test-C,X-Test-A']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['x-test-c', 'B'],
+        ['x-test-b', 'B'],
+        ['x-test-a', 'A']
+      ])
+    );
+    const resolvedInclude5 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A,X-Test-B,X-Test-C']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-TEST-B', 'B'],
+        ['X-Test-C', 'C'],
+        ['X-Test-A', 'A'],
+        ['X-Test-D', 'D']
+      ])
+    );
+
+    // then
+    expect(resolvedInclude1.getResolvedFragment()?.content).toBe('request 1');
+    expect(resolvedInclude2.getResolvedFragment()?.content).toBe('request 1');
+    expect(resolvedInclude3.getResolvedFragment()?.content).toBe('request 2');
+    expect(resolvedInclude4.getResolvedFragment()?.content).toBe('request 3');
+    expect(resolvedInclude5.getResolvedFragment()?.content).toBe('request 1');
+  });
+
   it('should configure auto refresh for cached Fragments', async () => {
     // given
     server = Fastify();

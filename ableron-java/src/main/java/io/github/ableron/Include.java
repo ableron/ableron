@@ -459,11 +459,14 @@ public class Include {
       .orElse(String.valueOf(Math.abs(rawIncludeTag.hashCode())));
   }
 
-  private String buildFragmentCacheKey(String fragmentUrl, Map<String, List<String>> fragmentRequestHeaders, Collection<String> cacheVaryByRequestHeaders) {
+  private String buildFragmentCacheKey(String fragmentUrl, Map<String, List<String>> requestHeaders, Collection<String> cacheVaryByRequestHeaders) {
+    var headersRelevantForCaching = Stream.concat(cacheVaryByRequestHeaders.stream(), this.headersToPass.stream())
+      .collect(Collectors.toSet());
+
     return fragmentUrl +
-      fragmentRequestHeaders.entrySet()
+      requestHeaders.entrySet()
         .stream()
-        .filter(header -> cacheVaryByRequestHeaders.stream().anyMatch(headerName -> headerName.equalsIgnoreCase(header.getKey())))
+        .filter(header -> headersRelevantForCaching.stream().anyMatch(headerName -> headerName.equalsIgnoreCase(header.getKey())))
         .sorted((c1, c2) -> c1.getKey().compareToIgnoreCase(c2.getKey()))
         .map(entry -> "|" + entry.getKey() + "=" + String.join(",", entry.getValue()))
         .map(String::toLowerCase)

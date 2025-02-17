@@ -435,12 +435,13 @@ export default class Include {
 
   private buildFragmentCacheKey(
     fragmentUrl: string,
-    fragmentRequestHeaders: Headers,
+    requestHeaders: Headers,
     cacheVaryByRequestHeaders: string[]
   ): string {
+    const headersRelevantForCaching = [...cacheVaryByRequestHeaders, ...this.headersToPass];
     let cacheKey = fragmentUrl;
-    cacheVaryByRequestHeaders.forEach((headerName) => {
-      const headerValue = fragmentRequestHeaders.get(headerName)?.toLowerCase();
+    headersRelevantForCaching.forEach((headerName) => {
+      const headerValue = requestHeaders.get(headerName)?.toLowerCase();
 
       if (headerValue) {
         cacheKey += '|' + headerName.toLowerCase() + '=' + headerValue;
