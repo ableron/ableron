@@ -176,7 +176,8 @@ export default abstract class HttpUtil {
         const cookieName = cookie.split('=', 1)[0].trim();
         return cookieNameAllowlist.includes(cookieName);
       })
-      .join(';');
+      .map((cookie) => cookie.trim())
+      .join('; ');
     return cookies.length === 0 ? null : cookies;
   }
 }

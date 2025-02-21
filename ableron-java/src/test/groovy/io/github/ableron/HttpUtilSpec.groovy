@@ -188,11 +188,11 @@ class HttpUtilSpec extends Specification {
     null                                         | null                   | Optional.empty()
     ["Cookie": ["uid=1"]]                        | null                   | Optional.empty()
     null                                         | ["uid"]                | Optional.empty()
-    ["Cookie": ["uid=1"]]                        | []                     | Optional.empty()
+    ["cookie": ["uid=1"]]                        | []                     | Optional.empty()
     [:]                                          | ["uid"]                | Optional.empty()
     ["Cookie": ["uid=1;TEST=A; Foo=Bar"]]        | ["test"]               | Optional.empty()
-    ["Cookie": ["uid=1;TEST=A; Foo=Bar"]]        | ["TEST"]               | Optional.of("TEST=A")
-    ["Cookie": [" uid=1  ;TEST=A;  Foo=Bar  ;"]] | ["TEST", "Foo", "uid"] | Optional.of("uid=1  ;TEST=A;  Foo=Bar  ")
+    ["cookie": ["uid=1;TEST=A; Foo=Bar"]]        | ["TEST"]               | Optional.of("TEST=A")
+    ["Cookie": [" uid=1  ;TEST=A;  Foo=Bar  ;"]] | ["TEST", "Foo", "uid"] | Optional.of("uid=1; TEST=A; Foo=Bar")
   }
 
   private byte[] gzip(String data) {

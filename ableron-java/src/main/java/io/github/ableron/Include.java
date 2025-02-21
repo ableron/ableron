@@ -340,10 +340,9 @@ public class Include {
     AbleronConfig config,
     Duration requestTimeout,
     String urlSource) {
-    var fragmentCacheKey = buildFragmentCacheKey(uri, requestHeaders, config.getCacheVaryByRequestHeaders());
-
     return Optional.ofNullable(uri)
       .map(uri1 -> {
+        var fragmentCacheKey = buildFragmentCacheKey(uri, requestHeaders, config.getCacheVaryByRequestHeaders());
         var fragmentFromCache = fragmentCache.get(fragmentCacheKey);
         this.resolvedFragmentSource = (fragmentFromCache.isPresent() ? "cached " : "remote ") + urlSource;
 
@@ -461,16 +460,23 @@ public class Include {
 
   private String buildFragmentCacheKey(String fragmentUrl, Map<String, List<String>> requestHeaders, Collection<String> cacheVaryByRequestHeaders) {
     var headersRelevantForCaching = Stream.concat(cacheVaryByRequestHeaders.stream(), this.headersToPass.stream())
+      .map(String::toLowerCase)
       .collect(Collectors.toSet());
-
-    return fragmentUrl +
-      requestHeaders.entrySet()
-        .stream()
-        .filter(header -> headersRelevantForCaching.stream().anyMatch(headerName -> headerName.equalsIgnoreCase(header.getKey())))
-        .sorted((c1, c2) -> c1.getKey().compareToIgnoreCase(c2.getKey()))
-        .map(entry -> "|" + entry.getKey() + "=" + String.join(",", entry.getValue()))
-        .map(String::toLowerCase)
-        .collect(Collectors.joining());
+    var headersCacheKey = requestHeaders.entrySet()
+      .stream()
+      .filter(header -> headersRelevantForCaching.contains(header.getKey().toLowerCase()))
+      .sorted((c1, c2) -> c1.getKey().compareToIgnoreCase(c2.getKey()))
+      .map(header -> "\nh:" + header.getKey().toLowerCase() + "=" + String.join(",", header.getValue()))
+      .collect(Collectors.joining());
+    var cookiesCacheKey = HttpUtil.getCookieHeaderValue(requestHeaders, this.cookiesToPass)
+      .map(cookieHeader -> cookieHeader.split(";"))
+      .stream()
+      .flatMap(Stream::of)
+      .map(String::trim)
+      .sorted()
+      .map(cookie -> "\nc:" + cookie)
+      .collect(Collectors.joining());
+    return fragmentUrl + headersCacheKey + cookiesCacheKey;
   }
 
   private boolean hasBooleanAttribute(String attributeName) {

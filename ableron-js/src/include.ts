@@ -439,14 +439,28 @@ export default class Include {
     cacheVaryByRequestHeaders: string[]
   ): string {
     const headersRelevantForCaching = [...cacheVaryByRequestHeaders, ...this.headersToPass];
-    let cacheKey = fragmentUrl;
-    headersRelevantForCaching.forEach((headerName) => {
-      const headerValue = requestHeaders.get(headerName)?.toLowerCase();
+    let headersCacheKey = '';
+
+    headersRelevantForCaching.sort().forEach((headerName) => {
+      const headerValue = requestHeaders.get(headerName);
 
       if (headerValue) {
-        cacheKey += '|' + headerName.toLowerCase() + '=' + headerValue;
+        headersCacheKey += '\nh:' + headerName + '=' + headerValue;
       }
     });
-    return cacheKey;
+
+    let cookiesCacheKey = '';
+    const cookieHeaderValue = HttpUtil.getCookieHeaderValue(requestHeaders, this.cookiesToPass);
+
+    if (cookieHeaderValue !== null) {
+      cookiesCacheKey = cookieHeaderValue
+        .split(';')
+        .map((cookie) => cookie.trim())
+        .sort()
+        .map((cookie) => '\nc:' + cookie)
+        .join();
+    }
+
+    return fragmentUrl + headersCacheKey + cookiesCacheKey;
   }
 }

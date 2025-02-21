@@ -948,7 +948,7 @@ describe('Include', () => {
     );
 
     // then
-    expect(lastRecordedRequestHeaders['cookie']).toBe('UID=user1 ; cID = 123');
+    expect(lastRecordedRequestHeaders['cookie']).toBe('UID=user1; cID = 123');
   });
 
   it('should not pass non-allowed request headers to fragment requests', async () => {
@@ -1330,7 +1330,7 @@ describe('Include', () => {
       '',
       new Map([
         ['src', serverAddress('/src')],
-        ['headers', 'X-Test-A,X-Test-B,X-Test-C']
+        ['headers', 'X-TEST-C, X-Test-A,X-Test-B']
       ])
     ).resolve(
       config,
@@ -1342,6 +1342,14 @@ describe('Include', () => {
         ['X-Test-D', 'D']
       ])
     );
+    const resolvedInclude6 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'x-test-b'],
+        ['cookies', 'x-test-b']
+      ])
+    ).resolve(config, fragmentCache, new Headers([['Cookie', 'x-test-b=B']]));
 
     // then
     expect(resolvedInclude1.getResolvedFragment()?.content).toBe('request 1');
@@ -1349,6 +1357,113 @@ describe('Include', () => {
     expect(resolvedInclude3.getResolvedFragment()?.content).toBe('request 2');
     expect(resolvedInclude4.getResolvedFragment()?.content).toBe('request 3');
     expect(resolvedInclude5.getResolvedFragment()?.content).toBe('request 1');
+    expect(resolvedInclude6.getResolvedFragment()?.content).toBe('request 4');
+  });
+
+  it('should consider cookies defined in cookies attribute for cache key generation', async () => {
+    // given
+    server = Fastify();
+    let reqCounter = 0;
+    server.get('/src', function (request, reply) {
+      reply
+        .status(200)
+        .header('Cache-Control', 'max-age=30')
+        .send('request ' + ++reqCounter);
+    });
+    await server.listen();
+
+    // when
+    const resolvedInclude1 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A'],
+        ['cookies', 'UID,ab_test']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-Test-A', 'A'],
+        ['Cookie', 'foo=bar;UID=1;ab_test=x']
+      ])
+    );
+    const resolvedInclude2 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A'],
+        ['cookies', 'UID,ab_test']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-Test-A', 'A'],
+        ['Cookie', 'foo=bar;ab_test=x']
+      ])
+    );
+    const resolvedInclude3 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A'],
+        ['cookies', 'UID,ab_test']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-Test-A', 'A'],
+        ['Cookie', 'foo=bar;UID=2;ab_test=x']
+      ])
+    );
+    const resolvedInclude4 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A'],
+        ['cookies', 'UID,ab_test']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['x-test-a', 'A'],
+        ['Cookie', 'ab_test=x; UID=1']
+      ])
+    );
+    const resolvedInclude5 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A'],
+        ['cookies', 'UID,ab_test']
+      ])
+    ).resolve(config, fragmentCache, new Headers([['Cookie', 'ab_test=x']]));
+    const resolvedInclude6 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A'],
+        ['cookies', 'UID,ab_test']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-Test-B', 'B'],
+        ['Cookie', 'ab_test=x;a=a']
+      ])
+    );
+
+    // then
+    expect(resolvedInclude1.getResolvedFragment()?.content).toBe('request 1');
+    expect(resolvedInclude2.getResolvedFragment()?.content).toBe('request 2');
+    expect(resolvedInclude3.getResolvedFragment()?.content).toBe('request 3');
+    expect(resolvedInclude4.getResolvedFragment()?.content).toBe('request 1');
+    expect(resolvedInclude5.getResolvedFragment()?.content).toBe('request 4');
+    expect(resolvedInclude6.getResolvedFragment()?.content).toBe('request 4');
   });
 
   it('should configure auto refresh for cached Fragments', async () => {

@@ -190,11 +190,11 @@ describe('HttpUtil.getCookieHeaderValue', () => {
     [null, null, null],
     [new Headers([['Cookie', 'uid']]), null, null],
     [null, ['uid'], null],
-    [new Headers([['Cookie', 'uid']]), [], null],
+    [new Headers([['cookie', 'uid']]), [], null],
     [new Headers(), ['uid'], null],
     [new Headers([['Cookie', 'uid=1;TEST=A; Foo=Bar']]), ['test'], null],
-    [new Headers([['Cookie', 'uid=1;TEST=A; Foo=Bar']]), ['TEST'], 'TEST=A'],
-    [new Headers([['Cookie', ' uid=1  ;TEST=A;  Foo=Bar  ; ']]), ['TEST', 'Foo', 'uid'], 'uid=1  ;TEST=A;  Foo=Bar  ']
+    [new Headers([['cookie', 'uid=1;TEST=A; Foo=Bar']]), ['TEST'], 'TEST=A'],
+    [new Headers([['Cookie', ' uid=1  ;TEST=A;  Foo=Bar  ; ']]), ['TEST', 'Foo', 'uid'], 'uid=1; TEST=A; Foo=Bar']
   ])(
     'should extract cookie header value',
     (headers: Headers, cookieNameAllowlist: string[], expectedResult: string | null) => {

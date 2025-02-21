@@ -18,6 +18,7 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -76,7 +77,7 @@ public class HttpUtil {
   }
 
   public static Instant calculateResponseExpirationTime(Map<String, List<String>> responseHeaders) {
-    var headers = HttpHeaders.of(responseHeaders, (name, value) -> true);
+    var headers = toHttpHeaders(responseHeaders);
     var cacheControlDirectives = headers
       .firstValue(HEADER_CACHE_CONTROL)
       .stream()
@@ -185,15 +186,15 @@ public class HttpUtil {
     return StandardCharsets.UTF_8;
   }
 
-  public static Optional<String> getCookieHeaderValue(Map<String, List<String>> headers, List<String> cookieNameAllowlist) {
+  public static Optional<String> getCookieHeaderValue(Map<String, List<String>> headers, Collection<String> cookieNameAllowlist) {
     if (headers == null
       || cookieNameAllowlist == null
-      || cookieNameAllowlist.isEmpty()
-      || !headers.containsKey(HEADER_COOKIE)) {
+      || cookieNameAllowlist.isEmpty()) {
       return Optional.empty();
     }
 
-    var cookies = headers.get(HEADER_COOKIE)
+    var cookies = toHttpHeaders(headers)
+      .firstValue(HEADER_COOKIE)
       .stream()
       .findFirst()
       .map(cookieHeader -> cookieHeader.split(";"))
@@ -203,9 +204,13 @@ public class HttpUtil {
         var cookieName = cookie.split("=", 2)[0].trim();
         return cookieNameAllowlist.contains(cookieName);
       })
-      .collect(Collectors.joining(";"))
+      .map(String::trim)
+      .collect(Collectors.joining("; "))
       .stripLeading();
-
     return cookies.isEmpty() ? Optional.empty() : Optional.of(cookies);
+  }
+
+  private static HttpHeaders toHttpHeaders(Map<String, List<String>> headers) {
+    return HttpHeaders.of(headers, (name, value) -> true);
   }
 }
