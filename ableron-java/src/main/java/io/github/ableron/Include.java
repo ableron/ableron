@@ -123,12 +123,12 @@ public class Include {
   /**
    * List of HTTP header names that shall be passed from the parent request to fragment requests.
    */
-  private final List<String> headersToPass = new ArrayList<>();
+  private final Collection<String> headersToPass = new ArrayList<>();
 
   /**
    * List of HTTP cookie names that shall be passed from the parent request to fragment requests.
    */
-  private final List<String> cookiesToPass = new ArrayList<>();
+  private final Collection<String> cookiesToPass = new ArrayList<>();
 
   /**
    * Fallback content to use in case the include could not be resolved.
@@ -246,11 +246,11 @@ public class Include {
     return primary;
   }
 
-  public List<String> getHeadersToPass() {
+  public Collection<String> getHeadersToPass() {
     return headersToPass;
   }
 
-  public List<String> getCookiesToPass() {
+  public Collection<String> getCookiesToPass() {
     return cookiesToPass;
   }
 
