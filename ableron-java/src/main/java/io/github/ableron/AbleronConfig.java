@@ -29,9 +29,9 @@ public class AbleronConfig {
   );
 
   /**
-   * Response headers of primary fragments to pass to the page response if present.
+   * Response headers of primary fragments to pass through to the page response, if present.
    */
-  private Collection<String> primaryFragmentResponseHeadersToPass = List.of(
+  private Collection<String> responseHeadersPassThrough = List.of(
     "Content-Language",
     "Location",
     "Refresh"
@@ -95,8 +95,8 @@ public class AbleronConfig {
     return fragmentRequestHeadersToPass;
   }
 
-  public Collection<String> getPrimaryFragmentResponseHeadersToPass() {
-    return primaryFragmentResponseHeadersToPass;
+  public Collection<String> getResponseHeadersPassThrough() {
+    return responseHeadersPassThrough;
   }
 
   public long getCacheMaxSizeInBytes() {
@@ -147,9 +147,9 @@ public class AbleronConfig {
       return this;
     }
 
-    public Builder primaryFragmentResponseHeadersToPass(Collection<String> primaryFragmentResponseHeadersToPass) {
-      Objects.requireNonNull(primaryFragmentResponseHeadersToPass, "primaryFragmentResponseHeadersToPass must not be null");
-      ableronConfig.primaryFragmentResponseHeadersToPass = primaryFragmentResponseHeadersToPass.stream().collect(Collectors.toUnmodifiableList());
+    public Builder responseHeadersPassThrough(Collection<String> responseHeadersPassThrough) {
+      Objects.requireNonNull(responseHeadersPassThrough, "responseHeadersPassThrough must not be null");
+      ableronConfig.responseHeadersPassThrough = responseHeadersPassThrough.stream().collect(Collectors.toUnmodifiableList());
       return this;
     }
 

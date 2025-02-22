@@ -351,7 +351,7 @@ public class Include {
             if (!isHttpStatusCacheable(response.statusCode())) {
               logger.error("[Ableron] Fragment '{}' returned status code {}", uri, response.statusCode());
               recordErroredPrimaryFragment(
-                toFragment(response, uri, config.getPrimaryFragmentResponseHeadersToPass(), true),
+                toFragment(response, uri, config.getResponseHeadersPassThrough(), true),
                 this.resolvedFragmentSource
               );
               return false;
@@ -360,10 +360,10 @@ public class Include {
             return true;
           })
           .map(response -> {
-            var fragment = toFragment(response, uri, config.getPrimaryFragmentResponseHeadersToPass(), false);
+            var fragment = toFragment(response, uri, config.getResponseHeadersPassThrough(), false);
             fragmentCache.set(fragmentCacheKey, fragment, () ->
               HttpUtil.loadUrl(uri, httpClient, requestHeaders, requestTimeout)
-                .map(res -> toFragment(res, uri, config.getPrimaryFragmentResponseHeadersToPass(), false))
+                .map(res -> toFragment(res, uri, config.getResponseHeadersPassThrough(), false))
                 .orElse(null));
             return fragment;
           })
@@ -383,14 +383,14 @@ public class Include {
   private Fragment toFragment(
     HttpResponse<byte[]> response,
     String url,
-    Collection<String> primaryFragmentResponseHeadersToPass,
+    Collection<String> responseHeadersPassThrough,
     boolean preventCaching) {
     return new Fragment(
       url,
       response.statusCode(),
       HttpUtil.getResponseBodyAsString(response),
       preventCaching ? Instant.EPOCH : HttpUtil.calculateResponseExpirationTime(response.headers().map()),
-      filterHeaders(response.headers().map(), primaryFragmentResponseHeadersToPass)
+      filterHeaders(response.headers().map(), responseHeadersPassThrough)
     );
   }
 

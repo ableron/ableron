@@ -15,9 +15,9 @@ export default class AbleronConfig {
   readonly fragmentRequestHeadersToPass: string[] = ['Correlation-ID', 'X-Correlation-ID', 'X-Request-ID'];
 
   /**
-   * Response headers of primary fragments to pass to the page response if present.
+   * Response headers of primary fragments to pass through to the page response, if present.
    */
-  readonly primaryFragmentResponseHeadersToPass: string[] = ['Content-Language', 'Location', 'Refresh'];
+  readonly responseHeadersPassThrough: string[] = ['Content-Language', 'Location', 'Refresh'];
 
   /**
    * Maximum number of items, the fragment cache may hold.

@@ -1035,7 +1035,7 @@ class IncludeSpec extends Specification {
     mockWebServer.enqueue(new MockResponse().setResponseCode(200)
       .addHeader("X-Test", "Test"))
     def config = AbleronConfig.builder()
-      .primaryFragmentResponseHeadersToPass(["X-Test"])
+      .responseHeadersPassThrough(["X-Test"])
       .build()
 
     when:
@@ -1072,7 +1072,7 @@ class IncludeSpec extends Specification {
     mockWebServer.enqueue(new MockResponse().setResponseCode(200)
       .addHeader("x-test", "Test"))
     def config = AbleronConfig.builder()
-      .primaryFragmentResponseHeadersToPass(["X-TeSt"])
+      .responseHeadersPassThrough(["X-TeSt"])
       .build()
 
     when:
@@ -1093,7 +1093,7 @@ class IncludeSpec extends Specification {
       .addHeader("X-Test", "Test")
       .addHeader("X-Test", "Test2"))
     def config = AbleronConfig.builder()
-      .primaryFragmentResponseHeadersToPass(["X-TEST"])
+      .responseHeadersPassThrough(["X-TEST"])
       .build()
 
     when:

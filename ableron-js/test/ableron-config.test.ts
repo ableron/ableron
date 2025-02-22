@@ -10,7 +10,7 @@ describe('AbleronConfig', () => {
     expect(config.enabled).toBe(true);
     expect(config.requestTimeoutMs).toBe(3000);
     expect(config.fragmentRequestHeadersToPass).toEqual(['Correlation-ID', 'X-Correlation-ID', 'X-Request-ID']);
-    expect(config.primaryFragmentResponseHeadersToPass).toEqual(['Content-Language', 'Location', 'Refresh']);
+    expect(config.responseHeadersPassThrough).toEqual(['Content-Language', 'Location', 'Refresh']);
     expect(config.cacheMaxItems).toEqual(10000);
     expect(config.cacheVaryByRequestHeaders).toEqual([]);
     expect(config.cacheAutoRefreshEnabled).toBe(false);
@@ -26,7 +26,7 @@ describe('AbleronConfig', () => {
       enabled: false,
       requestTimeoutMs: 200,
       fragmentRequestHeadersToPass: ['X-Test-Request-Header', 'X-Test-Request-Header-2'],
-      primaryFragmentResponseHeadersToPass: ['X-Test-Response-Header', 'X-Test-Response-Header-2'],
+      responseHeadersPassThrough: ['X-Test-Response-Header', 'X-Test-Response-Header-2'],
       cacheMaxItems: 999,
       cacheVaryByRequestHeaders: ['X-ACME-Test-Groups'],
       cacheAutoRefreshEnabled: true,
@@ -40,7 +40,7 @@ describe('AbleronConfig', () => {
     expect(config.enabled).toBe(false);
     expect(config.requestTimeoutMs).toBe(200);
     expect(config.fragmentRequestHeadersToPass).toEqual(['X-Test-Request-Header', 'X-Test-Request-Header-2']);
-    expect(config.primaryFragmentResponseHeadersToPass).toEqual(['X-Test-Response-Header', 'X-Test-Response-Header-2']);
+    expect(config.responseHeadersPassThrough).toEqual(['X-Test-Response-Header', 'X-Test-Response-Header-2']);
     expect(config.cacheMaxItems).toEqual(999);
     expect(config.cacheVaryByRequestHeaders).toEqual(['X-ACME-Test-Groups']);
     expect(config.cacheAutoRefreshEnabled).toBe(true);

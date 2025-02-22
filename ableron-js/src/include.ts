@@ -313,19 +313,19 @@ export default class Include {
             if (!HttpUtil.HTTP_STATUS_CODES_CACHEABLE.includes(response.status)) {
               this.logger.error(`[Ableron] Fragment '${this.id}' returned status code ${response.status}`);
               this.recordErroredPrimaryFragment(
-                await this.toFragment(response, url, config.primaryFragmentResponseHeadersToPass, true),
+                await this.toFragment(response, url, config.responseHeadersPassThrough, true),
                 fragmentSource
               );
               return null;
             }
 
-            return this.toFragment(response, url, config.primaryFragmentResponseHeadersToPass);
+            return this.toFragment(response, url, config.responseHeadersPassThrough);
           })
           .then((fragment) => {
             if (fragment) {
               fragmentCache.set(fragmentCacheKey, fragment, () =>
                 HttpUtil.loadUrl(url, requestHeaders, requestTimeoutMs).then(async (response: Response | null) => {
-                  return response ? this.toFragment(response, url, config.primaryFragmentResponseHeadersToPass) : null;
+                  return response ? this.toFragment(response, url, config.responseHeadersPassThrough) : null;
                 })
               );
             }
@@ -348,7 +348,7 @@ export default class Include {
   private async toFragment(
     response: Response,
     url: string,
-    primaryFragmentResponseHeadersToPass: string[],
+    responseHeadersPassThrough: string[],
     preventCaching: boolean = false
   ): Promise<Fragment> {
     return response
@@ -360,7 +360,7 @@ export default class Include {
             responseBody,
             url,
             preventCaching ? undefined : HttpUtil.calculateResponseExpirationTime(response.headers),
-            this.filterHeaders(response.headers, primaryFragmentResponseHeadersToPass)
+            this.filterHeaders(response.headers, responseHeadersPassThrough)
           )
       );
   }

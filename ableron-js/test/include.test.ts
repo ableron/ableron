@@ -1020,7 +1020,7 @@ describe('Include', () => {
 
     // when
     const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
-      new AbleronConfig({ primaryFragmentResponseHeadersToPass: ['X-Test'] }),
+      new AbleronConfig({ responseHeadersPassThrough: ['X-Test'] }),
       fragmentCache,
       new Headers()
     );
@@ -1063,7 +1063,7 @@ describe('Include', () => {
         ['src', serverAddress('/src')],
         ['primary', '']
       ])
-    ).resolve(new AbleronConfig({ primaryFragmentResponseHeadersToPass: ['X-TeSt'] }), fragmentCache, new Headers());
+    ).resolve(new AbleronConfig({ responseHeadersPassThrough: ['X-TeSt'] }), fragmentCache, new Headers());
 
     // then
     expect(include.getResolvedFragment()?.responseHeaders.get('x-test')).toBe('Test');

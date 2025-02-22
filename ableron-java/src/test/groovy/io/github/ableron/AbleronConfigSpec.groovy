@@ -19,7 +19,7 @@ class AbleronConfigSpec extends Specification {
         "X-Correlation-ID",
         "X-Request-ID"
       ]
-      primaryFragmentResponseHeadersToPass == [
+      responseHeadersPassThrough == [
         "Content-Language",
         "Location",
         "Refresh"
@@ -40,7 +40,7 @@ class AbleronConfigSpec extends Specification {
       .enabled(false)
       .requestTimeout(Duration.ofMillis(200))
       .fragmentRequestHeadersToPass(["X-Test-Request-Header", "X-Test-Request-Header-2"])
-      .primaryFragmentResponseHeadersToPass(["X-Test-Response-Header", "X-Test-Response-Header-2"])
+      .responseHeadersPassThrough(["X-Test-Response-Header", "X-Test-Response-Header-2"])
       .cacheMaxSizeInBytes(1024 * 100)
       .cacheVaryByRequestHeaders(["X-Test-Groups", "X-ACME-Country"])
       .cacheAutoRefreshEnabled(true)
@@ -55,7 +55,7 @@ class AbleronConfigSpec extends Specification {
       !enabled
       requestTimeout == Duration.ofMillis(200)
       fragmentRequestHeadersToPass == ["X-Test-Request-Header", "X-Test-Request-Header-2"]
-      primaryFragmentResponseHeadersToPass == ["X-Test-Response-Header", "X-Test-Response-Header-2"]
+      responseHeadersPassThrough == ["X-Test-Response-Header", "X-Test-Response-Header-2"]
       cacheMaxSizeInBytes == 1024 * 100
       cacheVaryByRequestHeaders == ["X-Test-Groups", "X-ACME-Country"]
       cacheAutoRefreshEnabled()
@@ -88,15 +88,15 @@ class AbleronConfigSpec extends Specification {
     exception.message == "fragmentRequestHeadersToPass must not be null"
   }
 
-  def "should throw exception if primaryFragmentResponseHeadersToPass is tried to be set to null"() {
+  def "should throw exception if responseHeadersPassThrough is tried to be set to null"() {
     when:
     AbleronConfig.builder()
-      .primaryFragmentResponseHeadersToPass(null)
+      .responseHeadersPassThrough(null)
       .build()
 
     then:
     def exception = thrown(NullPointerException)
-    exception.message == "primaryFragmentResponseHeadersToPass must not be null"
+    exception.message == "responseHeadersPassThrough must not be null"
   }
 
   def "should throw exception if cacheVaryByRequestHeaders is tried to be set to null"() {
@@ -121,7 +121,7 @@ class AbleronConfigSpec extends Specification {
     thrown(UnsupportedOperationException)
 
     when:
-    config.getPrimaryFragmentResponseHeadersToPass().add("Not-Allowed")
+    config.getResponseHeadersPassThrough().add("Not-Allowed")
 
     then:
     thrown(UnsupportedOperationException)
@@ -137,7 +137,7 @@ class AbleronConfigSpec extends Specification {
     given:
     def config = AbleronConfig.builder()
       .fragmentRequestHeadersToPass(new ArrayList())
-      .primaryFragmentResponseHeadersToPass(new ArrayList())
+      .responseHeadersPassThrough(new ArrayList())
       .cacheVaryByRequestHeaders(new ArrayList())
       .build()
 
@@ -148,7 +148,7 @@ class AbleronConfigSpec extends Specification {
     thrown(UnsupportedOperationException)
 
     when:
-    config.getPrimaryFragmentResponseHeadersToPass().add("Not-Allowed")
+    config.getResponseHeadersPassThrough().add("Not-Allowed")
 
     then:
     thrown(UnsupportedOperationException)

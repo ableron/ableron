@@ -72,9 +72,9 @@ To use `ableron-java` directly, follow these steps:
 - `fragmentRequestHeadersToPass`
   - Default: `[Correlation-ID, X-Correlation-ID, X-Request-ID]`
   - Request headers that are passed to fragment requests, if present.
-- `primaryFragmentResponseHeadersToPass`
+- `responseHeadersPassThrough`
   - Default: `[Content-Language, Location, Refresh]`
-  - Response headers of primary fragments to pass to the page response, if present.
+  - Response headers of primary fragments to pass through to the page response, if present.
 - `cacheMaxSizeInBytes`
   - Default: `1024 * 1024 * 50` (`50 MiB`)
   - Maximum size in bytes the fragment cache may have.
