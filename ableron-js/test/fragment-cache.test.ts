@@ -8,7 +8,7 @@ import { NoOpLogger } from '../src/logger';
 const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay));
 const fragmentCache = new TransclusionProcessor(
   new AbleronConfig({
-    fragmentRequestTimeoutMillis: 1000,
+    requestTimeoutMs: 1000,
     cacheAutoRefreshEnabled: true
   }),
   new NoOpLogger()

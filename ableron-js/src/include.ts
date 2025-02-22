@@ -290,7 +290,7 @@ export default class Include {
   private async load(
     url: string | undefined,
     requestHeaders: Headers,
-    requestTimeoutMillis: number,
+    requestTimeoutMs: number,
     fragmentCache: FragmentCache,
     config: AbleronConfig,
     urlSource: string
@@ -304,7 +304,7 @@ export default class Include {
     const fragmentSource = (fragmentFromCache ? 'cached ' : 'remote ') + urlSource;
     const fragment: Promise<Fragment | null> = fragmentFromCache
       ? Promise.resolve(fragmentFromCache)
-      : HttpUtil.loadUrl(url, requestHeaders, requestTimeoutMillis)
+      : HttpUtil.loadUrl(url, requestHeaders, requestTimeoutMs)
           .then(async (response: Response | null) => {
             if (!response) {
               return null;
@@ -324,7 +324,7 @@ export default class Include {
           .then((fragment) => {
             if (fragment) {
               fragmentCache.set(fragmentCacheKey, fragment, () =>
-                HttpUtil.loadUrl(url, requestHeaders, requestTimeoutMillis).then(async (response: Response | null) => {
+                HttpUtil.loadUrl(url, requestHeaders, requestTimeoutMs).then(async (response: Response | null) => {
                   return response ? this.toFragment(response, url, config.primaryFragmentResponseHeadersToPass) : null;
                 })
               );
@@ -418,7 +418,7 @@ export default class Include {
   }
 
   private getRequestTimeout(localTimeout: number | undefined, config: AbleronConfig): number {
-    return localTimeout ? localTimeout : config.fragmentRequestTimeoutMillis;
+    return localTimeout ? localTimeout : config.requestTimeoutMs;
   }
 
   private buildIncludeId(providedId?: string): string {

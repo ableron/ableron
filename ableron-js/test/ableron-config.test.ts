@@ -8,7 +8,7 @@ describe('AbleronConfig', () => {
 
     // then
     expect(config.enabled).toBe(true);
-    expect(config.fragmentRequestTimeoutMillis).toBe(3000);
+    expect(config.requestTimeoutMs).toBe(3000);
     expect(config.fragmentRequestHeadersToPass).toEqual(['Correlation-ID', 'X-Correlation-ID', 'X-Request-ID']);
     expect(config.primaryFragmentResponseHeadersToPass).toEqual(['Content-Language', 'Location', 'Refresh']);
     expect(config.cacheMaxItems).toEqual(10000);
@@ -24,7 +24,7 @@ describe('AbleronConfig', () => {
     // when
     const config = new AbleronConfig({
       enabled: false,
-      fragmentRequestTimeoutMillis: 200,
+      requestTimeoutMs: 200,
       fragmentRequestHeadersToPass: ['X-Test-Request-Header', 'X-Test-Request-Header-2'],
       primaryFragmentResponseHeadersToPass: ['X-Test-Response-Header', 'X-Test-Response-Header-2'],
       cacheMaxItems: 999,
@@ -38,7 +38,7 @@ describe('AbleronConfig', () => {
 
     // then
     expect(config.enabled).toBe(false);
-    expect(config.fragmentRequestTimeoutMillis).toBe(200);
+    expect(config.requestTimeoutMs).toBe(200);
     expect(config.fragmentRequestHeadersToPass).toEqual(['X-Test-Request-Header', 'X-Test-Request-Header-2']);
     expect(config.primaryFragmentResponseHeadersToPass).toEqual(['X-Test-Response-Header', 'X-Test-Response-Header-2']);
     expect(config.cacheMaxItems).toEqual(999);

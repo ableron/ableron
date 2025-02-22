@@ -12,7 +12,7 @@ const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, de
 
 let server: FastifyInstance | undefined;
 const config = new AbleronConfig({
-  fragmentRequestTimeoutMillis: 1000
+  requestTimeoutMs: 1000
 });
 const fragmentCache = new TransclusionProcessor(config, new NoOpLogger()).getFragmentCache();
 

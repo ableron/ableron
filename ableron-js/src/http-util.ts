@@ -19,10 +19,10 @@ export default abstract class HttpUtil {
   public static async loadUrl(
     url: string,
     requestHeaders: Headers,
-    requestTimeoutMillis: number,
+    requestTimeoutMs: number,
     logger?: LoggerInterface
   ): Promise<Response | null> {
-    logger && logger.debug(`[Ableron] Loading ${url} with timeout ${requestTimeoutMillis}ms`);
+    logger && logger.debug(`[Ableron] Loading ${url} with timeout ${requestTimeoutMs}ms`);
     requestHeaders.set('Accept-Encoding', 'gzip');
 
     if (!requestHeaders.has(this.HEADER_USER_AGENT)) {
@@ -33,14 +33,14 @@ export default abstract class HttpUtil {
       return await fetch(url, {
         headers: requestHeaders,
         redirect: 'manual',
-        signal: AbortSignal.timeout(requestTimeoutMillis)
+        signal: AbortSignal.timeout(requestTimeoutMs)
       });
     } catch (e: any) {
       if (logger) {
         logger.error(
           `[Ableron] Unable to load ${url}: ${
             e?.name === 'TimeoutError'
-              ? `${requestTimeoutMillis}ms timeout exceeded`
+              ? `${requestTimeoutMs}ms timeout exceeded`
               : `${e?.message}${e?.cause ? ` (${e?.cause})` : ''}`
           }`
         );

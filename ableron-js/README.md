@@ -67,7 +67,7 @@ try {
 - `enabled`
   - Default: `true`
   - Whether to enable UI composition.
-- `fragmentRequestTimeoutMillis`
+- `requestTimeoutMs`
   - Default: `3000`
   - Timeout in milliseconds for requesting fragments.
 - `fragmentRequestHeadersToPass`

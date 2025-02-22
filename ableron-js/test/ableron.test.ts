@@ -44,6 +44,6 @@ describe('Ableron', () => {
   });
 
   it('should create complete config', () => {
-    expect(new Ableron({ enabled: false }).getConfig().fragmentRequestTimeoutMillis).toBe(3000);
+    expect(new Ableron({ enabled: false }).getConfig().requestTimeoutMs).toBe(3000);
   });
 });

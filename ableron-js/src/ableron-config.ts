@@ -5,9 +5,9 @@ export default class AbleronConfig {
   readonly enabled: boolean = true;
 
   /**
-   * Timeout for requesting fragments.
+   * Timeout in milliseconds for requesting fragments.
    */
-  readonly fragmentRequestTimeoutMillis: number = 3000;
+  readonly requestTimeoutMs: number = 3000;
 
   /**
    * Request headers that are passed to fragment requests if present.
