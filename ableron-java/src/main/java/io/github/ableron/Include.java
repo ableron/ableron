@@ -289,7 +289,7 @@ public class Include {
    */
   public CompletableFuture<Include> resolve(HttpClient httpClient, Map<String, List<String>> parentRequestHeaders, FragmentCache fragmentCache, AbleronConfig config, ExecutorService resolveThreadPool) {
     var resolveStartTime = System.nanoTime();
-    var requestHeaders = buildRequestHeaders(parentRequestHeaders, config.getFragmentRequestHeadersToPass());
+    var requestHeaders = buildRequestHeaders(parentRequestHeaders, config.getRequestHeadersPassThrough());
     erroredPrimaryFragment = null;
 
     return CompletableFuture.supplyAsync(

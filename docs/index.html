@@ -166,7 +166,7 @@
     <div class="col-lg-8 mx-auto mb-4">
       <p>Q: I have added a header to <code>cacheVaryByRequestHeaders</code>, but caching is not influenced. Why?</p>
       <p>A: Most probably the header set via <code>cacheVaryByRequestHeaders</code> is not sent along the fragment request.
-        Also add the header to <code>fragmentRequestHeadersToPass</code> to make sure it is included in the fragment request.</p>
+        Also add the header to <code>requestHeadersPassThrough</code> to make sure it is included in the fragment request.</p>
     </div>
     <div class="col-lg-8 mx-auto mb-4">
       <p>Q: When <code>src</code> or <code>fallback-src</code> of an <code>&lt;ableron-include&gt;</code>-tag return

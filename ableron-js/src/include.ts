@@ -214,7 +214,7 @@ export default class Include {
 
   resolve(config: AbleronConfig, fragmentCache: FragmentCache, parentRequestHeaders: Headers): Promise<Include> {
     const resolveStartTime = Date.now();
-    const requestHeaders = this.buildRequestHeaders(parentRequestHeaders!, config.fragmentRequestHeadersToPass);
+    const requestHeaders = this.buildRequestHeaders(parentRequestHeaders!, config.requestHeadersPassThrough);
     this.erroredPrimaryFragment = undefined;
 
     return this.load(

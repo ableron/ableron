@@ -70,9 +70,10 @@ try {
 - `requestTimeoutMs`
   - Default: `3000`
   - Timeout in milliseconds for requesting fragments.
-- `fragmentRequestHeadersToPass`
+- `requestHeadersPassThrough`
   - Default: `[Correlation-ID, X-Correlation-ID, X-Request-ID]`
-  - Request headers that are passed to fragment requests, if present.
+  - Request headers that are passed through to fragment requests, if present.<br>
+    These request headers are not considered to influence the response and thus will not influence caching.
 - `responseHeadersPassThrough`
   - Default: `[Content-Language, Location, Refresh]`
   - Response headers of primary fragments to pass through to the page response, if present.
@@ -82,7 +83,7 @@ try {
 - `cacheVaryByRequestHeaders`
   - Default: `empty list`
   - Fragment request headers which influence the requested fragment aside from its URL. Used to create fragment cache keys.<br>
-    Must be a subset of `fragmentRequestHeadersToPass`. Common example are headers used for steering A/B-tests.
+    Must be a subset of `requestHeadersPassThrough`. Common example are headers used for steering A/B-tests.
 - `cacheAutoRefreshEnabled`
   - Default: `false`
   - Whether to enable auto-refreshing of cached fragments, before they expire.<br>

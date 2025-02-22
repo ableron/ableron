@@ -862,7 +862,7 @@ describe('Include', () => {
     }
   );
 
-  it('should pass headers defined via fragmentRequestHeadersToPass to fragment requests', async () => {
+  it('should pass headers defined via requestHeadersPassThrough to fragment requests', async () => {
     // given
     server = Fastify();
     let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
@@ -875,7 +875,7 @@ describe('Include', () => {
     // when
     await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
       new AbleronConfig({
-        fragmentRequestHeadersToPass: ['X-Header1', 'X-Header2', 'x-hEADEr3']
+        requestHeadersPassThrough: ['X-Header1', 'X-Header2', 'x-hEADEr3']
       }),
       fragmentCache,
       new Headers([
@@ -963,7 +963,7 @@ describe('Include', () => {
 
     // when
     await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
-      new AbleronConfig({ fragmentRequestHeadersToPass: [] }),
+      new AbleronConfig({ requestHeadersPassThrough: [] }),
       fragmentCache,
       new Headers([['X-Test', 'Foo']])
     );
@@ -989,7 +989,7 @@ describe('Include', () => {
     expect(lastRecordedRequestHeaders['user-agent']).toBe('Ableron/2.0');
   });
 
-  it('should pass provided User-Agent header to fragment requests if enabled via fragmentRequestHeadersToPass', async () => {
+  it('should pass provided User-Agent header to fragment requests if enabled via requestHeadersPassThrough', async () => {
     // given
     server = Fastify();
     let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
@@ -1001,7 +1001,7 @@ describe('Include', () => {
 
     // when
     await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
-      new AbleronConfig({ fragmentRequestHeadersToPass: ['User-Agent'] }),
+      new AbleronConfig({ requestHeadersPassThrough: ['User-Agent'] }),
       fragmentCache,
       new Headers([['user-AGENT', 'test']])
     );
@@ -1113,7 +1113,7 @@ describe('Include', () => {
     });
     await server.listen();
     const config = new AbleronConfig({
-      fragmentRequestHeadersToPass: ['x-ab-TEST', 'x-ab-TEST-1', 'x-ab-TEST-2'],
+      requestHeadersPassThrough: ['x-ab-TEST', 'x-ab-TEST-1', 'x-ab-TEST-2'],
       cacheVaryByRequestHeaders: ['x-AB-test', 'x-AB-test-1', 'x-AB-test-2']
     });
 
@@ -1204,7 +1204,7 @@ describe('Include', () => {
     });
     await server.listen();
     const config = new AbleronConfig({
-      fragmentRequestHeadersToPass: ['X-Test-A', 'X-Test-B', 'X-Test-C'],
+      requestHeadersPassThrough: ['X-Test-A', 'X-Test-B', 'X-Test-C'],
       cacheVaryByRequestHeaders: ['X-Test-A', 'X-Test-B', 'X-Test-C']
     });
 

@@ -20,9 +20,10 @@ public class AbleronConfig {
   private Duration requestTimeout = Duration.ofSeconds(3);
 
   /**
-   * Request headers that are passed to fragment requests if present.
+   * Request headers that are passed through to fragment requests, if present.
+   * These request headers are not considered to influence the response and thus will not influence caching.
    */
-  private Collection<String> fragmentRequestHeadersToPass = List.of(
+  private Collection<String> requestHeadersPassThrough = List.of(
     "Correlation-ID",
     "X-Correlation-ID",
     "X-Request-ID"
@@ -91,8 +92,8 @@ public class AbleronConfig {
     return requestTimeout;
   }
 
-  public Collection<String> getFragmentRequestHeadersToPass() {
-    return fragmentRequestHeadersToPass;
+  public Collection<String> getRequestHeadersPassThrough() {
+    return requestHeadersPassThrough;
   }
 
   public Collection<String> getResponseHeadersPassThrough() {
@@ -141,9 +142,9 @@ public class AbleronConfig {
       return this;
     }
 
-    public Builder fragmentRequestHeadersToPass(Collection<String> fragmentRequestHeadersToPass) {
-      Objects.requireNonNull(fragmentRequestHeadersToPass, "fragmentRequestHeadersToPass must not be null");
-      ableronConfig.fragmentRequestHeadersToPass = fragmentRequestHeadersToPass.stream().collect(Collectors.toUnmodifiableList());
+    public Builder requestHeadersPassThrough(Collection<String> requestHeadersPassThrough) {
+      Objects.requireNonNull(requestHeadersPassThrough, "requestHeadersPassThrough must not be null");
+      ableronConfig.requestHeadersPassThrough = requestHeadersPassThrough.stream().collect(Collectors.toUnmodifiableList());
       return this;
     }
 
