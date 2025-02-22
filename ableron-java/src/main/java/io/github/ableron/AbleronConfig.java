@@ -16,9 +16,8 @@ public class AbleronConfig {
 
   /**
    * Timeout for requesting fragments.
-   * Defaults to 3 seconds.
    */
-  private Duration fragmentRequestTimeout = Duration.ofSeconds(3);
+  private Duration requestTimeout = Duration.ofSeconds(3);
 
   /**
    * Request headers that are passed to fragment requests if present.
@@ -88,8 +87,8 @@ public class AbleronConfig {
     return enabled;
   }
 
-  public Duration getFragmentRequestTimeout() {
-    return fragmentRequestTimeout;
+  public Duration getRequestTimeout() {
+    return requestTimeout;
   }
 
   public Collection<String> getFragmentRequestHeadersToPass() {
@@ -137,8 +136,8 @@ public class AbleronConfig {
       return this;
     }
 
-    public Builder fragmentRequestTimeout(Duration fragmentRequestTimeout) {
-      ableronConfig.fragmentRequestTimeout = Objects.requireNonNull(fragmentRequestTimeout, "fragmentRequestTimeout must not be null");
+    public Builder requestTimeout(Duration requestTimeout) {
+      ableronConfig.requestTimeout = Objects.requireNonNull(requestTimeout, "requestTimeout must not be null");
       return this;
     }
 

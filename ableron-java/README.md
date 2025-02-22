@@ -66,7 +66,7 @@ To use `ableron-java` directly, follow these steps:
 - `enabled`
   - Default: `true`
   - Whether to enable UI composition.
-- `fragmentRequestTimeout`
+- `requestTimeout`
   - Default: `3 seconds`
   - Timeout for requesting fragments.
 - `fragmentRequestHeadersToPass`

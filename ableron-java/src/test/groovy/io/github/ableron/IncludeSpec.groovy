@@ -20,7 +20,7 @@ class IncludeSpec extends Specification {
 
   @Shared
   def config = AbleronConfig.builder()
-    .fragmentRequestTimeout(Duration.ofSeconds(1))
+    .requestTimeout(Duration.ofSeconds(1))
     .build()
 
   @Shared

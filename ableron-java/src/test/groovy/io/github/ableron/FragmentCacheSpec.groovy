@@ -8,7 +8,7 @@ import java.time.Instant
 class FragmentCacheSpec extends Specification {
 
   def fragmentCache = new TransclusionProcessor(AbleronConfig.builder()
-    .fragmentRequestTimeout(Duration.ofSeconds(1))
+    .requestTimeout(Duration.ofSeconds(1))
     .cacheAutoRefreshEnabled(true)
     .build()).getFragmentCache()
 

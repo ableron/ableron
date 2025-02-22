@@ -444,7 +444,7 @@ public class Include {
 
   private Duration getRequestTimeout(Duration localTimeout, AbleronConfig config) {
     return Optional.ofNullable(localTimeout)
-      .orElse(config.getFragmentRequestTimeout());
+      .orElse(config.getRequestTimeout());
   }
 
   private boolean isHttpStatusCacheable(int httpStatusCode) {
