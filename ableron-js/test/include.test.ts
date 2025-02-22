@@ -76,7 +76,7 @@ describe('Include', () => {
   it.each([
     [new Include(''), undefined],
     [new Include('', new Map([['src', 'https://example.com']])), 'https://example.com']
-  ])('should set src attribute in constructor', (include: Include, expectedSrc?: string) => {
+  ])('should parse src attribute', (include: Include, expectedSrc?: string) => {
     expect(include.getSrc()).toBe(expectedSrc);
   });
 
@@ -90,14 +90,14 @@ describe('Include', () => {
     [new Include('', new Map([['src-timeout', '2000 ']])), undefined],
     [new Include('', new Map([['src-timeout', '2m']])), undefined],
     [new Include('', new Map([['src-timeout', '2\ns']])), undefined]
-  ])('should set src timeout attribute in constructor', (include: Include, expectedSrcTimeout?: number) => {
+  ])('should parse src timeout attribute', (include: Include, expectedSrcTimeout?: number) => {
     expect(include.getSrcTimeoutMillis()).toBe(expectedSrcTimeout);
   });
 
   it.each([
     [new Include(''), undefined],
     [new Include('', new Map([['fallback-src', 'https://example.com']])), 'https://example.com']
-  ])('should set fallback-src attribute in constructor', (include: Include, expectedFallbackSrc?: string) => {
+  ])('should parse fallback-src attribute', (include: Include, expectedFallbackSrc?: string) => {
     expect(include.getFallbackSrc()).toBe(expectedFallbackSrc);
   });
 
@@ -111,12 +111,9 @@ describe('Include', () => {
     [new Include('', new Map([['fallback-src-timeout', '2000 ']])), undefined],
     [new Include('', new Map([['fallback-src-timeout', '2m']])), undefined],
     [new Include('', new Map([['fallback-src-timeout', '2\ns']])), undefined]
-  ])(
-    'should set fallback-src timeout attribute in constructor',
-    (include: Include, expectedFallbackSrcTimeout?: number) => {
-      expect(include.getFallbackSrcTimeoutMillis()).toBe(expectedFallbackSrcTimeout);
-    }
-  );
+  ])('should parse fallback-src timeout attribute', (include: Include, expectedFallbackSrcTimeout?: number) => {
+    expect(include.getFallbackSrcTimeoutMillis()).toBe(expectedFallbackSrcTimeout);
+  });
 
   it.each([
     [new Include(''), false],
@@ -124,8 +121,34 @@ describe('Include', () => {
     [new Include('', new Map([['primary', 'primary']])), true],
     [new Include('', new Map([['primary', 'PRIMARY']])), true],
     [new Include('', new Map([['primary', 'nope']])), false]
-  ])('should set primary attribute in constructor', (include: Include, expectedPrimary: boolean) => {
+  ])('should parse primary attribute', (include: Include, expectedPrimary: boolean) => {
     expect(include.isPrimary()).toBe(expectedPrimary);
+  });
+
+  it.each([
+    [new Include(''), []],
+    [new Include('', new Map([['headers', '']])), []],
+    [new Include('', new Map([['headers', 'test']])), ['test']],
+    [new Include('', new Map([['headers', 'TEST']])), ['test']],
+    [
+      new Include('', new Map([['headers', ' test1,test2  ,, TEST3 ,\nTest4,,test4  ']])),
+      ['test1', 'test2', 'test3', 'test4']
+    ]
+  ])('should parse headers attribute', (include: Include, expectedHeadersToPass: string[]) => {
+    expect(include.getHeadersToPass()).toStrictEqual(expectedHeadersToPass);
+  });
+
+  it.each([
+    [new Include(''), []],
+    [new Include('', new Map([['cookies', '']])), []],
+    [new Include('', new Map([['cookies', 'test']])), ['test']],
+    [new Include('', new Map([['cookies', 'TEST']])), ['TEST']],
+    [
+      new Include('', new Map([['cookies', ' test1,test2  ,, TEST3 ,\nTest4,,test4  ']])),
+      ['test1', 'test2', 'TEST3', 'Test4', 'test4']
+    ]
+  ])('should parse cookies attribute', (include: Include, expectedCookiesToPass: string[]) => {
+    expect(include.getCookiesToPass()).toStrictEqual(expectedCookiesToPass);
   });
 
   it('should resolve with src', async () => {
@@ -137,7 +160,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -165,7 +192,7 @@ describe('Include', () => {
         ['src', serverAddress('/src')],
         ['fallback-src', serverAddress('/fallback-src')]
       ])
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -194,7 +221,7 @@ describe('Include', () => {
         ['fallback-src', serverAddress('/fallback-src')]
       ]),
       'fallback content'
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -206,7 +233,7 @@ describe('Include', () => {
 
   it('should resolve to empty string if src, fallback src and fallback content are not present', async () => {
     // when
-    const include = await new Include('').resolve(config, fragmentCache);
+    const include = await new Include('').resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -230,7 +257,7 @@ describe('Include', () => {
         ['src', serverAddress('/src')],
         ['primary', 'primary']
       ])
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -255,7 +282,7 @@ describe('Include', () => {
         ['fallback-src', serverAddress('/fallback-src-503')],
         ['primary', 'primary']
       ])
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -284,7 +311,7 @@ describe('Include', () => {
         ['fallback-src', serverAddress('/fallback-src')],
         ['primary', '']
       ])
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -313,7 +340,7 @@ describe('Include', () => {
         ['fallback-src', serverAddress('/fallback-src')],
         ['primary', '']
       ])
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -348,7 +375,7 @@ describe('Include', () => {
     );
 
     // when
-    await include.resolve(config, fragmentCache);
+    await include.resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -358,7 +385,7 @@ describe('Include', () => {
     expect(include.getResolveTimeMillis()).toBeGreaterThan(0);
 
     // when
-    await include.resolve(config, fragmentCache);
+    await include.resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -383,7 +410,7 @@ describe('Include', () => {
         ['primary', '']
       ]),
       'fallback content'
-    ).resolve(config, fragmentCache);
+    ).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(include.isResolved()).toBe(true);
@@ -407,7 +434,8 @@ describe('Include', () => {
     // when
     const include = await new Include('', new Map([['src', serverAddress('/src')]]), 'fallback content').resolve(
       config,
-      fragmentCache
+      fragmentCache,
+      new Headers()
     );
 
     // then
@@ -434,7 +462,11 @@ describe('Include', () => {
       // when
       fragmentCache.set(serverAddress('/src'), new Fragment(200, 'fragment from cache', undefined, expirationTime));
       await sleep(2);
-      const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+      const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+        config,
+        fragmentCache,
+        new Headers()
+      );
 
       // then
       expect(include.isResolved()).toBe(true);
@@ -490,7 +522,8 @@ describe('Include', () => {
       // when
       const include = await new Include('', new Map([['src', serverAddress('/src')]]), ':(').resolve(
         config,
-        fragmentCache
+        fragmentCache,
+        new Headers()
       );
 
       // then
@@ -520,7 +553,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -544,7 +581,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -564,7 +605,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -588,7 +633,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -612,7 +661,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -635,7 +688,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -653,7 +710,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
 
     // then
     expect(include.getResolvedFragment()?.content).toBe('fragment from src');
@@ -673,7 +734,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
     const cachedFragment = fragmentCache.get(serverAddress('/src')) as Fragment;
 
     // then
@@ -692,7 +757,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
 
     // then
     expect(include.getResolvedFragment()?.content).toBe('fragment from src');
@@ -716,7 +785,11 @@ describe('Include', () => {
       await server.listen();
 
       // when
-      const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+      const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+        config,
+        fragmentCache,
+        new Headers()
+      );
 
       // then
       expect(include.getResolvedFragment()?.content).toBe('fragment from src');
@@ -732,7 +805,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
 
     // then
     expect(include.getResolvedFragment()?.content).toBe('fragment from src');
@@ -750,7 +827,8 @@ describe('Include', () => {
     // when
     const include = await new Include('', new Map([['src', serverAddress('/src')]]), 'fallback content').resolve(
       config,
-      fragmentCache
+      fragmentCache,
+      new Headers()
     );
 
     // then
@@ -777,14 +855,14 @@ describe('Include', () => {
       // when
       const rawAttributes = new Map([[srcAttributeName, serverAddress('/')]]);
       timeoutAttribute.forEach((value, key) => rawAttributes.set(key, value));
-      const include = await new Include('', rawAttributes).resolve(config, fragmentCache);
+      const include = await new Include('', rawAttributes).resolve(config, fragmentCache, new Headers());
 
       // then
       expect(include.getResolvedFragment()?.content).toBe(expectedFragmentContent);
     }
   );
 
-  it('should pass allowed request headers to fragment requests', async () => {
+  it('should pass headers defined via fragmentRequestHeadersToPass to fragment requests', async () => {
     // given
     server = Fastify();
     let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
@@ -797,21 +875,23 @@ describe('Include', () => {
     // when
     await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
       new AbleronConfig({
-        fragmentRequestHeadersToPass: ['X-Default', 'X-Additional']
+        fragmentRequestHeadersToPass: ['X-Header1', 'X-Header2', 'x-hEADEr3']
       }),
       fragmentCache,
       new Headers([
-        ['X-Default', 'Foo'],
-        ['X-Additional', 'Bar']
+        ['X-Header1', 'header1'],
+        ['X-Header2', 'header2'],
+        ['X-HeadeR3', 'header3']
       ])
     );
 
     // then
-    expect(lastRecordedRequestHeaders['x-default']).toBe('Foo');
-    expect(lastRecordedRequestHeaders['x-additional']).toBe('Bar');
+    expect(lastRecordedRequestHeaders['x-header1']).toBe('header1');
+    expect(lastRecordedRequestHeaders['x-header2']).toBe('header2');
+    expect(lastRecordedRequestHeaders['x-header3']).toBe('header3');
   });
 
-  it('should treat fragment request headers allow list as case insensitive', async () => {
+  it('should pass headers defined via ableron-include headers-attribute to fragment requests', async () => {
     // given
     server = Fastify();
     let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
@@ -822,14 +902,53 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
-      new AbleronConfig({ fragmentRequestHeadersToPass: ['X-TeSt'] }),
+    await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Header1,X-Header2,x-hEADEr3']
+      ])
+    ).resolve(
+      config,
       fragmentCache,
-      new Headers([['x-tEsT', 'Foo']])
+      new Headers([
+        ['X-Header1', 'header1'],
+        ['X-Header2', 'header2'],
+        ['X-HEADER3', 'header3']
+      ])
     );
 
     // then
-    expect(lastRecordedRequestHeaders['x-test']).toBe('Foo');
+    expect(lastRecordedRequestHeaders['x-header1']).toBe('header1');
+    expect(lastRecordedRequestHeaders['x-header2']).toBe('header2');
+    expect(lastRecordedRequestHeaders['x-header3']).toBe('header3');
+  });
+
+  it('should pass cookies defined via ableron-include cookies-attribute to fragment requests', async () => {
+    // given
+    server = Fastify();
+    let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
+    server.get('/src', function (request, reply) {
+      lastRecordedRequestHeaders = request.headers;
+      reply.status(204).send();
+    });
+    await server.listen();
+
+    // when
+    await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['cookies', 'UID,selected_tab, cID ']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([['Cookie', 'foo=bar;  UID=user1 ; Uid=user%3B2; SELECTED_TAB=home; cID = 123']])
+    );
+
+    // then
+    expect(lastRecordedRequestHeaders['cookie']).toBe('UID=user1; cID = 123');
   });
 
   it('should not pass non-allowed request headers to fragment requests', async () => {
@@ -864,7 +983,7 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache, new Headers());
 
     // then
     expect(lastRecordedRequestHeaders['user-agent']).toBe('Ableron/2.0');
@@ -902,7 +1021,8 @@ describe('Include', () => {
     // when
     const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
       new AbleronConfig({ primaryFragmentResponseHeadersToPass: ['X-Test'] }),
-      fragmentCache
+      fragmentCache,
+      new Headers()
     );
 
     // then
@@ -918,7 +1038,11 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(config, fragmentCache);
+    const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+      config,
+      fragmentCache,
+      new Headers()
+    );
 
     // then
     expect(include.getResolvedFragment()?.responseHeaders).toEqual(new Headers());
@@ -939,7 +1063,7 @@ describe('Include', () => {
         ['src', serverAddress('/src')],
         ['primary', '']
       ])
-    ).resolve(new AbleronConfig({ primaryFragmentResponseHeadersToPass: ['X-TeSt'] }), fragmentCache);
+    ).resolve(new AbleronConfig({ primaryFragmentResponseHeadersToPass: ['X-TeSt'] }), fragmentCache, new Headers());
 
     // then
     expect(include.getResolvedFragment()?.responseHeaders.get('x-test')).toBe('Test');
@@ -961,12 +1085,13 @@ describe('Include', () => {
     const include = new Include('', new Map([['src', serverAddress('/src')]]));
 
     // when
-    const fragment1 = include.resolve(config, fragmentCache);
-    const fragment2 = include.resolve(config, fragmentCache);
-    const fragment3 = include.resolve(config, fragmentCache);
+    const fragment1 = include.resolve(config, fragmentCache, new Headers());
+    const fragment2 = include.resolve(config, fragmentCache, new Headers());
+    const fragment3 = include.resolve(config, fragmentCache, new Headers());
     const fragment4 = new Include('', new Map([['src', serverAddress('/404')]]), '404 not found').resolve(
       config,
-      fragmentCache
+      fragmentCache,
+      new Headers()
     );
 
     // and
@@ -1026,7 +1151,8 @@ describe('Include', () => {
     );
     const resolvedInclude5 = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
       config,
-      fragmentCache
+      fragmentCache,
+      new Headers()
     );
     const resolvedInclude6 = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
       config,
@@ -1127,6 +1253,219 @@ describe('Include', () => {
     expect(resolvedInclude4.getResolvedFragment()?.content).toBe('request 2');
   });
 
+  it('should consider request headers defined in headers attribute for cache key generation', async () => {
+    // given
+    server = Fastify();
+    let reqCounter = 0;
+    server.get('/src', function (request, reply) {
+      reply
+        .status(200)
+        .header('Cache-Control', 'max-age=30')
+        .send('request ' + ++reqCounter);
+    });
+    await server.listen();
+
+    // when
+    const resolvedInclude1 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A,X-Test-B,X-Test-C']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-TEST-B', 'B'],
+        ['X-Test-C', 'C'],
+        ['X-Test-A', 'A']
+      ])
+    );
+    const resolvedInclude2 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A,X-Test-B,X-Test-C']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-TEST-B', 'B'],
+        ['X-TEST-A', 'A'],
+        ['X-Test-C', 'C']
+      ])
+    );
+    const resolvedInclude3 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'x-test-b']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-TEST-C', 'C'],
+        ['X-test-B', 'B'],
+        ['X-Test-A', 'A']
+      ])
+    );
+    const resolvedInclude4 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-B,X-Test-C,X-Test-A']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['x-test-c', 'B'],
+        ['x-test-b', 'B'],
+        ['x-test-a', 'A']
+      ])
+    );
+    const resolvedInclude5 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-TEST-C, X-Test-A,X-Test-B']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-TEST-B', 'B'],
+        ['X-Test-C', 'C'],
+        ['X-Test-A', 'A'],
+        ['X-Test-D', 'D']
+      ])
+    );
+    const resolvedInclude6 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'x-test-b'],
+        ['cookies', 'x-test-b']
+      ])
+    ).resolve(config, fragmentCache, new Headers([['Cookie', 'x-test-b=B']]));
+
+    // then
+    expect(resolvedInclude1.getResolvedFragment()?.content).toBe('request 1');
+    expect(resolvedInclude2.getResolvedFragment()?.content).toBe('request 1');
+    expect(resolvedInclude3.getResolvedFragment()?.content).toBe('request 2');
+    expect(resolvedInclude4.getResolvedFragment()?.content).toBe('request 3');
+    expect(resolvedInclude5.getResolvedFragment()?.content).toBe('request 1');
+    expect(resolvedInclude6.getResolvedFragment()?.content).toBe('request 4');
+  });
+
+  it('should consider cookies defined in cookies attribute for cache key generation', async () => {
+    // given
+    server = Fastify();
+    let reqCounter = 0;
+    server.get('/src', function (request, reply) {
+      reply
+        .status(200)
+        .header('Cache-Control', 'max-age=30')
+        .send('request ' + ++reqCounter);
+    });
+    await server.listen();
+
+    // when
+    const resolvedInclude1 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A'],
+        ['cookies', 'UID,ab_test']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-Test-A', 'A'],
+        ['Cookie', 'foo=bar;UID=1;ab_test=x']
+      ])
+    );
+    const resolvedInclude2 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A'],
+        ['cookies', 'UID,ab_test']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-Test-A', 'A'],
+        ['Cookie', 'foo=bar;ab_test=x']
+      ])
+    );
+    const resolvedInclude3 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A'],
+        ['cookies', 'UID,ab_test']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-Test-A', 'A'],
+        ['Cookie', 'foo=bar;UID=2;ab_test=x']
+      ])
+    );
+    const resolvedInclude4 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A'],
+        ['cookies', 'UID,ab_test']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['x-test-a', 'A'],
+        ['Cookie', 'ab_test=x; UID=1']
+      ])
+    );
+    const resolvedInclude5 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A'],
+        ['cookies', 'UID,ab_test']
+      ])
+    ).resolve(config, fragmentCache, new Headers([['Cookie', 'ab_test=x']]));
+    const resolvedInclude6 = await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'X-Test-A'],
+        ['cookies', 'UID,ab_test']
+      ])
+    ).resolve(
+      config,
+      fragmentCache,
+      new Headers([
+        ['X-Test-B', 'B'],
+        ['Cookie', 'ab_test=x;a=a']
+      ])
+    );
+
+    // then
+    expect(resolvedInclude1.getResolvedFragment()?.content).toBe('request 1');
+    expect(resolvedInclude2.getResolvedFragment()?.content).toBe('request 2');
+    expect(resolvedInclude3.getResolvedFragment()?.content).toBe('request 3');
+    expect(resolvedInclude4.getResolvedFragment()?.content).toBe('request 1');
+    expect(resolvedInclude5.getResolvedFragment()?.content).toBe('request 4');
+    expect(resolvedInclude6.getResolvedFragment()?.content).toBe('request 4');
+  });
+
   it('should configure auto refresh for cached Fragments', async () => {
     // given
     server = Fastify();
@@ -1142,7 +1481,7 @@ describe('Include', () => {
     // when
     for (let i = 0; i < 4; i++) {
       await new Include('', new Map([['src', serverAddress('/')]]))
-        .resolve(new AbleronConfig({ cacheAutoRefreshEnabled: true }), fragmentCache)
+        .resolve(new AbleronConfig({ cacheAutoRefreshEnabled: true }), fragmentCache, new Headers())
         .then(() => sleep(1000));
     }
 

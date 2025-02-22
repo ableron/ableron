@@ -71,7 +71,7 @@ class IncludeSpec extends Specification {
     new Include("zzzzzz")                      | "685785664"
   }
 
-  def "constructor should set src attribute"() {
+  def "should parse src attribute"() {
     expect:
     include.src == expectedSrc
 
@@ -82,7 +82,7 @@ class IncludeSpec extends Specification {
     new Include("", ["SRC": "https://example.com"]) | "https://example.com"
   }
 
-  def "constructor should set src timeout attribute"() {
+  def "should parse src timeout attribute"() {
     expect:
     include.srcTimeout == expectedSrcTimeout
 
@@ -99,7 +99,7 @@ class IncludeSpec extends Specification {
     new Include("", ["src-timeout": "2\ns"])   | null
   }
 
-  def "constructor should set fallback-src attribute"() {
+  def "should parse fallback-src attribute"() {
     expect:
     include.fallbackSrc == expectedFallbackSrc
 
@@ -109,7 +109,7 @@ class IncludeSpec extends Specification {
     new Include(null, ["fallback-src": "https://example.com"]) | "https://example.com"
   }
 
-  def "constructor should set fallback src timeout attribute"() {
+  def "should parse fallback src timeout attribute"() {
     expect:
     include.fallbackSrcTimeout == expectedFallbackSrcTimeout
 
@@ -126,7 +126,7 @@ class IncludeSpec extends Specification {
     new Include("", ["fallback-src-timeout": "2\ns"])   | null
   }
 
-  def "constructor should set primary attribute"() {
+  def "should parse primary attribute"() {
     expect:
     include.primary == expectedPrimary
 
@@ -139,6 +139,32 @@ class IncludeSpec extends Specification {
     new Include(null, ["primary": "PRIMARY"]) | true
     new Include(null, ["priMARY": "PRImary"]) | true
     new Include(null, ["primary": "nope"])    | false
+  }
+
+  def "should parse headers attribute"() {
+    expect:
+    include.headersToPass == expectedHeadersToPass
+
+    where:
+    include                                                                    | expectedHeadersToPass
+    new Include(null)                                                          | []
+    new Include(null, ["headers": ""])                                         | []
+    new Include(null, ["headers": "test"])                                     | ["test"]
+    new Include(null, ["headers": "TEST"])                                     | ["test"]
+    new Include(null, ["headers": " test1,test2  ,, TEST3 ,\nTest4,,test4  "]) | ["test1", "test2", "test3", "test4"]
+  }
+
+  def "should parse cookies attribute"() {
+    expect:
+    include.cookiesToPass == expectedCookiesToPass
+
+    where:
+    include                                                                    | expectedCookiesToPass
+    new Include(null)                                                          | []
+    new Include(null, ["cookies": ""])                                         | []
+    new Include(null, ["cookies": "test"])                                     | ["test"]
+    new Include(null, ["cookies": "TEST"])                                     | ["TEST"]
+    new Include(null, ["cookies": " test1,test2  ,, TEST3 ,\nTest4,,test4  "]) | ["test1", "test2", "TEST3", "Test4", "test4"]
   }
 
   def "should consider include objects with identical include string as equal"() {
@@ -868,42 +894,59 @@ class IncludeSpec extends Specification {
     "fallback-src"   | ["src-timeout": "2s"]          | ""
   }
 
-  def "should pass allowed request headers to fragment requests"() {
+  def "should pass headers defined via fragmentRequestHeadersToPass to fragment requests"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(204))
     def config = AbleronConfig.builder()
-      .fragmentRequestHeadersToPass(["X-Default", "X-Additional"])
+      .fragmentRequestHeadersToPass(["X-Header1", "X-Header2", "x-hEADEr3"])
       .build()
 
     when:
     new Include("", ["src": mockWebServer.url("/").toString()])
-      .resolve(httpClient, ["X-Default": ["Foo"], "X-Additional": ["Bar"]], cache, config, supplyPool).get()
+      .resolve(httpClient, ["X-Header1": ["header1"], "X-Header2": ["header2"], "X-HeadeR3": ["header3"]], cache, config, supplyPool).get()
     def fragmentRequest = mockWebServer.takeRequest()
 
     then:
-    fragmentRequest.getHeader("X-default") == "Foo"
-    fragmentRequest.getHeader("X-additional") == "Bar"
+    fragmentRequest.getHeader("X-header1") == "header1"
+    fragmentRequest.getHeader("X-header2") == "header2"
+    fragmentRequest.getHeader("X-header3") == "header3"
 
     cleanup:
     mockWebServer.shutdown()
   }
 
-  def "should treat fragment request headers allow list as case insensitive"() {
+  def "should pass headers defined via ableron-include headers-attribute to fragment requests"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(204))
-    def config = AbleronConfig.builder()
-      .fragmentRequestHeadersToPass(["X-TeSt"])
-      .build()
 
     when:
-    new Include("", ["src": mockWebServer.url("/").toString()])
-      .resolve(httpClient, ["x-tEsT":["Foo"]], cache, config, supplyPool).get()
+    new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Header1,X-Header2,x-hEADEr3"])
+      .resolve(httpClient, ["X-Header1": ["header1"], "X-Header2": ["header2"], "X-HEADER3": ["header3"]], cache, config, supplyPool).get()
     def fragmentRequest = mockWebServer.takeRequest()
 
     then:
-    fragmentRequest.getHeader("X-Test") == "Foo"
+    fragmentRequest.getHeader("X-header1") == "header1"
+    fragmentRequest.getHeader("X-header2") == "header2"
+    fragmentRequest.getHeader("X-header3") == "header3"
+
+    cleanup:
+    mockWebServer.shutdown()
+  }
+
+  def "should pass cookies defined via ableron-include cookies-attribute to fragment requests"() {
+    given:
+    def mockWebServer = new MockWebServer()
+    mockWebServer.enqueue(new MockResponse().setResponseCode(204))
+
+    when:
+    new Include("", ["src": mockWebServer.url("/").toString(), "cookies": "UID,selected_tab, cID "])
+      .resolve(httpClient, ["Cookie": ["foo=bar;  UID=user1 ; Uid=user%3B2; SELECTED_TAB=home; cID = 123"]], cache, config, supplyPool).get()
+    def fragmentRequest = mockWebServer.takeRequest()
+
+    then:
+    fragmentRequest.getHeader("Cookie") == "UID=user1; cID = 123"
 
     cleanup:
     mockWebServer.shutdown()
@@ -1141,6 +1184,98 @@ class IncludeSpec extends Specification {
     include2.resolvedFragment.content == "A,B,C"
     include3.resolvedFragment.content == "A,B,C"
     include4.resolvedFragment.content == "A,B,B"
+
+    cleanup:
+    mockWebServer.shutdown()
+  }
+
+  def "should consider request headers defined in headers attribute for cache key generation"() {
+    given:
+    def mockWebServer = new MockWebServer()
+    mockWebServer.enqueue(new MockResponse()
+      .setResponseCode(200)
+      .setHeader("Cache-Control", "max-age=30")
+      .setBody("A,B,C"))
+    mockWebServer.enqueue(new MockResponse()
+      .setResponseCode(200)
+      .setHeader("Cache-Control", "max-age=30")
+      .setBody("B"))
+    mockWebServer.enqueue(new MockResponse()
+      .setResponseCode(200)
+      .setHeader("Cache-Control", "max-age=30")
+      .setBody("A,B,B"))
+    mockWebServer.enqueue(new MockResponse()
+      .setResponseCode(200)
+      .setHeader("Cache-Control", "max-age=30")
+      .setBody("B from Cookie"))
+
+    when:
+    def include1 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Test-A,X-Test-B,X-Test-C"])
+      .resolve(httpClient, ["X-TEST-B": ["B"], "X-Test-C": ["C"], "X-Test-A": ["A"]], cache, config, supplyPool).get()
+    def include2 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Test-A,X-Test-B,X-Test-C"])
+      .resolve(httpClient, ["X-TEST-B": ["B"], "X-TEST-A": ["A"], "X-Test-C": ["C"]], cache, config, supplyPool).get()
+    def include3 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "x-test-b"])
+      .resolve(httpClient, ["X-TEST-C": ["C"], "X-test-B": ["B"], "X-Test-A": ["A"]], cache, config, supplyPool).get()
+    def include4 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Test-B,X-Test-C,X-Test-A"])
+      .resolve(httpClient, ["x-test-c": ["B"], "x-test-b": ["B"], "x-test-a": ["A"]], cache, config, supplyPool).get()
+    def include5 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-TEST-C, X-Test-A,X-Test-B"])
+      .resolve(httpClient, ["X-TEST-B": ["B"], "X-Test-C": ["C"], "X-Test-A": ["A"], "X-Test-D": ["D"]], cache, config, supplyPool).get()
+    def include6 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "x-test-b", "cookies": "x-test-b"])
+      .resolve(httpClient, ["Cookie": ["x-test-b=B"]], cache, config, supplyPool).get()
+
+    then:
+    include1.resolvedFragment.content == "A,B,C"
+    include2.resolvedFragment.content == "A,B,C"
+    include3.resolvedFragment.content == "B"
+    include4.resolvedFragment.content == "A,B,B"
+    include5.resolvedFragment.content == "A,B,C"
+    include6.resolvedFragment.content == "B from Cookie"
+
+    cleanup:
+    mockWebServer.shutdown()
+  }
+
+  def "should consider cookies defined in cookies attribute for cache key generation"() {
+    given:
+    def mockWebServer = new MockWebServer()
+    mockWebServer.enqueue(new MockResponse()
+      .setResponseCode(200)
+      .setHeader("Cache-Control", "max-age=30")
+      .setBody("req1"))
+    mockWebServer.enqueue(new MockResponse()
+      .setResponseCode(200)
+      .setHeader("Cache-Control", "max-age=30")
+      .setBody("req2"))
+    mockWebServer.enqueue(new MockResponse()
+      .setResponseCode(200)
+      .setHeader("Cache-Control", "max-age=30")
+      .setBody("req3"))
+    mockWebServer.enqueue(new MockResponse()
+      .setResponseCode(200)
+      .setHeader("Cache-Control", "max-age=30")
+      .setBody("req4"))
+
+    when:
+    def include1 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Test-A", "cookies": "UID,ab_test"])
+      .resolve(httpClient, ["X-Test-A": ["A"], "Cookie": ["foo=bar;UID=1;ab_test=x"]], cache, config, supplyPool).get()
+    def include2 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Test-A", "cookies": "UID,ab_test"])
+      .resolve(httpClient, ["X-Test-A": ["A"], "Cookie": ["foo=bar;ab_test=x"]], cache, config, supplyPool).get()
+    def include3 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Test-A", "cookies": "UID,ab_test"])
+      .resolve(httpClient, ["X-Test-A": ["A"], "Cookie": ["foo=bar;UID=2;ab_test=x"]], cache, config, supplyPool).get()
+    def include4 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Test-A", "cookies": "UID,ab_test"])
+      .resolve(httpClient, ["x-test-a": ["A"], "Cookie": ["ab_test=x; UID=1"]], cache, config, supplyPool).get()
+    def include5 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Test-A", "cookies": "UID,ab_test"])
+      .resolve(httpClient, ["Cookie": ["ab_test=x"]], cache, config, supplyPool).get()
+    def include6 = new Include("", ["src": mockWebServer.url("/").toString(), "headers": "X-Test-A", "cookies": "UID,ab_test"])
+      .resolve(httpClient, ["X-Test-B": ["B"], "Cookie": ["ab_test=x;a=a"]], cache, config, supplyPool).get()
+
+    then:
+    include1.resolvedFragment.content == "req1"
+    include2.resolvedFragment.content == "req2"
+    include3.resolvedFragment.content == "req3"
+    include4.resolvedFragment.content == "req1"
+    include5.resolvedFragment.content == "req4"
+    include6.resolvedFragment.content == "req4"
 
     cleanup:
     mockWebServer.shutdown()

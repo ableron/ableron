@@ -7,36 +7,48 @@ import FragmentCache from './fragment-cache.js';
 
 export default class Include {
   /**
-   * Name of the attribute which contains the ID of the include - an optional unique name.
+   * Name of the optional attribute which contains the ID of the include - an optional unique name.
    */
   private readonly ATTR_ID: string = 'id';
 
   /**
-   * Name of the attribute which contains the source URl to resolve the include to.
+   * Name of the optional attribute which contains the source URl to resolve the include to.
    */
   private readonly ATTR_SOURCE: string = 'src';
 
   /**
-   * Name of the attribute which contains the timeout for requesting the src URL.
+   * Name of the optional attribute which contains the timeout for requesting the src URL.
    */
   private readonly ATTR_SOURCE_TIMEOUT: string = 'src-timeout';
 
   /**
-   * Name of the attribute which contains the fallback URL to resolve the include to in case the
+   * Name of the optional attribute which contains the fallback URL to resolve the include to in case the
    * source URL could not be loaded.
    */
   private readonly ATTR_FALLBACK_SOURCE: string = 'fallback-src';
 
   /**
-   * Name of the attribute which contains the timeout for requesting the fallback-src URL.
+   * Name of the optional attribute which contains the timeout for requesting the fallback-src URL.
    */
   private readonly ATTR_FALLBACK_SOURCE_TIMEOUT: string = 'fallback-src-timeout';
 
   /**
-   * Name of the attribute which denotes a fragment whose response code is set as response code
+   * Name of the optional attribute which denotes a fragment whose response code is set as response code
    * for the page.
    */
   private readonly ATTR_PRIMARY: string = 'primary';
+
+  /**
+   * Name of the optional attribute which contains a comma separated list of HTTP header names that shall
+   * be passed from the parent request to fragment requests.
+   */
+  private readonly ATTR_HEADERS: string = 'headers';
+
+  /**
+   * Name of the optional attribute which contains a comma separated list of HTTP cookie names that shall
+   * be passed from the parent request to fragment requests.
+   */
+  private readonly ATTR_COOKIES: string = 'cookies';
 
   /**
    * Regular expression for parsing timeouts.<br>
@@ -94,6 +106,16 @@ export default class Include {
   private readonly primary: boolean;
 
   /**
+   * List of HTTP header names that shall be passed from the parent request to fragment requests.
+   */
+  private readonly headersToPass: string[];
+
+  /**
+   * List of HTTP cookie names that shall be passed from the parent request to fragment requests.
+   */
+  private readonly cookiesToPass: string[];
+
+  /**
    * Fallback content to use in case the include could not be resolved.
    */
   private readonly fallbackContent: string;
@@ -125,6 +147,8 @@ export default class Include {
     this.fallbackSrcTimeoutMillis = this.parseTimeout(this.rawAttributes.get(this.ATTR_FALLBACK_SOURCE_TIMEOUT));
     const primary = this.rawAttributes.get(this.ATTR_PRIMARY);
     this.primary = primary !== undefined && ['', 'primary'].includes(primary.toLowerCase());
+    this.headersToPass = this.parseCommaSeparatedList(this.rawAttributes.get(this.ATTR_HEADERS), true);
+    this.cookiesToPass = this.parseCommaSeparatedList(this.rawAttributes.get(this.ATTR_COOKIES));
     this.fallbackContent = fallbackContent !== undefined ? fallbackContent : '';
   }
 
@@ -160,6 +184,14 @@ export default class Include {
     return this.primary;
   }
 
+  getHeadersToPass(): string[] {
+    return this.headersToPass;
+  }
+
+  getCookiesToPass(): string[] {
+    return this.cookiesToPass;
+  }
+
   getFallbackContent(): string {
     return this.fallbackContent;
   }
@@ -180,17 +212,14 @@ export default class Include {
     return this.resolveTimeMillis;
   }
 
-  resolve(config: AbleronConfig, fragmentCache: FragmentCache, parentRequestHeaders?: Headers): Promise<Include> {
+  resolve(config: AbleronConfig, fragmentCache: FragmentCache, parentRequestHeaders: Headers): Promise<Include> {
     const resolveStartTime = Date.now();
-    const fragmentRequestHeaders = this.filterHeaders(
-      parentRequestHeaders || new Headers(),
-      config.fragmentRequestHeadersToPass
-    );
+    const requestHeaders = this.buildRequestHeaders(parentRequestHeaders!, config.fragmentRequestHeadersToPass);
     this.erroredPrimaryFragment = undefined;
 
     return this.load(
       this.src,
-      fragmentRequestHeaders,
+      requestHeaders,
       this.getRequestTimeout(this.srcTimeoutMillis, config),
       fragmentCache,
       config,
@@ -201,7 +230,7 @@ export default class Include {
           fragment ||
           this.load(
             this.fallbackSrc,
-            fragmentRequestHeaders,
+            requestHeaders,
             this.getRequestTimeout(this.fallbackSrcTimeoutMillis, config),
             fragmentCache,
             config,
@@ -245,6 +274,17 @@ export default class Include {
     this.resolveTimeMillis = resolveTimeMillis || 0;
     this.logger.debug("[Ableron] Resolved include '%s' in %dms", this.id, this.resolveTimeMillis);
     return this;
+  }
+
+  private buildRequestHeaders(parentRequestHeaders: Headers, requestHeadersToPass: string[]): Headers {
+    const requestHeaders = this.filterHeaders(parentRequestHeaders, [...requestHeadersToPass, ...this.headersToPass]);
+    const cookieHeaderValue = HttpUtil.getCookieHeaderValue(parentRequestHeaders, this.cookiesToPass);
+
+    if (cookieHeaderValue !== null) {
+      requestHeaders.set(HttpUtil.HEADER_COOKIE, cookieHeaderValue);
+    }
+
+    return requestHeaders;
   }
 
   private async load(
@@ -363,6 +403,20 @@ export default class Include {
     return undefined;
   }
 
+  private parseCommaSeparatedList(entriesAsString?: string, toLowerCase: boolean = false): string[] {
+    return entriesAsString !== undefined
+      ? [
+          ...new Set(
+            entriesAsString
+              .split(/,/)
+              .map((entry) => entry.trim())
+              .map((entry) => (toLowerCase ? entry.toLowerCase() : entry))
+              .filter((entry) => entry.length > 0)
+          )
+        ]
+      : [];
+  }
+
   private getRequestTimeout(localTimeout: number | undefined, config: AbleronConfig): number {
     return localTimeout ? localTimeout : config.fragmentRequestTimeoutMillis;
   }
@@ -381,17 +435,32 @@ export default class Include {
 
   private buildFragmentCacheKey(
     fragmentUrl: string,
-    fragmentRequestHeaders: Headers,
+    requestHeaders: Headers,
     cacheVaryByRequestHeaders: string[]
   ): string {
-    let cacheKey = fragmentUrl;
-    cacheVaryByRequestHeaders.forEach((headerName) => {
-      const headerValue = fragmentRequestHeaders.get(headerName)?.toLowerCase();
+    const headersRelevantForCaching = [...cacheVaryByRequestHeaders, ...this.headersToPass];
+    let headersCacheKey = '';
+
+    headersRelevantForCaching.sort().forEach((headerName) => {
+      const headerValue = requestHeaders.get(headerName);
 
       if (headerValue) {
-        cacheKey += '|' + headerName.toLowerCase() + '=' + headerValue;
+        headersCacheKey += '\nh:' + headerName + '=' + headerValue;
       }
     });
-    return cacheKey;
+
+    let cookiesCacheKey = '';
+    const cookieHeaderValue = HttpUtil.getCookieHeaderValue(requestHeaders, this.cookiesToPass);
+
+    if (cookieHeaderValue !== null) {
+      cookiesCacheKey = cookieHeaderValue
+        .split(';')
+        .map((cookie) => cookie.trim())
+        .sort()
+        .map((cookie) => '\nc:' + cookie)
+        .join();
+    }
+
+    return fragmentUrl + headersCacheKey + cookiesCacheKey;
   }
 }
