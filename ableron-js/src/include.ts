@@ -299,7 +299,7 @@ export default class Include {
       return null;
     }
 
-    const fragmentCacheKey = this.buildFragmentCacheKey(url, requestHeaders, config.cacheVaryByRequestHeaders);
+    const fragmentCacheKey = this.buildFragmentCacheKey(url, requestHeaders, config.requestHeadersPassThroughVary);
     const fragmentFromCache = fragmentCache.get(fragmentCacheKey);
     const fragmentSource = (fragmentFromCache ? 'cached ' : 'remote ') + urlSource;
     const fragment: Promise<Fragment | null> = fragmentFromCache
@@ -436,9 +436,9 @@ export default class Include {
   private buildFragmentCacheKey(
     fragmentUrl: string,
     requestHeaders: Headers,
-    cacheVaryByRequestHeaders: string[]
+    requestHeadersPassThroughVary: string[]
   ): string {
-    const headersRelevantForCaching = [...cacheVaryByRequestHeaders, ...this.headersToPass];
+    const headersRelevantForCaching = [...requestHeadersPassThroughVary, ...this.headersToPass];
     let headersCacheKey = '';
 
     headersRelevantForCaching.sort().forEach((headerName) => {

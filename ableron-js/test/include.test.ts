@@ -1101,7 +1101,7 @@ describe('Include', () => {
     expect(reqCounter).toBe(3);
   });
 
-  it('should consider cacheVaryByRequestHeaders', async () => {
+  it('should consider requestHeadersPassThroughVary', async () => {
     // given
     server = Fastify();
     let reqCounter = 0;
@@ -1114,7 +1114,7 @@ describe('Include', () => {
     await server.listen();
     const config = new AbleronConfig({
       requestHeadersPassThrough: ['x-ab-TEST', 'x-ab-TEST-1', 'x-ab-TEST-2'],
-      cacheVaryByRequestHeaders: ['x-AB-test', 'x-AB-test-1', 'x-AB-test-2']
+      requestHeadersPassThroughVary: ['x-AB-test', 'x-AB-test-1', 'x-AB-test-2']
     });
 
     // when
@@ -1192,7 +1192,7 @@ describe('Include', () => {
     expect(resolvedInclude8.getResolvedFragment()?.content).toBe('request X-AB-Test=A | 4');
   });
 
-  it('should use consistent order of cacheVaryByRequestHeaders for cache key generation', async () => {
+  it('should use consistent order of requestHeadersPassThroughVary for cache key generation', async () => {
     // given
     server = Fastify();
     let reqCounter = 0;
@@ -1205,7 +1205,7 @@ describe('Include', () => {
     await server.listen();
     const config = new AbleronConfig({
       requestHeadersPassThrough: ['X-Test-A', 'X-Test-B', 'X-Test-C'],
-      cacheVaryByRequestHeaders: ['X-Test-A', 'X-Test-B', 'X-Test-C']
+      requestHeadersPassThroughVary: ['X-Test-A', 'X-Test-B', 'X-Test-C']
     });
 
     // when

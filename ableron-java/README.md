@@ -73,16 +73,17 @@ To use `ableron-java` directly, follow these steps:
   - Default: `[Correlation-ID, X-Correlation-ID, X-Request-ID]`
   - Request headers that are passed through to fragment requests, if present.<br>
     These request headers are not considered to influence the response and thus will not influence caching.
+- `requestHeadersPassThroughVary`
+  - Default: `empty list`
+  - Request headers that are passed through to fragment requests, if present and that influence the requested fragment
+    aside from its URL.<br>
+    These request headers are considered to influence the response and thus influence caching.
 - `responseHeadersPassThrough`
   - Default: `[Content-Language, Location, Refresh]`
   - Response headers of primary fragments to pass through to the page response, if present.
 - `cacheMaxSizeInBytes`
   - Default: `1024 * 1024 * 50` (`50 MiB`)
   - Maximum size in bytes the fragment cache may have.
-- `cacheVaryByRequestHeaders`
-  - Default: `empty list`
-  - Fragment request headers which influence the requested fragment aside from its URL. Used to create fragment cache keys.<br>
-    Must be a subset of `requestHeadersPassThrough`. Common example are headers used for steering A/B-tests.
 - `cacheAutoRefreshEnabled`
   - Default: `false`
   - Whether to enable auto-refreshing of cached fragments, before they expire.<br>

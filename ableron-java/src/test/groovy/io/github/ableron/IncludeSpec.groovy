@@ -1107,7 +1107,7 @@ class IncludeSpec extends Specification {
     mockWebServer.shutdown()
   }
 
-  def "should consider cacheVaryByRequestHeaders"() {
+  def "should consider requestHeadersPassThroughVary"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse()
@@ -1124,7 +1124,7 @@ class IncludeSpec extends Specification {
       .setBody("X-AB-Test=omitted"))
     def config = AbleronConfig.builder()
       .requestHeadersPassThrough(["x-ab-TEST"])
-      .cacheVaryByRequestHeaders(["x-AB-test"])
+      .requestHeadersPassThroughVary(["x-AB-test"])
       .build()
 
     when:
@@ -1153,7 +1153,7 @@ class IncludeSpec extends Specification {
     mockWebServer.shutdown()
   }
 
-  def "should use consistent order of cacheVaryByRequestHeaders for cache key generation"() {
+  def "should use consistent order of requestHeadersPassThroughVary for cache key generation"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse()
@@ -1166,7 +1166,7 @@ class IncludeSpec extends Specification {
       .setBody("A,B,B"))
     def config = AbleronConfig.builder()
       .requestHeadersPassThrough(["x-test-A", "x-test-B", "x-test-C"])
-      .cacheVaryByRequestHeaders(["X-Test-A", "X-Test-B", "X-Test-C"])
+      .requestHeadersPassThroughVary(["X-Test-A", "X-Test-B", "X-Test-C"])
       .build()
 
     when:

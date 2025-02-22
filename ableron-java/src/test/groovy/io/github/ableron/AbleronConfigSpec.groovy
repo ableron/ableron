@@ -19,13 +19,13 @@ class AbleronConfigSpec extends Specification {
         "X-Correlation-ID",
         "X-Request-ID"
       ]
+      requestHeadersPassThroughVary == []
       responseHeadersPassThrough == [
         "Content-Language",
         "Location",
         "Refresh"
       ]
       cacheMaxSizeInBytes == 1024 * 1024 * 50
-      cacheVaryByRequestHeaders == []
       !cacheAutoRefreshEnabled()
       cacheAutoRefreshMaxAttempts == 3
       cacheAutoRefreshInactiveFragmentsMaxRefreshs == 2
@@ -40,9 +40,9 @@ class AbleronConfigSpec extends Specification {
       .enabled(false)
       .requestTimeout(Duration.ofMillis(200))
       .requestHeadersPassThrough(["X-Test-Request-Header", "X-Test-Request-Header-2"])
+      .requestHeadersPassThroughVary(["X-Test-Groups", "X-ACME-Country"])
       .responseHeadersPassThrough(["X-Test-Response-Header", "X-Test-Response-Header-2"])
       .cacheMaxSizeInBytes(1024 * 100)
-      .cacheVaryByRequestHeaders(["X-Test-Groups", "X-ACME-Country"])
       .cacheAutoRefreshEnabled(true)
       .cacheAutoRefreshMaxAttempts(5)
       .cacheAutoRefreshInactiveFragmentsMaxRefreshs(4)
@@ -55,9 +55,9 @@ class AbleronConfigSpec extends Specification {
       !enabled
       requestTimeout == Duration.ofMillis(200)
       requestHeadersPassThrough == ["X-Test-Request-Header", "X-Test-Request-Header-2"]
+      requestHeadersPassThroughVary == ["X-Test-Groups", "X-ACME-Country"]
       responseHeadersPassThrough == ["X-Test-Response-Header", "X-Test-Response-Header-2"]
       cacheMaxSizeInBytes == 1024 * 100
-      cacheVaryByRequestHeaders == ["X-Test-Groups", "X-ACME-Country"]
       cacheAutoRefreshEnabled()
       cacheAutoRefreshMaxAttempts == 5
       cacheAutoRefreshInactiveFragmentsMaxRefreshs == 4
@@ -88,6 +88,17 @@ class AbleronConfigSpec extends Specification {
     exception.message == "requestHeadersPassThrough must not be null"
   }
 
+  def "should throw exception if requestHeadersPassThroughVary is tried to be set to null"() {
+    when:
+    AbleronConfig.builder()
+      .requestHeadersPassThroughVary(null)
+      .build()
+
+    then:
+    def exception = thrown(NullPointerException)
+    exception.message == "requestHeadersPassThroughVary must not be null"
+  }
+
   def "should throw exception if responseHeadersPassThrough is tried to be set to null"() {
     when:
     AbleronConfig.builder()
@@ -97,17 +108,6 @@ class AbleronConfigSpec extends Specification {
     then:
     def exception = thrown(NullPointerException)
     exception.message == "responseHeadersPassThrough must not be null"
-  }
-
-  def "should throw exception if cacheVaryByRequestHeaders is tried to be set to null"() {
-    when:
-    AbleronConfig.builder()
-      .cacheVaryByRequestHeaders(null)
-      .build()
-
-    then:
-    def exception = thrown(NullPointerException)
-    exception.message == "cacheVaryByRequestHeaders must not be null"
   }
 
   def "should expose only immutable collections - default values"() {
@@ -121,13 +121,13 @@ class AbleronConfigSpec extends Specification {
     thrown(UnsupportedOperationException)
 
     when:
-    config.getResponseHeadersPassThrough().add("Not-Allowed")
+    config.getRequestHeadersPassThroughVary().add("Not-Allowed")
 
     then:
     thrown(UnsupportedOperationException)
 
     when:
-    config.getCacheVaryByRequestHeaders().add("Not-Allowed")
+    config.getResponseHeadersPassThrough().add("Not-Allowed")
 
     then:
     thrown(UnsupportedOperationException)
@@ -137,8 +137,8 @@ class AbleronConfigSpec extends Specification {
     given:
     def config = AbleronConfig.builder()
       .requestHeadersPassThrough(new ArrayList())
+      .requestHeadersPassThroughVary(new ArrayList())
       .responseHeadersPassThrough(new ArrayList())
-      .cacheVaryByRequestHeaders(new ArrayList())
       .build()
 
     when:
@@ -148,13 +148,13 @@ class AbleronConfigSpec extends Specification {
     thrown(UnsupportedOperationException)
 
     when:
-    config.getResponseHeadersPassThrough().add("Not-Allowed")
+    config.getRequestHeadersPassThroughVary().add("Not-Allowed")
 
     then:
     thrown(UnsupportedOperationException)
 
     when:
-    config.getCacheVaryByRequestHeaders().add("Not-Allowed")
+    config.getResponseHeadersPassThrough().add("Not-Allowed")
 
     then:
     thrown(UnsupportedOperationException)

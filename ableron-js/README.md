@@ -74,16 +74,17 @@ try {
   - Default: `[Correlation-ID, X-Correlation-ID, X-Request-ID]`
   - Request headers that are passed through to fragment requests, if present.<br>
     These request headers are not considered to influence the response and thus will not influence caching.
+- `requestHeadersPassThroughVary`
+  - Default: `empty list`
+  - Request headers that are passed through to fragment requests, if present and that influence the requested fragment
+    aside from its URL.<br>
+    These request headers are considered to influence the response and thus influence caching.
 - `responseHeadersPassThrough`
   - Default: `[Content-Language, Location, Refresh]`
   - Response headers of primary fragments to pass through to the page response, if present.
 - `cacheMaxItems`
   - Default: `10000`
   - Maximum number of items, the fragment cache may hold.
-- `cacheVaryByRequestHeaders`
-  - Default: `empty list`
-  - Fragment request headers which influence the requested fragment aside from its URL. Used to create fragment cache keys.<br>
-    Must be a subset of `requestHeadersPassThrough`. Common example are headers used for steering A/B-tests.
 - `cacheAutoRefreshEnabled`
   - Default: `false`
   - Whether to enable auto-refreshing of cached fragments, before they expire.<br>

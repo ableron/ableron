@@ -342,7 +342,7 @@ public class Include {
     String urlSource) {
     return Optional.ofNullable(uri)
       .map(uri1 -> {
-        var fragmentCacheKey = buildFragmentCacheKey(uri, requestHeaders, config.getCacheVaryByRequestHeaders());
+        var fragmentCacheKey = buildFragmentCacheKey(uri, requestHeaders, config.getRequestHeadersPassThroughVary());
         var fragmentFromCache = fragmentCache.get(fragmentCacheKey);
         this.resolvedFragmentSource = (fragmentFromCache.isPresent() ? "cached " : "remote ") + urlSource;
 
@@ -458,8 +458,8 @@ public class Include {
       .orElse(String.valueOf(Math.abs(rawIncludeTag.hashCode())));
   }
 
-  private String buildFragmentCacheKey(String fragmentUrl, Map<String, List<String>> requestHeaders, Collection<String> cacheVaryByRequestHeaders) {
-    var headersRelevantForCaching = Stream.concat(cacheVaryByRequestHeaders.stream(), this.headersToPass.stream())
+  private String buildFragmentCacheKey(String fragmentUrl, Map<String, List<String>> requestHeaders, Collection<String> requestHeadersPassThroughVary) {
+    var headersRelevantForCaching = Stream.concat(requestHeadersPassThroughVary.stream(), this.headersToPass.stream())
       .map(String::toLowerCase)
       .collect(Collectors.toSet());
     var headersCacheKey = requestHeaders.entrySet()

@@ -16,6 +16,13 @@ export default class AbleronConfig {
   readonly requestHeadersPassThrough: string[] = ['Correlation-ID', 'X-Correlation-ID', 'X-Request-ID'];
 
   /**
+   * Request headers that are passed through to fragment requests, if present and that influence the
+   * requested fragment aside from its URL.
+   * These request headers are considered to influence the response and thus influence caching.
+   */
+  readonly requestHeadersPassThroughVary: string[] = [];
+
+  /**
    * Response headers of primary fragments to pass through to the page response, if present.
    */
   readonly responseHeadersPassThrough: string[] = ['Content-Language', 'Location', 'Refresh'];
@@ -24,11 +31,6 @@ export default class AbleronConfig {
    * Maximum number of items, the fragment cache may hold.
    */
   readonly cacheMaxItems: number = 10000;
-
-  /**
-   * Fragment request headers which influence the requested fragment aside from its URL.
-   */
-  readonly cacheVaryByRequestHeaders: string[] = [];
 
   /**
    * Whether to enable auto-refreshing of cached fragments.
