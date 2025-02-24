@@ -289,7 +289,7 @@ public class Include {
    */
   public CompletableFuture<Include> resolve(HttpClient httpClient, Map<String, List<String>> parentRequestHeaders, FragmentCache fragmentCache, AbleronConfig config, ExecutorService resolveThreadPool) {
     var resolveStartTime = System.nanoTime();
-    var requestHeaders = buildRequestHeaders(parentRequestHeaders, config.getRequestHeadersPassThrough());
+    var requestHeaders = buildRequestHeaders(parentRequestHeaders, config.getRequestHeadersForward());
     erroredPrimaryFragment = null;
 
     return CompletableFuture.supplyAsync(
@@ -342,7 +342,7 @@ public class Include {
     String urlSource) {
     return Optional.ofNullable(uri)
       .map(uri1 -> {
-        var fragmentCacheKey = buildFragmentCacheKey(uri, requestHeaders, config.getRequestHeadersPassThroughVary());
+        var fragmentCacheKey = buildFragmentCacheKey(uri, requestHeaders, config.getRequestHeadersForwardVary());
         var fragmentFromCache = fragmentCache.get(fragmentCacheKey);
         this.resolvedFragmentSource = (fragmentFromCache.isPresent() ? "cached " : "remote ") + urlSource;
 
@@ -351,7 +351,7 @@ public class Include {
             if (!isHttpStatusCacheable(response.statusCode())) {
               logger.error("[Ableron] Fragment '{}' returned status code {}", uri, response.statusCode());
               recordErroredPrimaryFragment(
-                toFragment(response, uri, config.getResponseHeadersPassThrough(), true),
+                toFragment(response, uri, config.getResponseHeadersForward(), true),
                 this.resolvedFragmentSource
               );
               return false;
@@ -360,10 +360,10 @@ public class Include {
             return true;
           })
           .map(response -> {
-            var fragment = toFragment(response, uri, config.getResponseHeadersPassThrough(), false);
+            var fragment = toFragment(response, uri, config.getResponseHeadersForward(), false);
             fragmentCache.set(fragmentCacheKey, fragment, () ->
               HttpUtil.loadUrl(uri, httpClient, requestHeaders, requestTimeout)
-                .map(res -> toFragment(res, uri, config.getResponseHeadersPassThrough(), false))
+                .map(res -> toFragment(res, uri, config.getResponseHeadersForward(), false))
                 .orElse(null));
             return fragment;
           })
@@ -383,14 +383,14 @@ public class Include {
   private Fragment toFragment(
     HttpResponse<byte[]> response,
     String url,
-    Collection<String> responseHeadersPassThrough,
+    Collection<String> responseHeadersForward,
     boolean preventCaching) {
     return new Fragment(
       url,
       response.statusCode(),
       HttpUtil.getResponseBodyAsString(response),
       preventCaching ? Instant.EPOCH : HttpUtil.calculateResponseExpirationTime(response.headers().map()),
-      filterHeaders(response.headers().map(), responseHeadersPassThrough)
+      filterHeaders(response.headers().map(), responseHeadersForward)
     );
   }
 
@@ -458,8 +458,8 @@ public class Include {
       .orElse(String.valueOf(Math.abs(rawIncludeTag.hashCode())));
   }
 
-  private String buildFragmentCacheKey(String fragmentUrl, Map<String, List<String>> requestHeaders, Collection<String> requestHeadersPassThroughVary) {
-    var headersRelevantForCaching = Stream.concat(requestHeadersPassThroughVary.stream(), this.headersToPass.stream())
+  private String buildFragmentCacheKey(String fragmentUrl, Map<String, List<String>> requestHeaders, Collection<String> requestHeadersForwardVary) {
+    var headersRelevantForCaching = Stream.concat(requestHeadersForwardVary.stream(), this.headersToPass.stream())
       .map(String::toLowerCase)
       .collect(Collectors.toSet());
     var headersCacheKey = requestHeaders.entrySet()

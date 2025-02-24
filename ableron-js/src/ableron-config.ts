@@ -10,22 +10,22 @@ export default class AbleronConfig {
   readonly requestTimeoutMs: number = 3000;
 
   /**
-   * Request headers that are passed through to fragment requests, if present.
+   * Request headers that are forwarded to fragment requests, if present.
    * These request headers are not considered to influence the response and thus will not influence caching.
    */
-  readonly requestHeadersPassThrough: string[] = ['Correlation-ID', 'X-Correlation-ID', 'X-Request-ID'];
+  readonly requestHeadersForward: string[] = ['Correlation-ID', 'X-Correlation-ID', 'X-Request-ID'];
 
   /**
-   * Request headers that are passed through to fragment requests, if present and that influence the
+   * Request headers that are forwarded to fragment requests, if present and that influence the
    * requested fragment aside from its URL.
    * These request headers are considered to influence the response and thus influence caching.
    */
-  readonly requestHeadersPassThroughVary: string[] = [];
+  readonly requestHeadersForwardVary: string[] = [];
 
   /**
-   * Response headers of primary fragments to pass through to the page response, if present.
+   * Response headers of primary fragments to forward to the page response, if present.
    */
-  readonly responseHeadersPassThrough: string[] = ['Content-Language', 'Location', 'Refresh'];
+  readonly responseHeadersForward: string[] = ['Content-Language', 'Location', 'Refresh'];
 
   /**
    * Maximum number of items, the fragment cache may hold.

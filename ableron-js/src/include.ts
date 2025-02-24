@@ -214,7 +214,7 @@ export default class Include {
 
   resolve(config: AbleronConfig, fragmentCache: FragmentCache, parentRequestHeaders: Headers): Promise<Include> {
     const resolveStartTime = Date.now();
-    const requestHeaders = this.buildRequestHeaders(parentRequestHeaders!, config.requestHeadersPassThrough);
+    const requestHeaders = this.buildRequestHeaders(parentRequestHeaders!, config.requestHeadersForward);
     this.erroredPrimaryFragment = undefined;
 
     return this.load(
@@ -299,7 +299,7 @@ export default class Include {
       return null;
     }
 
-    const fragmentCacheKey = this.buildFragmentCacheKey(url, requestHeaders, config.requestHeadersPassThroughVary);
+    const fragmentCacheKey = this.buildFragmentCacheKey(url, requestHeaders, config.requestHeadersForwardVary);
     const fragmentFromCache = fragmentCache.get(fragmentCacheKey);
     const fragmentSource = (fragmentFromCache ? 'cached ' : 'remote ') + urlSource;
     const fragment: Promise<Fragment | null> = fragmentFromCache
@@ -313,19 +313,19 @@ export default class Include {
             if (!HttpUtil.HTTP_STATUS_CODES_CACHEABLE.includes(response.status)) {
               this.logger.error(`[Ableron] Fragment '${this.id}' returned status code ${response.status}`);
               this.recordErroredPrimaryFragment(
-                await this.toFragment(response, url, config.responseHeadersPassThrough, true),
+                await this.toFragment(response, url, config.responseHeadersForward, true),
                 fragmentSource
               );
               return null;
             }
 
-            return this.toFragment(response, url, config.responseHeadersPassThrough);
+            return this.toFragment(response, url, config.responseHeadersForward);
           })
           .then((fragment) => {
             if (fragment) {
               fragmentCache.set(fragmentCacheKey, fragment, () =>
                 HttpUtil.loadUrl(url, requestHeaders, requestTimeoutMs).then(async (response: Response | null) => {
-                  return response ? this.toFragment(response, url, config.responseHeadersPassThrough) : null;
+                  return response ? this.toFragment(response, url, config.responseHeadersForward) : null;
                 })
               );
             }
@@ -348,7 +348,7 @@ export default class Include {
   private async toFragment(
     response: Response,
     url: string,
-    responseHeadersPassThrough: string[],
+    responseHeadersForward: string[],
     preventCaching: boolean = false
   ): Promise<Fragment> {
     return response
@@ -360,7 +360,7 @@ export default class Include {
             responseBody,
             url,
             preventCaching ? undefined : HttpUtil.calculateResponseExpirationTime(response.headers),
-            this.filterHeaders(response.headers, responseHeadersPassThrough)
+            this.filterHeaders(response.headers, responseHeadersForward)
           )
       );
   }
@@ -436,9 +436,9 @@ export default class Include {
   private buildFragmentCacheKey(
     fragmentUrl: string,
     requestHeaders: Headers,
-    requestHeadersPassThroughVary: string[]
+    requestHeadersForwardVary: string[]
   ): string {
-    const headersRelevantForCaching = [...requestHeadersPassThroughVary, ...this.headersToPass];
+    const headersRelevantForCaching = [...requestHeadersForwardVary, ...this.headersToPass];
     let headersCacheKey = '';
 
     headersRelevantForCaching.sort().forEach((headerName) => {

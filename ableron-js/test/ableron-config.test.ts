@@ -9,9 +9,9 @@ describe('AbleronConfig', () => {
     // then
     expect(config.enabled).toBe(true);
     expect(config.requestTimeoutMs).toBe(3000);
-    expect(config.requestHeadersPassThrough).toEqual(['Correlation-ID', 'X-Correlation-ID', 'X-Request-ID']);
-    expect(config.requestHeadersPassThroughVary).toEqual([]);
-    expect(config.responseHeadersPassThrough).toEqual(['Content-Language', 'Location', 'Refresh']);
+    expect(config.requestHeadersForward).toEqual(['Correlation-ID', 'X-Correlation-ID', 'X-Request-ID']);
+    expect(config.requestHeadersForwardVary).toEqual([]);
+    expect(config.responseHeadersForward).toEqual(['Content-Language', 'Location', 'Refresh']);
     expect(config.cacheMaxItems).toEqual(10000);
     expect(config.cacheAutoRefreshEnabled).toBe(false);
     expect(config.cacheAutoRefreshMaxAttempts).toBe(3);
@@ -25,9 +25,9 @@ describe('AbleronConfig', () => {
     const config = new AbleronConfig({
       enabled: false,
       requestTimeoutMs: 200,
-      requestHeadersPassThrough: ['X-Test-Request-Header', 'X-Test-Request-Header-2'],
-      requestHeadersPassThroughVary: ['X-ACME-Test-Groups'],
-      responseHeadersPassThrough: ['X-Test-Response-Header', 'X-Test-Response-Header-2'],
+      requestHeadersForward: ['X-Test-Request-Header', 'X-Test-Request-Header-2'],
+      requestHeadersForwardVary: ['X-ACME-Test-Groups'],
+      responseHeadersForward: ['X-Test-Response-Header', 'X-Test-Response-Header-2'],
       cacheMaxItems: 999,
       cacheAutoRefreshEnabled: true,
       cacheAutoRefreshMaxAttempts: 5,
@@ -39,9 +39,9 @@ describe('AbleronConfig', () => {
     // then
     expect(config.enabled).toBe(false);
     expect(config.requestTimeoutMs).toBe(200);
-    expect(config.requestHeadersPassThrough).toEqual(['X-Test-Request-Header', 'X-Test-Request-Header-2']);
-    expect(config.requestHeadersPassThroughVary).toEqual(['X-ACME-Test-Groups']);
-    expect(config.responseHeadersPassThrough).toEqual(['X-Test-Response-Header', 'X-Test-Response-Header-2']);
+    expect(config.requestHeadersForward).toEqual(['X-Test-Request-Header', 'X-Test-Request-Header-2']);
+    expect(config.requestHeadersForwardVary).toEqual(['X-ACME-Test-Groups']);
+    expect(config.responseHeadersForward).toEqual(['X-Test-Response-Header', 'X-Test-Response-Header-2']);
     expect(config.cacheMaxItems).toEqual(999);
     expect(config.cacheAutoRefreshEnabled).toBe(true);
     expect(config.cacheAutoRefreshMaxAttempts).toBe(5);

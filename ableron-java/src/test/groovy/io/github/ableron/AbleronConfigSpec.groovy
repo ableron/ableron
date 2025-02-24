@@ -14,13 +14,13 @@ class AbleronConfigSpec extends Specification {
     with(config) {
       enabled
       requestTimeout == Duration.ofSeconds(3)
-      requestHeadersPassThrough == [
+      requestHeadersForward == [
         "Correlation-ID",
         "X-Correlation-ID",
         "X-Request-ID"
       ]
-      requestHeadersPassThroughVary == []
-      responseHeadersPassThrough == [
+      requestHeadersForwardVary == []
+      responseHeadersForward == [
         "Content-Language",
         "Location",
         "Refresh"
@@ -39,9 +39,9 @@ class AbleronConfigSpec extends Specification {
     def config = AbleronConfig.builder()
       .enabled(false)
       .requestTimeout(Duration.ofMillis(200))
-      .requestHeadersPassThrough(["X-Test-Request-Header", "X-Test-Request-Header-2"])
-      .requestHeadersPassThroughVary(["X-Test-Groups", "X-ACME-Country"])
-      .responseHeadersPassThrough(["X-Test-Response-Header", "X-Test-Response-Header-2"])
+      .requestHeadersForward(["X-Test-Request-Header", "X-Test-Request-Header-2"])
+      .requestHeadersForwardVary(["X-Test-Groups", "X-ACME-Country"])
+      .responseHeadersForward(["X-Test-Response-Header", "X-Test-Response-Header-2"])
       .cacheMaxSizeInBytes(1024 * 100)
       .cacheAutoRefreshEnabled(true)
       .cacheAutoRefreshMaxAttempts(5)
@@ -54,9 +54,9 @@ class AbleronConfigSpec extends Specification {
     with(config) {
       !enabled
       requestTimeout == Duration.ofMillis(200)
-      requestHeadersPassThrough == ["X-Test-Request-Header", "X-Test-Request-Header-2"]
-      requestHeadersPassThroughVary == ["X-Test-Groups", "X-ACME-Country"]
-      responseHeadersPassThrough == ["X-Test-Response-Header", "X-Test-Response-Header-2"]
+      requestHeadersForward == ["X-Test-Request-Header", "X-Test-Request-Header-2"]
+      requestHeadersForwardVary == ["X-Test-Groups", "X-ACME-Country"]
+      responseHeadersForward == ["X-Test-Response-Header", "X-Test-Response-Header-2"]
       cacheMaxSizeInBytes == 1024 * 100
       cacheAutoRefreshEnabled()
       cacheAutoRefreshMaxAttempts == 5
@@ -77,37 +77,37 @@ class AbleronConfigSpec extends Specification {
     exception.message == "requestTimeout must not be null"
   }
 
-  def "should throw exception if requestHeadersPassThrough is tried to be set to null"() {
+  def "should throw exception if requestHeadersForward is tried to be set to null"() {
     when:
     AbleronConfig.builder()
-      .requestHeadersPassThrough(null)
+      .requestHeadersForward(null)
       .build()
 
     then:
     def exception = thrown(NullPointerException)
-    exception.message == "requestHeadersPassThrough must not be null"
+    exception.message == "requestHeadersForward must not be null"
   }
 
-  def "should throw exception if requestHeadersPassThroughVary is tried to be set to null"() {
+  def "should throw exception if requestHeadersForwardVary is tried to be set to null"() {
     when:
     AbleronConfig.builder()
-      .requestHeadersPassThroughVary(null)
+      .requestHeadersForwardVary(null)
       .build()
 
     then:
     def exception = thrown(NullPointerException)
-    exception.message == "requestHeadersPassThroughVary must not be null"
+    exception.message == "requestHeadersForwardVary must not be null"
   }
 
-  def "should throw exception if responseHeadersPassThrough is tried to be set to null"() {
+  def "should throw exception if responseHeadersForward is tried to be set to null"() {
     when:
     AbleronConfig.builder()
-      .responseHeadersPassThrough(null)
+      .responseHeadersForward(null)
       .build()
 
     then:
     def exception = thrown(NullPointerException)
-    exception.message == "responseHeadersPassThrough must not be null"
+    exception.message == "responseHeadersForward must not be null"
   }
 
   def "should expose only immutable collections - default values"() {
@@ -115,19 +115,19 @@ class AbleronConfigSpec extends Specification {
     def config = AbleronConfig.builder().build()
 
     when:
-    config.getRequestHeadersPassThrough().add("Not-Allowed")
+    config.getRequestHeadersForward().add("Not-Allowed")
 
     then:
     thrown(UnsupportedOperationException)
 
     when:
-    config.getRequestHeadersPassThroughVary().add("Not-Allowed")
+    config.getRequestHeadersForwardVary().add("Not-Allowed")
 
     then:
     thrown(UnsupportedOperationException)
 
     when:
-    config.getResponseHeadersPassThrough().add("Not-Allowed")
+    config.getResponseHeadersForward().add("Not-Allowed")
 
     then:
     thrown(UnsupportedOperationException)
@@ -136,25 +136,25 @@ class AbleronConfigSpec extends Specification {
   def "should expose only immutable collections - provided values"() {
     given:
     def config = AbleronConfig.builder()
-      .requestHeadersPassThrough(new ArrayList())
-      .requestHeadersPassThroughVary(new ArrayList())
-      .responseHeadersPassThrough(new ArrayList())
+      .requestHeadersForward(new ArrayList())
+      .requestHeadersForwardVary(new ArrayList())
+      .responseHeadersForward(new ArrayList())
       .build()
 
     when:
-    config.getRequestHeadersPassThrough().add("Not-Allowed")
+    config.getRequestHeadersForward().add("Not-Allowed")
 
     then:
     thrown(UnsupportedOperationException)
 
     when:
-    config.getRequestHeadersPassThroughVary().add("Not-Allowed")
+    config.getRequestHeadersForwardVary().add("Not-Allowed")
 
     then:
     thrown(UnsupportedOperationException)
 
     when:
-    config.getResponseHeadersPassThrough().add("Not-Allowed")
+    config.getResponseHeadersForward().add("Not-Allowed")
 
     then:
     thrown(UnsupportedOperationException)

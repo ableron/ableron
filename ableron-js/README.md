@@ -70,18 +70,18 @@ try {
 - `requestTimeoutMs`
   - Default: `3000`
   - Timeout in milliseconds for requesting fragments.
-- `requestHeadersPassThrough`
+- `requestHeadersForward`
   - Default: `[Correlation-ID, X-Correlation-ID, X-Request-ID]`
-  - Request headers that are passed through to fragment requests, if present.<br>
+  - Request headers that are forwarded to fragment requests, if present.<br>
     These request headers are not considered to influence the response and thus will not influence caching.
-- `requestHeadersPassThroughVary`
+- `requestHeadersForwardVary`
   - Default: `empty list`
-  - Request headers that are passed through to fragment requests, if present and that influence the requested fragment
+  - Request headers that are forwarded to fragment requests, if present and that influence the requested fragment
     aside from its URL.<br>
     These request headers are considered to influence the response and thus influence caching.
-- `responseHeadersPassThrough`
+- `responseHeadersForward`
   - Default: `[Content-Language, Location, Refresh]`
-  - Response headers of primary fragments to pass through to the page response, if present.
+  - Response headers of primary fragments to forward to the page response, if present.
 - `cacheMaxItems`
   - Default: `10000`
   - Maximum number of items, the fragment cache may hold.

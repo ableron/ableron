@@ -20,26 +20,26 @@ public class AbleronConfig {
   private Duration requestTimeout = Duration.ofSeconds(3);
 
   /**
-   * Request headers that are passed through to fragment requests, if present.
+   * Request headers that are forwarded to fragment requests, if present.
    * These request headers are not considered to influence the response and thus will not influence caching.
    */
-  private Collection<String> requestHeadersPassThrough = List.of(
+  private Collection<String> requestHeadersForward = List.of(
     "Correlation-ID",
     "X-Correlation-ID",
     "X-Request-ID"
   );
 
   /**
-   * Request headers that are passed through to fragment requests, if present and that influence the
+   * Request headers that are forwarded to fragment requests, if present and that influence the
    * requested fragment aside from its URL.
    * These request headers are considered to influence the response and thus influence caching.
    */
-  private Collection<String> requestHeadersPassThroughVary = List.of();
+  private Collection<String> requestHeadersForwardVary = List.of();
 
   /**
-   * Response headers of primary fragments to pass through to the page response, if present.
+   * Response headers of primary fragments to forward to the page response, if present.
    */
-  private Collection<String> responseHeadersPassThrough = List.of(
+  private Collection<String> responseHeadersForward = List.of(
     "Content-Language",
     "Location",
     "Refresh"
@@ -94,16 +94,16 @@ public class AbleronConfig {
     return requestTimeout;
   }
 
-  public Collection<String> getRequestHeadersPassThrough() {
-    return requestHeadersPassThrough;
+  public Collection<String> getRequestHeadersForward() {
+    return requestHeadersForward;
   }
 
-  public Collection<String> getRequestHeadersPassThroughVary() {
-    return requestHeadersPassThroughVary;
+  public Collection<String> getRequestHeadersForwardVary() {
+    return requestHeadersForwardVary;
   }
 
-  public Collection<String> getResponseHeadersPassThrough() {
-    return responseHeadersPassThrough;
+  public Collection<String> getResponseHeadersForward() {
+    return responseHeadersForward;
   }
 
   public long getCacheMaxSizeInBytes() {
@@ -144,21 +144,21 @@ public class AbleronConfig {
       return this;
     }
 
-    public Builder requestHeadersPassThrough(Collection<String> requestHeadersPassThrough) {
-      Objects.requireNonNull(requestHeadersPassThrough, "requestHeadersPassThrough must not be null");
-      ableronConfig.requestHeadersPassThrough = requestHeadersPassThrough.stream().collect(Collectors.toUnmodifiableList());
+    public Builder requestHeadersForward(Collection<String> requestHeadersForward) {
+      Objects.requireNonNull(requestHeadersForward, "requestHeadersForward must not be null");
+      ableronConfig.requestHeadersForward = requestHeadersForward.stream().collect(Collectors.toUnmodifiableList());
       return this;
     }
 
-    public Builder requestHeadersPassThroughVary(Collection<String> requestHeadersPassThroughVary) {
-      Objects.requireNonNull(requestHeadersPassThroughVary, "requestHeadersPassThroughVary must not be null");
-      ableronConfig.requestHeadersPassThroughVary = requestHeadersPassThroughVary.stream().collect(Collectors.toUnmodifiableList());
+    public Builder requestHeadersForwardVary(Collection<String> requestHeadersForwardVary) {
+      Objects.requireNonNull(requestHeadersForwardVary, "requestHeadersForwardVary must not be null");
+      ableronConfig.requestHeadersForwardVary = requestHeadersForwardVary.stream().collect(Collectors.toUnmodifiableList());
       return this;
     }
 
-    public Builder responseHeadersPassThrough(Collection<String> responseHeadersPassThrough) {
-      Objects.requireNonNull(responseHeadersPassThrough, "responseHeadersPassThrough must not be null");
-      ableronConfig.responseHeadersPassThrough = responseHeadersPassThrough.stream().collect(Collectors.toUnmodifiableList());
+    public Builder responseHeadersForward(Collection<String> responseHeadersForward) {
+      Objects.requireNonNull(responseHeadersForward, "responseHeadersForward must not be null");
+      ableronConfig.responseHeadersForward = responseHeadersForward.stream().collect(Collectors.toUnmodifiableList());
       return this;
     }
 

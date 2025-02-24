@@ -894,12 +894,12 @@ class IncludeSpec extends Specification {
     "fallback-src"   | ["src-timeout": "2s"]          | ""
   }
 
-  def "should pass headers defined via requestHeadersPassThrough to fragment requests"() {
+  def "should forward headers defined via requestHeadersForward to fragment requests"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(204))
     def config = AbleronConfig.builder()
-      .requestHeadersPassThrough(["X-Header1", "X-Header2", "x-hEADEr3"])
+      .requestHeadersForward(["X-Header1", "X-Header2", "x-hEADEr3"])
       .build()
 
     when:
@@ -957,7 +957,7 @@ class IncludeSpec extends Specification {
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(204))
     def config = AbleronConfig.builder()
-      .requestHeadersPassThrough([])
+      .requestHeadersForward([])
       .build()
 
     when:
@@ -989,12 +989,12 @@ class IncludeSpec extends Specification {
     mockWebServer.shutdown()
   }
 
-  def "should pass provided User-Agent header to fragment requests if enabled via requestHeadersPassThrough"() {
+  def "should forward provided User-Agent header to fragment requests if enabled via requestHeadersForward"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(204))
     def config = AbleronConfig.builder()
-      .requestHeadersPassThrough(["User-Agent"])
+      .requestHeadersForward(["User-Agent"])
       .build()
 
     when:
@@ -1014,7 +1014,7 @@ class IncludeSpec extends Specification {
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(204))
     def config = AbleronConfig.builder()
-      .requestHeadersPassThrough(["X-Test"])
+      .requestHeadersForward(["X-Test"])
       .build()
 
     when:
@@ -1035,7 +1035,7 @@ class IncludeSpec extends Specification {
     mockWebServer.enqueue(new MockResponse().setResponseCode(200)
       .addHeader("X-Test", "Test"))
     def config = AbleronConfig.builder()
-      .responseHeadersPassThrough(["X-Test"])
+      .responseHeadersForward(["X-Test"])
       .build()
 
     when:
@@ -1072,7 +1072,7 @@ class IncludeSpec extends Specification {
     mockWebServer.enqueue(new MockResponse().setResponseCode(200)
       .addHeader("x-test", "Test"))
     def config = AbleronConfig.builder()
-      .responseHeadersPassThrough(["X-TeSt"])
+      .responseHeadersForward(["X-TeSt"])
       .build()
 
     when:
@@ -1093,7 +1093,7 @@ class IncludeSpec extends Specification {
       .addHeader("X-Test", "Test")
       .addHeader("X-Test", "Test2"))
     def config = AbleronConfig.builder()
-      .responseHeadersPassThrough(["X-TEST"])
+      .responseHeadersForward(["X-TEST"])
       .build()
 
     when:
@@ -1107,7 +1107,7 @@ class IncludeSpec extends Specification {
     mockWebServer.shutdown()
   }
 
-  def "should consider requestHeadersPassThroughVary"() {
+  def "should consider requestHeadersForwardVary"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse()
@@ -1123,8 +1123,8 @@ class IncludeSpec extends Specification {
       .setHeader("Cache-Control", "max-age=30")
       .setBody("X-AB-Test=omitted"))
     def config = AbleronConfig.builder()
-      .requestHeadersPassThrough(["x-ab-TEST"])
-      .requestHeadersPassThroughVary(["x-AB-test"])
+      .requestHeadersForward(["x-ab-TEST"])
+      .requestHeadersForwardVary(["x-AB-test"])
       .build()
 
     when:
@@ -1153,7 +1153,7 @@ class IncludeSpec extends Specification {
     mockWebServer.shutdown()
   }
 
-  def "should use consistent order of requestHeadersPassThroughVary for cache key generation"() {
+  def "should use consistent order of requestHeadersForwardVary for cache key generation"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse()
@@ -1165,8 +1165,8 @@ class IncludeSpec extends Specification {
       .setHeader("Cache-Control", "max-age=30")
       .setBody("A,B,B"))
     def config = AbleronConfig.builder()
-      .requestHeadersPassThrough(["x-test-A", "x-test-B", "x-test-C"])
-      .requestHeadersPassThroughVary(["X-Test-A", "X-Test-B", "X-Test-C"])
+      .requestHeadersForward(["x-test-A", "x-test-B", "x-test-C"])
+      .requestHeadersForwardVary(["X-Test-A", "X-Test-B", "X-Test-C"])
       .build()
 
     when:

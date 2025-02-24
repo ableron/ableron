@@ -862,7 +862,7 @@ describe('Include', () => {
     }
   );
 
-  it('should pass headers defined via requestHeadersPassThrough to fragment requests', async () => {
+  it('should forward headers defined via requestHeadersForward to fragment requests', async () => {
     // given
     server = Fastify();
     let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
@@ -875,7 +875,7 @@ describe('Include', () => {
     // when
     await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
       new AbleronConfig({
-        requestHeadersPassThrough: ['X-Header1', 'X-Header2', 'x-hEADEr3']
+        requestHeadersForward: ['X-Header1', 'X-Header2', 'x-hEADEr3']
       }),
       fragmentCache,
       new Headers([
@@ -963,7 +963,7 @@ describe('Include', () => {
 
     // when
     await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
-      new AbleronConfig({ requestHeadersPassThrough: [] }),
+      new AbleronConfig({ requestHeadersForward: [] }),
       fragmentCache,
       new Headers([['X-Test', 'Foo']])
     );
@@ -989,7 +989,7 @@ describe('Include', () => {
     expect(lastRecordedRequestHeaders['user-agent']).toBe('Ableron/2.0');
   });
 
-  it('should pass provided User-Agent header to fragment requests if enabled via requestHeadersPassThrough', async () => {
+  it('should forward provided User-Agent header to fragment requests if enabled via requestHeadersForward', async () => {
     // given
     server = Fastify();
     let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
@@ -1001,7 +1001,7 @@ describe('Include', () => {
 
     // when
     await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
-      new AbleronConfig({ requestHeadersPassThrough: ['User-Agent'] }),
+      new AbleronConfig({ requestHeadersForward: ['User-Agent'] }),
       fragmentCache,
       new Headers([['user-AGENT', 'test']])
     );
@@ -1020,7 +1020,7 @@ describe('Include', () => {
 
     // when
     const include = await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
-      new AbleronConfig({ responseHeadersPassThrough: ['X-Test'] }),
+      new AbleronConfig({ responseHeadersForward: ['X-Test'] }),
       fragmentCache,
       new Headers()
     );
@@ -1063,7 +1063,7 @@ describe('Include', () => {
         ['src', serverAddress('/src')],
         ['primary', '']
       ])
-    ).resolve(new AbleronConfig({ responseHeadersPassThrough: ['X-TeSt'] }), fragmentCache, new Headers());
+    ).resolve(new AbleronConfig({ responseHeadersForward: ['X-TeSt'] }), fragmentCache, new Headers());
 
     // then
     expect(include.getResolvedFragment()?.responseHeaders.get('x-test')).toBe('Test');
@@ -1101,7 +1101,7 @@ describe('Include', () => {
     expect(reqCounter).toBe(3);
   });
 
-  it('should consider requestHeadersPassThroughVary', async () => {
+  it('should consider requestHeadersForwardVary', async () => {
     // given
     server = Fastify();
     let reqCounter = 0;
@@ -1113,8 +1113,8 @@ describe('Include', () => {
     });
     await server.listen();
     const config = new AbleronConfig({
-      requestHeadersPassThrough: ['x-ab-TEST', 'x-ab-TEST-1', 'x-ab-TEST-2'],
-      requestHeadersPassThroughVary: ['x-AB-test', 'x-AB-test-1', 'x-AB-test-2']
+      requestHeadersForward: ['x-ab-TEST', 'x-ab-TEST-1', 'x-ab-TEST-2'],
+      requestHeadersForwardVary: ['x-AB-test', 'x-AB-test-1', 'x-AB-test-2']
     });
 
     // when
@@ -1192,7 +1192,7 @@ describe('Include', () => {
     expect(resolvedInclude8.getResolvedFragment()?.content).toBe('request X-AB-Test=A | 4');
   });
 
-  it('should use consistent order of requestHeadersPassThroughVary for cache key generation', async () => {
+  it('should use consistent order of requestHeadersForwardVary for cache key generation', async () => {
     // given
     server = Fastify();
     let reqCounter = 0;
@@ -1204,8 +1204,8 @@ describe('Include', () => {
     });
     await server.listen();
     const config = new AbleronConfig({
-      requestHeadersPassThrough: ['X-Test-A', 'X-Test-B', 'X-Test-C'],
-      requestHeadersPassThroughVary: ['X-Test-A', 'X-Test-B', 'X-Test-C']
+      requestHeadersForward: ['X-Test-A', 'X-Test-B', 'X-Test-C'],
+      requestHeadersForwardVary: ['X-Test-A', 'X-Test-B', 'X-Test-C']
     });
 
     // when

@@ -1,4 +1,4 @@
-## <p align="center">Ableron - The Distributed Server Side UI Composition Library</p>
+## <p align="center">Ableron - Distributed Server Side UI Composition</p>
 <p align="center">
   <a href="https://github.com/ableron/ableron/ableron-js" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-js-verify.yml/badge.svg" alt="ableron-js Status" /></a>
   <a href="https://github.com/ableron/ableron/ableron-java" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-java.yml/badge.svg" alt="ableron-java Status" /></a>
