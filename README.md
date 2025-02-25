@@ -13,10 +13,10 @@ used to load content from remote sources and substitute the <code>&lt;ableron-in
 the remote content.
 
 This leads to
-- Lean Infrastructure: No need to route all your traffic through the infrastructure component which is performing the UI composition
-- Easy Local Development: Includes are resolved directly in your service. This works fine for local development and increases developer experience.
-- Easy Configuration: Your can easily define different timeouts, fallback fragments or static fallback content for each of your includes.
-- Local Caching: All fragments are cached in memory directly within your service according to the cache policy of the fragments. This saves HTTP calls and thus money as well as latency.
+- **Lean Infrastructure**: No need to route all your traffic through the infrastructure component which is performing the UI composition
+- **Easy Local Development**: Includes are resolved directly in your service. This works fine for local development and increases developer experience.
+- **Easy Configuration**: Your can easily define different timeouts, fallback fragments or static fallback content for each of your includes.
+- **Local Caching**: All fragments are cached in memory directly within your service according to the cache policy of the fragments. This saves HTTP calls and thus money as well as latency.
 
 ## Getting Started
 

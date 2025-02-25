@@ -1,4 +1,4 @@
-name: ableron-java @ Java 21
+name: "ableron-verify: ableron-java @ Java 21"
 
 on: push
 

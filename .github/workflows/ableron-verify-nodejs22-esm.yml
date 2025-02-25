@@ -1,4 +1,4 @@
-name: ableron-js @ Node.js 22 using ES Modules
+name: "ableron-verify: ableron-js @ Node.js 22 using ES Modules"
 
 on: push
 

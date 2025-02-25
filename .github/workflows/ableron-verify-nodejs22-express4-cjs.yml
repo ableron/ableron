@@ -1,4 +1,4 @@
-name: ableron-express @ Node.js 22 & Express 4 & CommonJS
+name: "ableron-verify: ableron-express @ Node.js 22 & Express 4 & CommonJS"
 
 on: push
 

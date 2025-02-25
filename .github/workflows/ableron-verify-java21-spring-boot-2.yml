@@ -1,4 +1,4 @@
-name: ableron-spring-boot @ Java 21 & Spring Boot 2
+name: "ableron-verify: ableron-spring-boot @ Java 21 & Spring Boot 2"
 
 on: push
 
