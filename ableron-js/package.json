@@ -50,7 +50,7 @@
     "@isaacs/ttlcache": "1.4.1"
   },
   "devDependencies": {
-    "@types/node": "22.13.1",
+    "@types/node": "22.13.5",
     "fastify": "5.2.1",
     "prettier": "3.4.2",
     "ts-jest": "29.2.5",
