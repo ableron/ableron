@@ -1,0 +1,4 @@
+server.port: 8080
+ableron:
+  cache:
+    vary-by-request-headers: Accept-Language

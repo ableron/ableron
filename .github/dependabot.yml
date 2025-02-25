@@ -12,3 +12,7 @@ updates:
     directory: '/ableron-java'
     schedule:
       interval: 'monthly'
+  - package-ecosystem: 'gradle'
+    directory: '/ableron-verify'
+    schedule:
+      interval: 'monthly'

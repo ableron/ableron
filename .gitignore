@@ -2,9 +2,9 @@
 .DS_Store
 
 # IDE
-/.idea/
-/.settings/
-/.vscode/
+.idea/
+.settings/
+.vscode/
 *.iml
 .classpath
 .project
@@ -15,4 +15,5 @@ dist/
 node_modules/
 
 # Build Java
+.gradle/
 target/
