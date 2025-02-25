@@ -1,2 +1,5 @@
 # npm
 package-lock.json
+
+# Gradle
+build/
