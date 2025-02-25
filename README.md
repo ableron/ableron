@@ -29,6 +29,21 @@ The technical libs you may want to start with, are:
 - the [express Plugin](https://github.com/ableron/ableron-express)
 - the [fastify Plugin](https://github.com/ableron/ableron-fastify)
 
+### End-to-End Test Suite Status
+
+* [![ableron-java @ Java 11 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java11.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java11.yml)
+* [![ableron-java @ Java 17 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java17.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java17.yml)
+* [![ableron-java @ Java 21 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java21.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java21.yml)
+* [![ableron-spring-boot @ Java 11 & Spring Boot 2 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java11-spring-boot-2.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java11-spring-boot-2.yml)
+* [![ableron-spring-boot @ Java 21 & Spring Boot 2 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java21-spring-boot-2.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java21-spring-boot-2.yml)
+* [![ableron-spring-boot @ Java 17 & Spring Boot 3 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java17-spring-boot-3.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java17-spring-boot-3.yml)
+* [![ableron-spring-boot @ Java 21 & Spring Boot 3 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java21-spring-boot-3.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-java21-spring-boot-3.yml)
+* [![ableron-js @ Node.js 22 CommonJS Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-cjs.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-cjs.yml)
+* [![ableron-js @ Node.js 22 ES Modules Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-esm.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-esm.yml)
+* [![ableron-express @ Node.js 22 & Express 4 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-express4.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-express4.yml)
+* [![ableron-express @ Node.js 22 & Express 4 & CJS Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-express4-cjs.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-express4-cjs.yml)
+* [![ableron-fastify @ Node.js 22 & Fastify 4 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-fastify4.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-fastify4.yml)
+
 ### Contributing
 
 All contributions are greatly appreciated. Be it pull requests, feature requests or bug reports. See
