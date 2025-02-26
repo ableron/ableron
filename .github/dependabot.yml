@@ -7,12 +7,28 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/ableron-js'
     schedule:
-      interval: 'monthly'
+      interval: 'weekly'
   - package-ecosystem: 'maven'
     directory: '/ableron-java'
     schedule:
-      interval: 'monthly'
+      interval: 'weekly'
   - package-ecosystem: 'gradle'
     directory: '/ableron-verify'
     schedule:
-      interval: 'monthly'
+      interval: 'weekly'
+  - package-ecosystem: 'gradle'
+    directory: '/ableron-verify/java17'
+    schedule:
+      interval: 'weekly'
+  - package-ecosystem: 'gradle'
+    directory: '/ableron-verify/java17-spring-boot-3'
+    schedule:
+      interval: 'weekly'
+  - package-ecosystem: 'gradle'
+    directory: '/ableron-verify/java21'
+    schedule:
+      interval: 'weekly'
+  - package-ecosystem: 'gradle'
+    directory: '/ableron-verify/java21-spring-boot-3'
+    schedule:
+      interval: 'weekly'
