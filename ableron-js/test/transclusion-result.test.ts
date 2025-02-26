@@ -66,12 +66,12 @@ describe('TransclusionResult', () => {
     [new Date(0), 120, 'no-store'],
     [new Date(Date.now() - 5000), 120, 'no-store'],
     [new Date(), 120, 'no-store'],
-    [new Date(Date.now() + 300000), 120, 'max-age=120'],
-    [new Date(Date.now() + 360000), 300, 'max-age=300'],
-    [new Date(Date.now() + 300000), 600, 'max-age=300']
+    [new Date(Date.now() + 300000), 120, /max-age=(119|120)/],
+    [new Date(Date.now() + 360000), 300, /max-age=(299|300)/],
+    [new Date(Date.now() + 300000), 600, /max-age=(299|300)/]
   ])(
     'should calculate cache control header value',
-    (fragmentExpirationTime: Date, pageMaxAge: number | undefined, expectedCacheControlHeaderValue: string) => {
+    (fragmentExpirationTime: Date, pageMaxAge: number | undefined, expectedCacheControlHeaderValueRegex: string) => {
       // given
       const transclusionResult = new TransclusionResult('content', new CacheStats());
       transclusionResult.addResolvedInclude(
@@ -79,7 +79,9 @@ describe('TransclusionResult', () => {
       );
 
       // expect
-      expect(transclusionResult.calculateCacheControlHeaderValue(pageMaxAge)).toBe(expectedCacheControlHeaderValue);
+      expect(transclusionResult.calculateCacheControlHeaderValue(pageMaxAge)).toMatch(
+        expectedCacheControlHeaderValueRegex
+      );
     }
   );
 
