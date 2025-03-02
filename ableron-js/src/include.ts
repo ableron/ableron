@@ -214,7 +214,7 @@ export default class Include {
 
   resolve(config: AbleronConfig, fragmentCache: FragmentCache, parentRequestHeaders: Headers): Promise<Include> {
     const resolveStartTime = Date.now();
-    const requestHeaders = this.buildRequestHeaders(parentRequestHeaders!, config.requestHeadersForward);
+    const requestHeaders = this.buildRequestHeaders(parentRequestHeaders!, config);
     this.erroredPrimaryFragment = undefined;
 
     return this.load(
@@ -276,8 +276,12 @@ export default class Include {
     return this;
   }
 
-  private buildRequestHeaders(parentRequestHeaders: Headers, requestHeadersForward: string[]): Headers {
-    const requestHeaders = this.filterHeaders(parentRequestHeaders, [...requestHeadersForward, ...this.headersToForward]);
+  private buildRequestHeaders(parentRequestHeaders: Headers, config: AbleronConfig): Headers {
+    const requestHeaders = this.filterHeaders(parentRequestHeaders, [
+      ...config.requestHeadersForward,
+      ...config.requestHeadersForwardVary,
+      ...this.headersToForward
+    ]);
     const cookieHeaderValue = HttpUtil.getCookieHeaderValue(parentRequestHeaders, this.cookiesToForward);
 
     if (cookieHeaderValue !== null) {

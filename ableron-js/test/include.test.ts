@@ -862,7 +862,7 @@ describe('Include', () => {
     }
   );
 
-  it('should forward headers defined via requestHeadersForward to fragment requests', async () => {
+  it('should forward headers defined via requestHeadersForward and requestHeadersForwardVary to fragment requests', async () => {
     // given
     server = Fastify();
     let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
@@ -873,25 +873,42 @@ describe('Include', () => {
     await server.listen();
 
     // when
-    await new Include('', new Map([['src', serverAddress('/src')]])).resolve(
+    await new Include(
+      '',
+      new Map([
+        ['src', serverAddress('/src')],
+        ['headers', 'x-heaDER-7,']
+      ])
+    ).resolve(
       new AbleronConfig({
-        requestHeadersForward: ['X-Header1', 'X-Header2', 'x-hEADEr3']
+        requestHeadersForward: ['X-Header-1', 'X-Header-2', 'x-hEADEr-3'],
+        requestHeadersForwardVary: ['X-HEADER-4', 'x-header-5', 'x-hEADEr-6']
       }),
       fragmentCache,
       new Headers([
-        ['X-Header1', 'header1'],
-        ['X-Header2', 'header2'],
-        ['X-HeadeR3', 'header3']
+        ['x-header-1', 'header1'],
+        ['X-HEADER-2', 'header2'],
+        ['X-Header-3', 'header3'],
+        ['x-header-4', 'header4'],
+        ['X-Header-5', 'header5'],
+        ['X-Header-6', 'header6'],
+        ['X-Header-7', 'header7'],
+        ['X-Header-8', 'header8']
       ])
     );
 
     // then
-    expect(lastRecordedRequestHeaders['x-header1']).toBe('header1');
-    expect(lastRecordedRequestHeaders['x-header2']).toBe('header2');
-    expect(lastRecordedRequestHeaders['x-header3']).toBe('header3');
+    expect(lastRecordedRequestHeaders['x-header-1']).toBe('header1');
+    expect(lastRecordedRequestHeaders['x-header-2']).toBe('header2');
+    expect(lastRecordedRequestHeaders['x-header-3']).toBe('header3');
+    expect(lastRecordedRequestHeaders['x-header-4']).toBe('header4');
+    expect(lastRecordedRequestHeaders['x-header-5']).toBe('header5');
+    expect(lastRecordedRequestHeaders['x-header-6']).toBe('header6');
+    expect(lastRecordedRequestHeaders['x-header-7']).toBe('header7');
+    expect(lastRecordedRequestHeaders['x-header-8']).toBeUndefined();
   });
 
-  it('should pass headers defined via ableron-include headers-attribute to fragment requests', async () => {
+  it('should forward headers defined via ableron-include headers-attribute to fragment requests', async () => {
     // given
     server = Fastify();
     let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
@@ -924,7 +941,7 @@ describe('Include', () => {
     expect(lastRecordedRequestHeaders['x-header3']).toBe('header3');
   });
 
-  it('should pass cookies defined via ableron-include cookies-attribute to fragment requests', async () => {
+  it('should forward cookies defined via ableron-include cookies-attribute to fragment requests', async () => {
     // given
     server = Fastify();
     let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
@@ -951,7 +968,7 @@ describe('Include', () => {
     expect(lastRecordedRequestHeaders['cookie']).toBe('UID=user1; cID = 123');
   });
 
-  it('should not pass non-allowed request headers to fragment requests', async () => {
+  it('should not forward non-allowed request headers to fragment requests', async () => {
     // given
     server = Fastify();
     let lastRecordedRequestHeaders: IncomingHttpHeaders = {};
@@ -1010,7 +1027,7 @@ describe('Include', () => {
     expect(lastRecordedRequestHeaders['user-agent']).toBe('test');
   });
 
-  it('should pass allowed response headers of primary fragment to transclusion result', async () => {
+  it('should forward allowed response headers of primary fragment to transclusion result', async () => {
     // given
     server = Fastify();
     server.get('/src', function (request, reply) {
@@ -1029,7 +1046,7 @@ describe('Include', () => {
     expect(include.getResolvedFragment()?.responseHeaders).toEqual(new Headers([['x-test', 'Test']]));
   });
 
-  it('should not pass allowed response headers of non-primary fragment to transclusion result', async () => {
+  it('should not forward allowed response headers of non-primary fragment to transclusion result', async () => {
     // given
     server = Fastify();
     server.get('/src', function (request, reply) {

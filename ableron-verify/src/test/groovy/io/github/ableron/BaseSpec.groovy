@@ -753,7 +753,7 @@ abstract class BaseSpec extends Specification {
     result2 == "fragment 1st req"
   }
 
-  def "should pass allowed request headers to fragment requests"() {
+  def "should forward allowed request headers to fragment requests"() {
     given:
     wiremockServer.stubFor(get("/pass-req-headers-01").willReturn(ok()))
 
@@ -768,7 +768,7 @@ abstract class BaseSpec extends Specification {
       .withHeader("X-Correlation-ID", equalTo("pass-req-headers-test")))
   }
 
-  def "should pass allowed request headers to fragment requests treating header names as case insensitive"() {
+  def "should forward allowed request headers to fragment requests treating header names as case insensitive"() {
     given:
     wiremockServer.stubFor(get("/pass-req-headers-02").willReturn(ok()))
 
@@ -783,14 +783,14 @@ abstract class BaseSpec extends Specification {
       .withHeader("x-correlation-ID", equalTo("pass-req-headers-test-case-insensitivity")))
   }
 
-  def "should not pass non-allowed request headers to fragment requests"() {
+  def "should not forward non-allowed request headers to fragment requests"() {
     given:
     wiremockServer.stubFor(get("/pass-req-headers-03").willReturn(ok()))
 
     when:
     performUiIntegration(
       "<ableron-include src=\"${wiremockAddress}/pass-req-headers-03\"/>",
-      ["X-Test": ["not allowed to pass this header to fragment requests by default"]]
+      ["X-Test": ["not allowed to forward this header to fragment requests by default"]]
     )
 
     then:
@@ -810,7 +810,7 @@ abstract class BaseSpec extends Specification {
       .withHeader("User-Agent", matching("^Java-http-client/.+")))
   }
 
-  def "should pass provided User-Agent header to fragment requests by default"() {
+  def "should forward provided User-Agent header to fragment requests by default"() {
     given:
     wiremockServer.stubFor(get("/pass-req-headers-05").willReturn(ok()))
 
@@ -825,7 +825,7 @@ abstract class BaseSpec extends Specification {
       .withHeader("User-Agent", equalTo("pass-through-user-agent")))
   }
 
-  def "should pass header with multiple values to fragment requests"() {
+  def "should forward header with multiple values to fragment requests"() {
     given:
     wiremockServer.stubFor(get("/pass-req-headers-06").willReturn(ok()))
 

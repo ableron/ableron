@@ -289,7 +289,7 @@ public class Include {
    */
   public CompletableFuture<Include> resolve(HttpClient httpClient, Map<String, List<String>> parentRequestHeaders, FragmentCache fragmentCache, AbleronConfig config, ExecutorService resolveThreadPool) {
     var resolveStartTime = System.nanoTime();
-    var requestHeaders = buildRequestHeaders(parentRequestHeaders, config.getRequestHeadersForward());
+    var requestHeaders = buildRequestHeaders(parentRequestHeaders, config);
     erroredPrimaryFragment = null;
 
     return CompletableFuture.supplyAsync(
@@ -323,10 +323,15 @@ public class Include {
     return this;
   }
 
-  private Map<String, List<String>> buildRequestHeaders(Map<String, List<String>> parentRequestHeaders, Collection<String> requestHeadersForward) {
+  private Map<String, List<String>> buildRequestHeaders(Map<String, List<String>> parentRequestHeaders, AbleronConfig config) {
     var requestHeaders = filterHeaders(
       parentRequestHeaders,
-      Stream.concat(requestHeadersForward.stream(), this.headersToForward.stream()).collect(Collectors.toList())
+      Stream.of(
+          config.getRequestHeadersForward().stream(),
+          config.getRequestHeadersForwardVary().stream(),
+          this.headersToForward.stream())
+        .flatMap(headers -> headers)
+        .collect(Collectors.toList())
     );
     HttpUtil.getCookieHeaderValue(parentRequestHeaders, this.cookiesToForward).ifPresent(value -> requestHeaders.put(HttpUtil.HEADER_COOKIE, List.of(value)));
     return requestHeaders;

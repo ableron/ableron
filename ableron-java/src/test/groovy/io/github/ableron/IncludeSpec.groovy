@@ -894,29 +894,43 @@ class IncludeSpec extends Specification {
     "fallback-src"   | ["src-timeout": "2s"]          | ""
   }
 
-  def "should forward headers defined via requestHeadersForward to fragment requests"() {
+  def "should forward headers defined via requestHeadersForward and requestHeadersForwardVary to fragment requests"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(204))
     def config = AbleronConfig.builder()
-      .requestHeadersForward(["X-Header1", "X-Header2", "x-hEADEr3"])
+      .requestHeadersForward(["X-Header-1", "X-Header-2", "x-hEADEr-3"])
+      .requestHeadersForwardVary(["X-HEADER-4", "x-header-5", "x-hEADEr-6"])
       .build()
 
     when:
-    new Include("", ["src": mockWebServer.url("/").toString()])
-      .resolve(httpClient, ["X-Header1": ["header1"], "X-Header2": ["header2"], "X-HeadeR3": ["header3"]], cache, config, supplyPool).get()
+    new Include("", ["src": mockWebServer.url("/").toString(), "headers": "x-heaDER-7,"])
+      .resolve(httpClient, [
+        "x-header-1": ["header1"],
+        "X-HEADER-2": ["header2"],
+        "X-Header-3": ["header3"],
+        "x-header-4": ["header4"],
+        "X-Header-5": ["header5"],
+        "X-Header-6": ["header6"],
+        "X-Header-7": ["header7"]
+      ], cache, config, supplyPool).get()
     def fragmentRequest = mockWebServer.takeRequest()
 
     then:
-    fragmentRequest.getHeader("X-header1") == "header1"
-    fragmentRequest.getHeader("X-header2") == "header2"
-    fragmentRequest.getHeader("X-header3") == "header3"
+    fragmentRequest.getHeader("X-header-1") == "header1"
+    fragmentRequest.getHeader("X-header-2") == "header2"
+    fragmentRequest.getHeader("X-header-3") == "header3"
+    fragmentRequest.getHeader("X-header-4") == "header4"
+    fragmentRequest.getHeader("X-header-5") == "header5"
+    fragmentRequest.getHeader("X-header-6") == "header6"
+    fragmentRequest.getHeader("X-header-7") == "header7"
+    fragmentRequest.getHeader("X-header-8") == null
 
     cleanup:
     mockWebServer.shutdown()
   }
 
-  def "should pass headers defined via ableron-include headers-attribute to fragment requests"() {
+  def "should forward headers defined via ableron-include headers-attribute to fragment requests"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(204))
@@ -935,7 +949,7 @@ class IncludeSpec extends Specification {
     mockWebServer.shutdown()
   }
 
-  def "should pass cookies defined via ableron-include cookies-attribute to fragment requests"() {
+  def "should forward cookies defined via ableron-include cookies-attribute to fragment requests"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(204))
@@ -952,7 +966,7 @@ class IncludeSpec extends Specification {
     mockWebServer.shutdown()
   }
 
-  def "should not pass non-allowed request headers to fragment requests"() {
+  def "should not forward non-allowed request headers to fragment requests"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(204))
@@ -1009,7 +1023,7 @@ class IncludeSpec extends Specification {
     mockWebServer.shutdown()
   }
 
-  def "should pass header with multiple values to fragment requests"() {
+  def "should forward header with multiple values to fragment requests"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(204))
@@ -1029,7 +1043,7 @@ class IncludeSpec extends Specification {
     mockWebServer.shutdown()
   }
 
-  def "should pass allowed response headers of primary fragment to transclusion result"() {
+  def "should forward allowed response headers of primary fragment to transclusion result"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(200)
@@ -1049,7 +1063,7 @@ class IncludeSpec extends Specification {
     mockWebServer.shutdown()
   }
 
-  def "should not pass allowed response headers of non-primary fragment to transclusion result"() {
+  def "should not forward allowed response headers of non-primary fragment to transclusion result"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(200)
@@ -1086,7 +1100,7 @@ class IncludeSpec extends Specification {
     mockWebServer.shutdown()
   }
 
-  def "should pass primary fragment response header with multiple values to transclusion result"() {
+  def "should forward primary fragment response header with multiple values to transclusion result"() {
     given:
     def mockWebServer = new MockWebServer()
     mockWebServer.enqueue(new MockResponse().setResponseCode(200)
