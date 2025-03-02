@@ -134,8 +134,8 @@ describe('Include', () => {
       new Include('', new Map([['headers', ' test1,test2  ,, TEST3 ,\nTest4,,test4  ']])),
       ['test1', 'test2', 'test3', 'test4']
     ]
-  ])('should parse headers attribute', (include: Include, expectedHeadersToPass: string[]) => {
-    expect(include.getHeadersToPass()).toStrictEqual(expectedHeadersToPass);
+  ])('should parse headers attribute', (include: Include, expectedHeadersToForward: string[]) => {
+    expect(include.getHeadersToForward()).toStrictEqual(expectedHeadersToForward);
   });
 
   it.each([
@@ -147,8 +147,8 @@ describe('Include', () => {
       new Include('', new Map([['cookies', ' test1,test2  ,, TEST3 ,\nTest4,,test4  ']])),
       ['test1', 'test2', 'TEST3', 'Test4', 'test4']
     ]
-  ])('should parse cookies attribute', (include: Include, expectedCookiesToPass: string[]) => {
-    expect(include.getCookiesToPass()).toStrictEqual(expectedCookiesToPass);
+  ])('should parse cookies attribute', (include: Include, expectedCookiesToForward: string[]) => {
+    expect(include.getCookiesToForward()).toStrictEqual(expectedCookiesToForward);
   });
 
   it('should resolve with src', async () => {

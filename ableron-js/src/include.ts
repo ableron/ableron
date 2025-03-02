@@ -39,8 +39,8 @@ export default class Include {
   private readonly ATTR_PRIMARY: string = 'primary';
 
   /**
-   * Name of the optional attribute which contains a comma separated list of HTTP header names that shall
-   * be passed from the parent request to fragment requests.
+   * Name of the optional attribute which contains a comma separated list of request headers that shall
+   * be forwarded from the parent request to fragment requests.
    */
   private readonly ATTR_HEADERS: string = 'headers';
 
@@ -106,14 +106,14 @@ export default class Include {
   private readonly primary: boolean;
 
   /**
-   * List of HTTP header names that shall be passed from the parent request to fragment requests.
+   * Request headers, that shall be forwarded from the parent request to fragment requests.
    */
-  private readonly headersToPass: string[];
+  private readonly headersToForward: string[];
 
   /**
-   * List of HTTP cookie names that shall be passed from the parent request to fragment requests.
+   * Cookies, that shall be forwarded from the parent request to fragment requests.
    */
-  private readonly cookiesToPass: string[];
+  private readonly cookiesToForward: string[];
 
   /**
    * Fallback content to use in case the include could not be resolved.
@@ -147,8 +147,8 @@ export default class Include {
     this.fallbackSrcTimeoutMillis = this.parseTimeout(this.rawAttributes.get(this.ATTR_FALLBACK_SOURCE_TIMEOUT));
     const primary = this.rawAttributes.get(this.ATTR_PRIMARY);
     this.primary = primary !== undefined && ['', 'primary'].includes(primary.toLowerCase());
-    this.headersToPass = this.parseCommaSeparatedList(this.rawAttributes.get(this.ATTR_HEADERS), true);
-    this.cookiesToPass = this.parseCommaSeparatedList(this.rawAttributes.get(this.ATTR_COOKIES));
+    this.headersToForward = this.parseCommaSeparatedList(this.rawAttributes.get(this.ATTR_HEADERS), true);
+    this.cookiesToForward = this.parseCommaSeparatedList(this.rawAttributes.get(this.ATTR_COOKIES));
     this.fallbackContent = fallbackContent !== undefined ? fallbackContent : '';
   }
 
@@ -184,12 +184,12 @@ export default class Include {
     return this.primary;
   }
 
-  getHeadersToPass(): string[] {
-    return this.headersToPass;
+  getHeadersToForward(): string[] {
+    return this.headersToForward;
   }
 
-  getCookiesToPass(): string[] {
-    return this.cookiesToPass;
+  getCookiesToForward(): string[] {
+    return this.cookiesToForward;
   }
 
   getFallbackContent(): string {
@@ -276,9 +276,9 @@ export default class Include {
     return this;
   }
 
-  private buildRequestHeaders(parentRequestHeaders: Headers, requestHeadersToPass: string[]): Headers {
-    const requestHeaders = this.filterHeaders(parentRequestHeaders, [...requestHeadersToPass, ...this.headersToPass]);
-    const cookieHeaderValue = HttpUtil.getCookieHeaderValue(parentRequestHeaders, this.cookiesToPass);
+  private buildRequestHeaders(parentRequestHeaders: Headers, requestHeadersForward: string[]): Headers {
+    const requestHeaders = this.filterHeaders(parentRequestHeaders, [...requestHeadersForward, ...this.headersToForward]);
+    const cookieHeaderValue = HttpUtil.getCookieHeaderValue(parentRequestHeaders, this.cookiesToForward);
 
     if (cookieHeaderValue !== null) {
       requestHeaders.set(HttpUtil.HEADER_COOKIE, cookieHeaderValue);
@@ -438,7 +438,7 @@ export default class Include {
     requestHeaders: Headers,
     requestHeadersForwardVary: string[]
   ): string {
-    const headersRelevantForCaching = [...requestHeadersForwardVary, ...this.headersToPass];
+    const headersRelevantForCaching = [...requestHeadersForwardVary, ...this.headersToForward];
     let headersCacheKey = '';
 
     headersRelevantForCaching.sort().forEach((headerName) => {
@@ -450,7 +450,7 @@ export default class Include {
     });
 
     let cookiesCacheKey = '';
-    const cookieHeaderValue = HttpUtil.getCookieHeaderValue(requestHeaders, this.cookiesToPass);
+    const cookieHeaderValue = HttpUtil.getCookieHeaderValue(requestHeaders, this.cookiesToForward);
 
     if (cookieHeaderValue !== null) {
       cookiesCacheKey = cookieHeaderValue

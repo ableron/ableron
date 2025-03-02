@@ -143,10 +143,10 @@ class IncludeSpec extends Specification {
 
   def "should parse headers attribute"() {
     expect:
-    include.headersToPass == expectedHeadersToPass
+    include.headersToForward == expectedHeadersToForward
 
     where:
-    include                                                                    | expectedHeadersToPass
+    include                                                                    | expectedHeadersToForward
     new Include(null)                                                          | []
     new Include(null, ["headers": ""])                                         | []
     new Include(null, ["headers": "test"])                                     | ["test"]
@@ -156,10 +156,10 @@ class IncludeSpec extends Specification {
 
   def "should parse cookies attribute"() {
     expect:
-    include.cookiesToPass == expectedCookiesToPass
+    include.cookiesToForward == expectedCookiesToForward
 
     where:
-    include                                                                    | expectedCookiesToPass
+    include                                                                    | expectedCookiesToForward
     new Include(null)                                                          | []
     new Include(null, ["cookies": ""])                                         | []
     new Include(null, ["cookies": "test"])                                     | ["test"]

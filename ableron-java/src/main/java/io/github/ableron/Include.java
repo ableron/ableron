@@ -50,8 +50,8 @@ public class Include {
   private static final String ATTR_PRIMARY = "primary";
 
   /**
-   * Name of the optional attribute which contains a comma separated list of HTTP header names that shall
-   * be passed from the parent request to fragment requests.
+   * Name of the optional attribute which contains a comma separated list of request headers that shall
+   * be forwarded from the parent request to fragment requests.
    */
   private static final String ATTR_HEADERS = "headers";
 
@@ -121,14 +121,14 @@ public class Include {
   private final boolean primary;
 
   /**
-   * List of HTTP header names that shall be passed from the parent request to fragment requests.
+   * Request headers, that shall be forwarded from the parent request to fragment requests.
    */
-  private final Collection<String> headersToPass = new ArrayList<>();
+  private final Collection<String> headersToForward = new ArrayList<>();
 
   /**
-   * List of HTTP cookie names that shall be passed from the parent request to fragment requests.
+   * Cookies, that shall be forwarded from the parent request to fragment requests.
    */
-  private final Collection<String> cookiesToPass = new ArrayList<>();
+  private final Collection<String> cookiesToForward = new ArrayList<>();
 
   /**
    * Fallback content to use in case the include could not be resolved.
@@ -185,8 +185,8 @@ public class Include {
     this.fallbackSrc = this.rawAttributes.get(ATTR_FALLBACK_SOURCE);
     this.fallbackSrcTimeout = parseTimeout(this.rawAttributes.get(ATTR_FALLBACK_SOURCE_TIMEOUT));
     this.primary = hasBooleanAttribute(ATTR_PRIMARY);
-    this.headersToPass.addAll(parseCommaSeparatedList(this.rawAttributes.get(ATTR_HEADERS), true));
-    this.cookiesToPass.addAll(parseCommaSeparatedList(this.rawAttributes.get(ATTR_COOKIES), false));
+    this.headersToForward.addAll(parseCommaSeparatedList(this.rawAttributes.get(ATTR_HEADERS), true));
+    this.cookiesToForward.addAll(parseCommaSeparatedList(this.rawAttributes.get(ATTR_COOKIES), false));
     this.fallbackContent = Optional.ofNullable(fallbackContent).orElse("");
   }
 
@@ -246,12 +246,12 @@ public class Include {
     return primary;
   }
 
-  public Collection<String> getHeadersToPass() {
-    return headersToPass;
+  public Collection<String> getHeadersToForward() {
+    return headersToForward;
   }
 
-  public Collection<String> getCookiesToPass() {
-    return cookiesToPass;
+  public Collection<String> getCookiesToForward() {
+    return cookiesToForward;
   }
 
   /**
@@ -323,12 +323,12 @@ public class Include {
     return this;
   }
 
-  private Map<String, List<String>> buildRequestHeaders(Map<String, List<String>> parentRequestHeaders, Collection<String> requestHeadersToPass) {
+  private Map<String, List<String>> buildRequestHeaders(Map<String, List<String>> parentRequestHeaders, Collection<String> requestHeadersForward) {
     var requestHeaders = filterHeaders(
       parentRequestHeaders,
-      Stream.concat(requestHeadersToPass.stream(), headersToPass.stream()).collect(Collectors.toList())
+      Stream.concat(requestHeadersForward.stream(), this.headersToForward.stream()).collect(Collectors.toList())
     );
-    HttpUtil.getCookieHeaderValue(parentRequestHeaders, this.cookiesToPass).ifPresent(value -> requestHeaders.put(HttpUtil.HEADER_COOKIE, List.of(value)));
+    HttpUtil.getCookieHeaderValue(parentRequestHeaders, this.cookiesToForward).ifPresent(value -> requestHeaders.put(HttpUtil.HEADER_COOKIE, List.of(value)));
     return requestHeaders;
   }
 
@@ -459,7 +459,7 @@ public class Include {
   }
 
   private String buildFragmentCacheKey(String fragmentUrl, Map<String, List<String>> requestHeaders, Collection<String> requestHeadersForwardVary) {
-    var headersRelevantForCaching = Stream.concat(requestHeadersForwardVary.stream(), this.headersToPass.stream())
+    var headersRelevantForCaching = Stream.concat(requestHeadersForwardVary.stream(), this.headersToForward.stream())
       .map(String::toLowerCase)
       .collect(Collectors.toSet());
     var headersCacheKey = requestHeaders.entrySet()
@@ -468,7 +468,7 @@ public class Include {
       .sorted((c1, c2) -> c1.getKey().compareToIgnoreCase(c2.getKey()))
       .map(header -> "\nh:" + header.getKey().toLowerCase() + "=" + String.join(",", header.getValue()))
       .collect(Collectors.joining());
-    var cookiesCacheKey = HttpUtil.getCookieHeaderValue(requestHeaders, this.cookiesToPass)
+    var cookiesCacheKey = HttpUtil.getCookieHeaderValue(requestHeaders, this.cookiesToForward)
       .map(cookieHeader -> cookieHeader.split(";"))
       .stream()
       .flatMap(Stream::of)
