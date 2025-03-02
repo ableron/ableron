@@ -44,7 +44,7 @@ try {
     .resolveIncludes(rawResponseBody, req.headers)
     .then((transclusionResult) => {
       transclusionResult
-        .getResponseHeadersToPass()
+        .getResponseHeadersToForward()
         .forEach((headerValue, headerName) => res.setHeader(headerName, headerValue));
       res.setHeader(
         'Cache-Control',

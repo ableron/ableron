@@ -17,7 +17,7 @@ describe('TransclusionResult', () => {
     expect(transclusionResult.getContentExpirationTime()).toBeUndefined();
     expect(transclusionResult.getHasPrimaryInclude()).toBe(false);
     expect(transclusionResult.getStatusCodeOverride()).toBeUndefined();
-    expect(transclusionResult.getResponseHeadersToPass()).toEqual(new Headers());
+    expect(transclusionResult.getResponseHeadersToForward()).toEqual(new Headers());
     expect(transclusionResult.getProcessedIncludesCount()).toBe(0);
     expect(transclusionResult.getProcessingTimeMillis()).toBe(0);
   });
@@ -49,7 +49,7 @@ describe('TransclusionResult', () => {
     expect(transclusionResult.getContentExpirationTime()).toEqual(new Date(0));
     expect(transclusionResult.getHasPrimaryInclude()).toBe(true);
     expect(transclusionResult.getStatusCodeOverride()).toBe(404);
-    expect(transclusionResult.getResponseHeadersToPass()).toEqual(new Headers([['X-Test', 'Foo']]));
+    expect(transclusionResult.getResponseHeadersToForward()).toEqual(new Headers([['X-Test', 'Foo']]));
     expect(transclusionResult.getProcessedIncludesCount()).toBe(1);
     expect(transclusionResult.getProcessingTimeMillis()).toBe(0);
   });

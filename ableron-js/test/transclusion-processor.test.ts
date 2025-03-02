@@ -274,7 +274,7 @@ describe('TransclusionProcessor', () => {
     );
     expect(result.getHasPrimaryInclude()).toBe(true);
     expect(result.getStatusCodeOverride()).toBe(301);
-    expect(result.getResponseHeadersToPass()).toEqual(new Headers([['location', '/foobar']]));
+    expect(result.getResponseHeadersToForward()).toEqual(new Headers([['location', '/foobar']]));
   });
 
   it('should set content expiration time to lowest fragment expiration time', async () => {

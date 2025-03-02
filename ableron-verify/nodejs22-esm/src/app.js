@@ -12,7 +12,7 @@ app.use(bodyParser.text({ type: 'text/*', limit: '5MB' }))
 
 app.post('/verify', async (req, res) => {
   const transclusionResult = await ableron.resolveIncludes(req.body, req.headers)
-  transclusionResult.getResponseHeadersToPass().forEach((headerValue, headerName) => res.set(headerName, headerValue))
+  transclusionResult.getResponseHeadersToForward().forEach((headerValue, headerName) => res.set(headerName, headerValue))
   res
     .set('Content-Type', 'text/html; charset=utf-8')
     .set('Cache-Control', transclusionResult.calculateCacheControlHeaderValue(600))

@@ -56,7 +56,7 @@ To use `ableron-java` directly, follow these steps:
    // override response status code when primary include was present
    transclusionResult.getStatusCodeOverride().ifPresent(statusCode -> setResponseStatusCode(statusCode));
    // add response headers when primary include was present
-   addResponseHeaders(transclusionResult.getResponseHeadersToPass());
+   addResponseHeaders(transclusionResult.getResponseHeadersToForward());
    // set cache-control header
    getResponse().setHeader(CACHE_CONTROL, transclusionResult.calculateCacheControlHeaderValue(getResponseHeaders()));
    ```

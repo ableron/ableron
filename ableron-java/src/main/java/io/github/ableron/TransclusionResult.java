@@ -49,9 +49,9 @@ public class TransclusionResult {
   private Integer statusCodeOverride;
 
   /**
-   * Response headers set by a primary include which are to be sent along the content.
+   * Response headers of primary includes, that shall be forwarded to the final response.
    */
-  private final Map<String, List<String>> responseHeadersToPass = new HashMap<>();
+  private final Map<String, List<String>> responseHeadersToForward = new HashMap<>();
 
   /**
    * Time in milliseconds it took to resolve the includes in the content.
@@ -90,8 +90,8 @@ public class TransclusionResult {
     return Optional.ofNullable(statusCodeOverride);
   }
 
-  public Map<String, List<String>> getResponseHeadersToPass() {
-    return responseHeadersToPass;
+  public Map<String, List<String>> getResponseHeadersToForward() {
+    return responseHeadersToForward;
   }
 
   public int getProcessedIncludesCount() {
@@ -115,7 +115,7 @@ public class TransclusionResult {
       } else {
         hasPrimaryInclude = true;
         statusCodeOverride = fragment.getStatusCode();
-        responseHeadersToPass.putAll(fragment.getResponseHeaders());
+        responseHeadersToForward.putAll(fragment.getResponseHeaders());
       }
     }
 

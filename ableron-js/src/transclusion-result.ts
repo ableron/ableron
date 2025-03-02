@@ -11,7 +11,7 @@ export default class TransclusionResult {
   private contentExpirationTime?: Date;
   private hasPrimaryInclude: boolean = false;
   private statusCodeOverride?: number;
-  private readonly responseHeadersToPass: Headers = new Headers();
+  private readonly responseHeadersToForward: Headers = new Headers();
   private readonly cacheStats: CacheStats;
   private readonly appendStatsToContent: boolean;
   private readonly exposeFragmentUrl: boolean;
@@ -48,8 +48,8 @@ export default class TransclusionResult {
     return this.statusCodeOverride;
   }
 
-  getResponseHeadersToPass(): Headers {
-    return this.responseHeadersToPass;
+  getResponseHeadersToForward(): Headers {
+    return this.responseHeadersToForward;
   }
 
   getProcessedIncludesCount(): number {
@@ -76,7 +76,7 @@ export default class TransclusionResult {
         this.hasPrimaryInclude = true;
         this.statusCodeOverride = fragment.statusCode;
         fragment.responseHeaders.forEach((headerValue, headerName) =>
-          this.responseHeadersToPass.set(headerName, headerValue)
+          this.responseHeadersToForward.set(headerName, headerValue)
         );
       }
     }

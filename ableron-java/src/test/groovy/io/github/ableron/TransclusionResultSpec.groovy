@@ -20,7 +20,7 @@ class TransclusionResultSpec extends Specification {
     transclusionResult.getContentExpirationTime() == Optional.empty()
     !transclusionResult.hasPrimaryInclude()
     transclusionResult.getStatusCodeOverride() == Optional.empty()
-    transclusionResult.getResponseHeadersToPass() == [:]
+    transclusionResult.getResponseHeadersToForward() == [:]
     transclusionResult.getProcessedIncludesCount() == 0
     transclusionResult.getProcessingTimeMillis() == 0
   }
@@ -52,7 +52,7 @@ class TransclusionResultSpec extends Specification {
     transclusionResult.getContentExpirationTime() == Optional.of(Instant.EPOCH)
     transclusionResult.hasPrimaryInclude()
     transclusionResult.getStatusCodeOverride() == Optional.of(404)
-    transclusionResult.getResponseHeadersToPass() == ["X-Test":["Foo"]]
+    transclusionResult.getResponseHeadersToForward() == ["X-Test":["Foo"]]
     transclusionResult.getProcessedIncludesCount() == 1
     transclusionResult.getProcessingTimeMillis() == 0
   }

@@ -221,7 +221,7 @@ class TransclusionProcessorSpec extends Specification {
     """
     result.hasPrimaryInclude()
     result.getStatusCodeOverride().get() == 301
-    result.getResponseHeadersToPass() == ["location": ["/foobar"]]
+    result.getResponseHeadersToForward() == ["location": ["/foobar"]]
 
     cleanup:
     mockWebServer.shutdown()
