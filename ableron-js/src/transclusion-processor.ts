@@ -60,7 +60,7 @@ export default class TransclusionProcessor {
       Array.from(this.findIncludes(content)).map((include) => {
         try {
           return include
-            .resolve(this.ableronConfig, this.fragmentCache, parentRequestHeaders)
+            .resolve(this.ableronConfig, this.fragmentCache, parentRequestHeaders || new Headers())
             .then(() => transclusionResult.addResolvedInclude(include))
             .catch((e) => this.handleResolveError(include, e, transclusionResult, startTime));
         } catch (e: any) {
