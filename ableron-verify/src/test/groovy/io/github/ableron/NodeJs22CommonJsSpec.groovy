@@ -10,6 +10,6 @@ class NodeJs22CommonJsSpec extends BaseSpec {
   @Override
   GenericContainer getContainerUnderTest() {
     return new GenericContainer<>(new ImageFromDockerfile()
-      .withDockerfile(Path.of("nodejs22-cjs", "Dockerfile")))
+      .withDockerfile(Path.of("..", "Dockerfile-verify-nodejs22-cjs")))
   }
 }

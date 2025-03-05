@@ -19,7 +19,7 @@
   },
   "scripts": {
     "clean": "rm -fr dist/*",
-    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:types && bash ./tsconfig/set-package-type",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:types && sh ./tsconfig/set-package-type",
     "build:esm": "tsc -p tsconfig.json",
     "build:cjs": "tsc -p tsconfig/tsconfig-cjs.json",
     "build:types": "tsc -p tsconfig/tsconfig-types.json",

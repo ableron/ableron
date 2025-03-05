@@ -798,31 +798,33 @@ abstract class BaseSpec extends Specification {
       .withoutHeader("X-Test"))
   }
 
-  def "should pass default User-Agent header to fragment requests"() {
+  def "should send custom User-Agent header to fragment requests"() {
     given:
-    wiremockServer.stubFor(get("/pass-req-headers-04").willReturn(ok()))
+    def srcPath = randomIncludeSrcPath()
+    wiremockServer.stubFor(get(srcPath).willReturn(ok()))
 
     when:
-    performUiIntegration("<ableron-include src=\"${wiremockAddress}/pass-req-headers-04\"/>")
+    performUiIntegration("<ableron-include src=\"${wiremockAddress}${srcPath}\"/>")
 
     then:
-    wiremockServer.verify(1, getRequestedFor(urlEqualTo("/pass-req-headers-04"))
-      .withHeader("User-Agent", matching("^Java-http-client/.+")))
+    wiremockServer.verify(1, getRequestedFor(urlEqualTo(srcPath))
+      .withHeader("User-Agent", equalTo("Ableron/2.0")))
   }
 
-  def "should forward provided User-Agent header to fragment requests by default"() {
+  def "should send custom User-Agent header to fragment requests independent of provided one"() {
     given:
-    wiremockServer.stubFor(get("/pass-req-headers-05").willReturn(ok()))
+    def srcPath = randomIncludeSrcPath()
+    wiremockServer.stubFor(get(srcPath).willReturn(ok()))
 
     when:
     performUiIntegration(
-      "<ableron-include src=\"${wiremockAddress}/pass-req-headers-05\"/>",
-      ["User-Agent": ["pass-through-user-agent"]]
+      "<ableron-include src=\"${wiremockAddress}${srcPath}\"/>",
+      ["User-Agent": ["user-agent-from-parent-request"]]
     )
 
     then:
-    wiremockServer.verify(1, getRequestedFor(urlEqualTo("/pass-req-headers-05"))
-      .withHeader("User-Agent", equalTo("pass-through-user-agent")))
+    wiremockServer.verify(1, getRequestedFor(urlEqualTo(srcPath))
+      .withHeader("User-Agent", equalTo("Ableron/2.0")))
   }
 
   def "should forward header with multiple values to fragment requests"() {
@@ -1036,7 +1038,7 @@ abstract class BaseSpec extends Specification {
     performUiIntegration("<ableron-include src=\"${wiremockAddress}${includeSrcPath}\"/>") == ""
   }
 
-  def "should consider cacheVaryByRequestHeaders"() {
+  def "should consider requestHeadersForwardVary"() {
     given:
     def includeSrcPathCacheVary = randomIncludeSrcPath()
     def includeSrcPathCacheNoVary = randomIncludeSrcPath()
@@ -1047,7 +1049,7 @@ abstract class BaseSpec extends Specification {
     wiremockServer.stubFor(get(includeSrcPathCacheNoVary)
       .willReturn(ok()
         .withHeader("Cache-Control", "public, s-maxage=30")
-        .withBody("User-Agent: {{request.headers.User-Agent}}")))
+        .withBody("Correlation-ID: {{request.headers.Correlation-ID}}")))
 
     expect:
     performUiIntegration(
@@ -1060,12 +1062,12 @@ abstract class BaseSpec extends Specification {
     ) == "Accept-Language: b"
     performUiIntegration(
       "<ableron-include src=\"${wiremockAddress}${includeSrcPathCacheNoVary}\"/>",
-      ["User-Agent": ["a"]]
-    ) == "User-Agent: a"
+      ["Correlation-ID": ["a"]]
+    ) == "Correlation-ID: a"
     performUiIntegration(
       "<ableron-include src=\"${wiremockAddress}${includeSrcPathCacheNoVary}\"/>",
-      ["User-Agent": ["b"]]
-    ) == "User-Agent: a"
+      ["Correlation-ID": ["b"]]
+    ) == "Correlation-ID: a"
   }
 
   private String performUiIntegration(String content) {

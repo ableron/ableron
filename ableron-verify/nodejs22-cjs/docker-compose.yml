@@ -1,4 +1,5 @@
-version: "3"
 services:
   ableron:
-    build: .
+    build:
+      context: ../..
+      dockerfile: Dockerfile-verify-nodejs22-cjs
