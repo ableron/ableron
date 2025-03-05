@@ -23,14 +23,14 @@ public class VerifyController {
 
   public VerifyController() {
     this.ableron = new Ableron(AbleronConfig.builder()
-      .cacheVaryByRequestHeaders(List.of("Accept-Language"))
+      .requestHeadersForwardVary(List.of("Accept-Language"))
       .build());
   }
 
   @PostMapping(value = "/verify", produces = MediaType.TEXT_HTML_VALUE)
   public ResponseEntity<String> verify(@RequestBody String content, @RequestHeader MultiValueMap<String, String> requestHeaders) {
     var transclusionResult = ableron.resolveIncludes(content, requestHeaders);
-    var responseHeaders = new HttpHeaders(CollectionUtils.toMultiValueMap(transclusionResult.getResponseHeadersToPass()));
+    var responseHeaders = new HttpHeaders(CollectionUtils.toMultiValueMap(transclusionResult.getResponseHeadersToForward()));
     responseHeaders.set(HttpHeaders.CACHE_CONTROL, transclusionResult.calculateCacheControlHeaderValue(Duration.ofSeconds(600)));
 
     return new ResponseEntity<>(
