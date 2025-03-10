@@ -11,9 +11,6 @@ jobs:
           - ubuntu-latest
           - windows-latest
         nodeVersion: [19.x, 20.x, 21.x, 22.x]
-    defaults:
-      run:
-        working-directory: ableron-express
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -21,6 +18,12 @@ jobs:
           node-version: ${{ matrix.nodeVersion }}
           cache: npm
           cache-dependency-path: ableron-express/package-lock.json
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
+      - run: |
+          cd ../ableron-js
+          npm install
+          npm run build
+          cd ../ableron-express
+          npm install ../ableron-js
+          npm install
+          npm run build
+          npm run test
