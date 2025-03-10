@@ -10,6 +10,6 @@ class NodeJs22EsModulesSpec extends BaseSpec {
   @Override
   GenericContainer getContainerUnderTest() {
     return new GenericContainer<>(new ImageFromDockerfile()
-      .withDockerfile(Path.of("nodejs22-esm", "Dockerfile")))
+      .withDockerfile(Path.of("..", "Dockerfile-verify-nodejs22-esm")))
   }
 }
