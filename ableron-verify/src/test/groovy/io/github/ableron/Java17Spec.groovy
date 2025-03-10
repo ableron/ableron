@@ -10,6 +10,6 @@ class Java17Spec extends BaseSpec {
   @Override
   GenericContainer getContainerUnderTest() {
     return new GenericContainer<>(new ImageFromDockerfile()
-      .withDockerfile(Path.of("java17", "Dockerfile")))
+      .withDockerfile(Path.of("..", "Dockerfile-verify-java17")))
   }
 }

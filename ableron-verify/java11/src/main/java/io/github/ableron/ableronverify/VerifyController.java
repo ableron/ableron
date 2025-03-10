@@ -23,7 +23,7 @@ public class VerifyController {
 
   public VerifyController() {
     this.ableron = new Ableron(AbleronConfig.builder()
-      .cacheVaryByRequestHeaders(List.of("Accept-Language"))
+      .requestHeadersForwardVary(List.of("Accept-Language"))
       .build());
   }
 
