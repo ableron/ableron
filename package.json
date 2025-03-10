@@ -1,0 +1,7 @@
+{
+  "name": "@ableron/ableron-manager",
+  "version": "0.0.1",
+  "scripts": {
+    "test:ableron-js": "cd ableron-js && npm ci && npm run build && npm test"
+  }
+}
