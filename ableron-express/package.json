@@ -1,0 +1,68 @@
+{
+  "name": "@ableron/express",
+  "version": "1.5.1",
+  "description": "Express Middleware for Ableron Server Side UI Composition",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "clean": "rm -fr dist/*",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:types && sh ./tsconfig/set-package-type",
+    "build:esm": "tsc -p tsconfig.json",
+    "build:cjs": "tsc -p tsconfig/tsconfig-cjs.json",
+    "build:types": "tsc -p tsconfig/tsconfig-types.json",
+    "prettier": "prettier . --write",
+    "test": "vitest"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "ableron",
+    "express",
+    "ssi",
+    "server-side-includes",
+    "ui-composition",
+    "dynamic-ui-composition"
+  ],
+  "author": "Torsten Blasche <dev@t-blasche.de>",
+  "license": "MIT",
+  "homepage": "https://ableron.github.io/",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ableron/ableron.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ableron/ableron/issues"
+  },
+  "dependencies": {
+    "@ableron/ableron": "file:../ableron-js"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.0",
+    "express": "4.21.1",
+    "prettier": "3.3.3",
+    "supertest": "7.0.0",
+    "ts-loader": "9.5.1",
+    "typescript": "5.6.3",
+    "vitest": "2.1.4"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "quoteProps": "consistent",
+    "singleQuote": true,
+    "trailingComma": "none"
+  }
+}

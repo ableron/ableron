@@ -1,6 +1,7 @@
 ## <p align="center">Ableron - Distributed Server Side UI Composition</p>
 <p align="center">
   <a href="https://github.com/ableron/ableron/ableron-js" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-js-verify.yml/badge.svg" alt="ableron-js Status" /></a>
+  <a href="https://github.com/ableron/ableron/ableron-express" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-express-verify.yml/badge.svg" alt="ableron-express Status" /></a>
   <a href="https://github.com/ableron/ableron/ableron-java" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-java.yml/badge.svg" alt="ableron-java Status" /></a>
 </p>
 
@@ -26,7 +27,7 @@ The technical libs you may want to start with, are:
 - the [Java Library](https://github.com/ableron/ableron/tree/main/ableron-java)
 - the [JavaScript Library](https://github.com/ableron/ableron/tree/main/ableron-js)
 - the [Spring Boot Plugin](https://github.com/ableron/ableron-spring-boot)
-- the [express Plugin](https://github.com/ableron/ableron-express)
+- the [express Plugin](https://github.com/ableron/ableron/tree/main/ableron-express)
 - the [fastify Plugin](https://github.com/ableron/ableron-fastify)
 
 ### End-to-End Test Suite Status

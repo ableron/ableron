@@ -10,6 +10,6 @@ class NodeJs22Express4Spec extends BaseSpec {
   @Override
   GenericContainer getContainerUnderTest() {
     return new GenericContainer<>(new ImageFromDockerfile()
-      .withDockerfile(Path.of("nodejs22-express4", "Dockerfile")))
+      .withDockerfile(Path.of("..", "Dockerfile-verify-nodejs22-express4")))
   }
 }

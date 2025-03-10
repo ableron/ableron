@@ -1,0 +1,26 @@
+name: ableron-express
+
+on: push
+
+jobs:
+  verify:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+        nodeVersion: [19.x, 20.x, 21.x, 22.x]
+    defaults:
+      run:
+        working-directory: ableron-express
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.nodeVersion }}
+          cache: npm
+          cache-dependency-path: ableron-express/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run build

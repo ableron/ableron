@@ -227,10 +227,10 @@ abstract class BaseSpec extends Specification {
     ) == "before" + expectedResolvedContent + "after"
 
     where:
-    scenarioName                   | content                                                                        | expectedResolvedContent
-    "invalid src url"              | '<ableron-include src=",._">fallback</ableron-include>'                        | "fallback"
-    "invalid src timeout"          | '<ableron-include src-timeout-millis="5s">fallback</ableron-include>'          | "fallback"
-    "invalid fallback-src timeout" | '<ableron-include fallback-src-timeout-millis="5s">fallback</ableron-include>' | "fallback"
+    scenarioName                   | content                                                                 | expectedResolvedContent
+    "invalid src url"              | '<ableron-include src=",._">fallback</ableron-include>'                 | "fallback"
+    "invalid src timeout"          | '<ableron-include src-timeout="5s">fallback</ableron-include>'          | "fallback"
+    "invalid fallback-src timeout" | '<ableron-include fallback-src-timeout="5s">fallback</ableron-include>' | "fallback"
   }
 
   @Timeout(value = 3, unit = TimeUnit.SECONDS)
@@ -363,7 +363,6 @@ abstract class BaseSpec extends Specification {
     given:
     wiremockServer.stubFor(get("/5000ms-delay").willReturn(ok()
       .withBody("fragment")
-      .withHeader("Expires", "0")
       .withFixedDelay(5000)))
 
     when:
@@ -373,13 +372,13 @@ abstract class BaseSpec extends Specification {
     result == expectedResolvedContent
 
     where:
-    content                                                                                                    | expectedResolvedContent
-    "<ableron-include src=\"${wiremockAddress}/5000ms-delay\"/>"                                               | ""
-    "<ableron-include src=\"${wiremockAddress}/5000ms-delay\" src-timeout-millis=\"6000\"/>"                   | "fragment"
-    "<ableron-include src=\"${wiremockAddress}/5000ms-delay\" fallback-src-timeout-millis=\"6000\"/>"          | ""
-    "<ableron-include fallback-src=\"${wiremockAddress}/5000ms-delay\"/>"                                      | ""
-    "<ableron-include fallback-src=\"${wiremockAddress}/5000ms-delay\" src-timeout-millis=\"6000\"/>"          | ""
-    "<ableron-include fallback-src=\"${wiremockAddress}/5000ms-delay\" fallback-src-timeout-millis=\"6000\"/>" | "fragment"
+    content                                                                                             | expectedResolvedContent
+    "<ableron-include src=\"${wiremockAddress}/5000ms-delay\"/>"                                        | ""
+    "<ableron-include src=\"${wiremockAddress}/5000ms-delay\" src-timeout=\"7000\"/>"                   | "fragment"
+    "<ableron-include src=\"${wiremockAddress}/5000ms-delay\" fallback-src-timeout=\"7000\"/>"          | ""
+    "<ableron-include fallback-src=\"${wiremockAddress}/5000ms-delay\"/>"                               | ""
+    "<ableron-include fallback-src=\"${wiremockAddress}/5000ms-delay\" src-timeout=\"7000\"/>"          | ""
+    "<ableron-include fallback-src=\"${wiremockAddress}/5000ms-delay\" fallback-src-timeout=\"7000\"/>" | "fragment"
   }
 
   @Unroll

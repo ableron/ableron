@@ -7,7 +7,7 @@ const port = 8080
 
 app.use(bodyParser.text({ type: 'text/*', limit: '5MB' }))
 app.use(ableron({
-  cacheVaryByRequestHeaders: ['Accept-Language']
+  requestHeadersForwardVary: ['Accept-Language']
 }, console))
 
 app.post('/verify', (req, res) => {
