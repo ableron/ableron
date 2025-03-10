@@ -13,7 +13,7 @@ cd ../ableron-express
 npm install ../ableron-js
 npm install
 npm run build
-npm run test
+npm test
 ```
 
 ## Perform Release

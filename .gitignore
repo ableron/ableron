@@ -16,4 +16,5 @@ node_modules/
 
 # Build Java
 .gradle/
+build/
 target/

@@ -1,7 +1,8 @@
 {
-  "name": "@ableron/ableron-manager",
-  "version": "0.0.1",
   "scripts": {
-    "test:ableron-js": "cd ableron-js && npm ci && npm run build && npm test"
+    "test": "npm run test:ableron-java && npm run test:ableron-js && npm run test:ableron-express",
+    "test:ableron-java": "cd ableron-java && ./mvnw clean install",
+    "test:ableron-js": "cd ableron-js && npm ci && npm run build && npm test",
+    "test:ableron-express": "cd ableron-js && npm ci && npm run build && cd ../ableron-express && npm install ../ableron-js && npm ci && npm run build && npm test"
   }
 }
