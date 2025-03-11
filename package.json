@@ -1,8 +1,10 @@
 {
   "scripts": {
-    "test": "npm run test:ableron-java && npm run test:ableron-js && npm run test:ableron-express",
+    "test": "npm run test:ableron-java && npm run test:ableron-js && npm run test:ableron-express && npm run test:ableron-fastify && npm run test:ableron-verify",
     "test:ableron-java": "cd ableron-java && ./mvnw clean install",
     "test:ableron-js": "cd ableron-js && npm ci && npm run build && npm test",
-    "test:ableron-express": "cd ableron-js && npm ci && npm run build && cd ../ableron-express && npm install ../ableron-js && npm ci && npm run build && npm test"
+    "test:ableron-express": "cd ableron-js && npm ci && npm run build && cd ../ableron-express && npm install ../ableron-js && npm ci && npm run build && npm test",
+    "test:ableron-fastify": "cd ableron-js && npm ci && npm run build && cd ../ableron-fastify && npm install ../ableron-js && npm ci && npm run build && npm test",
+    "test:ableron-verify": "cd ableron-verify && ./gradlew test"
   }
 }

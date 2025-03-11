@@ -1,0 +1,29 @@
+name: ableron-fastify
+
+on: push
+
+jobs:
+  verify:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+        nodeVersion: [19.x, 20.x, 21.x, 22.x]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.nodeVersion }}
+          cache: npm
+          cache-dependency-path: ableron-fastify/package-lock.json
+      - run: |
+          cd ableron-js
+          npm install
+          npm run build
+          cd ../ableron-fastify
+          npm install ../ableron-js
+          npm install
+          npm run build
+          npm test

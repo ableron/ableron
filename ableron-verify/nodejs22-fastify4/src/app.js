@@ -7,7 +7,7 @@ const app = Fastify({
 
 app.register(ableron, {
   ableron: {
-    cacheVaryByRequestHeaders: ['Accept-Language'],
+    requestHeadersForwardVary: ['Accept-Language'],
     logger: console
   }
 });

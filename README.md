@@ -2,6 +2,7 @@
 <p align="center">
   <a href="https://github.com/ableron/ableron/actions/workflows/ableron-js-verify.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-js-verify.yml/badge.svg" alt="ableron-js Status" /></a>
   <a href="https://github.com/ableron/ableron/actions/workflows/ableron-express-verify.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-express-verify.yml/badge.svg" alt="ableron-express Status" /></a>
+  <a href="https://github.com/ableron/ableron/actions/workflows/ableron-fastify-verify.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-fastify-verify.yml/badge.svg" alt="ableron-fastify Status" /></a>
   <a href="https://github.com/ableron/ableron/actions/workflows/ableron-java.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-java.yml/badge.svg" alt="ableron-java Status" /></a>
 </p>
 
@@ -28,7 +29,7 @@ The technical libs you may want to start with, are:
 - the [JavaScript Library](https://github.com/ableron/ableron/tree/main/ableron-js)
 - the [Spring Boot Plugin](https://github.com/ableron/ableron-spring-boot)
 - the [express Plugin](https://github.com/ableron/ableron/tree/main/ableron-express)
-- the [fastify Plugin](https://github.com/ableron/ableron-fastify)
+- the [fastify Plugin](https://github.com/ableron/ableron/tree/main/ableron-fastify)
 
 ### End-to-End Test Suite Status
 

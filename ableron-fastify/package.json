@@ -1,7 +1,7 @@
 {
-  "name": "@ableron/express",
-  "version": "1.5.1",
-  "description": "Express Middleware for Ableron Server Side UI Composition",
+  "name": "@ableron/fastify",
+  "version": "1.1.2",
+  "description": "Fastify Middleware for Ableron Server Side UI Composition",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
@@ -31,7 +31,7 @@
   },
   "keywords": [
     "ableron",
-    "express",
+    "fastify",
     "ssi",
     "server-side-includes",
     "ui-composition",
@@ -48,16 +48,16 @@
     "url": "https://github.com/ableron/ableron/issues"
   },
   "dependencies": {
-    "@ableron/ableron": "^1.10.0"
+    "@ableron/ableron": "^1.8.2",
+    "fastify-plugin": "^4.5.1"
   },
   "devDependencies": {
-    "@types/express": "5.0.0",
-    "express": "4.21.2",
-    "prettier": "3.3.3",
+    "fastify": "4.28.1",
+    "prettier": "3.3.2",
     "supertest": "7.0.0",
     "ts-loader": "9.5.1",
-    "typescript": "5.6.3",
-    "vitest": "2.1.4"
+    "typescript": "5.5.3",
+    "vitest": "1.6.0"
   },
   "prettier": {
     "printWidth": 120,
