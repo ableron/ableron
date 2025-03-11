@@ -1,6 +1,6 @@
 # @ableron/express
 
-[![Build Status](https://github.com/ableron/ableron/actions/workflows/ableron-express-verify.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-express-verify.yml)
+[![Build Status](https://github.com/ableron/ableron/actions/workflows/ableron-express.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-express.yml)
 [![npm version](https://badge.fury.io/js/@ableron%2Fexpress.svg)](https://badge.fury.io/js/@ableron%2Fexpress)
 [![Node.js Version](https://img.shields.io/badge/Node.js-18+-4EB1BA.svg)](https://nodejs.org/docs/latest-v18.x/api/)
 

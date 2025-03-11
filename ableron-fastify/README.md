@@ -1,6 +1,6 @@
 # @ableron/fastify
 
-[![Build Status](https://github.com/ableron/ableron/actions/workflows/ableron-fastify-verify.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-fastify-verify.yml)
+[![Build Status](https://github.com/ableron/ableron/actions/workflows/ableron-fastify.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-fastify.yml)
 [![npm version](https://badge.fury.io/js/@ableron%2Ffastify.svg)](https://badge.fury.io/js/@ableron%2Ffastify)
 [![Node.js Version](https://img.shields.io/badge/Node.js-18+-4EB1BA.svg)](https://nodejs.org/docs/latest-v18.x/api/)
 

@@ -12,6 +12,14 @@ updates:
     directory: '/ableron-java'
     schedule:
       interval: 'weekly'
+  - package-ecosystem: 'maven'
+    directory: '/ableron-spring-boot-2'
+    schedule:
+      interval: 'weekly'
+  - package-ecosystem: 'maven'
+    directory: '/ableron-spring-boot-3'
+    schedule:
+      interval: 'weekly'
   - package-ecosystem: 'npm'
     directory: '/ableron-express'
     schedule:

@@ -1,11 +1,13 @@
 ## <p align="center">Ableron - Distributed Server Side UI Composition</p>
 <p align="center">
-  <a href="https://github.com/ableron/ableron/actions/workflows/ableron-js-verify.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-js-verify.yml/badge.svg" alt="ableron-js Status" /></a>
+  <a href="https://github.com/ableron/ableron/actions/workflows/ableron-js.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-js.yml/badge.svg" alt="ableron-js Status" /></a>
   <a href="https://github.com/ableron/ableron/actions/workflows/ableron-java.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-java.yml/badge.svg" alt="ableron-java Status" /></a>
 </p>
 <p align="center">
-  <a href="https://github.com/ableron/ableron/actions/workflows/ableron-express-verify.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-express-verify.yml/badge.svg" alt="ableron-express Status" /></a>
-  <a href="https://github.com/ableron/ableron/actions/workflows/ableron-fastify-verify.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-fastify-verify.yml/badge.svg" alt="ableron-fastify Status" /></a>
+  <a href="https://github.com/ableron/ableron/actions/workflows/ableron-express.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-express.yml/badge.svg" alt="ableron-express Status" /></a>
+  <a href="https://github.com/ableron/ableron/actions/workflows/ableron-fastify.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-fastify.yml/badge.svg" alt="ableron-fastify Status" /></a>
+  <a href="https://github.com/ableron/ableron/actions/workflows/ableron-spring-boot-2.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-spring-boot-2.yml/badge.svg" alt="ableron-spring-boot-2 Status" /></a>
+  <a href="https://github.com/ableron/ableron/actions/workflows/ableron-spring-boot-3.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-spring-boot-3.yml/badge.svg" alt="ableron-spring-boot-3 Status" /></a>
 </p>
 
 ## Description
@@ -29,7 +31,8 @@ Find documentation at [ableron.github.io](http://ableron.github.io/)
 The technical libs you may want to start with, are:
 - the [Java Library](https://github.com/ableron/ableron/tree/main/ableron-java)
 - the [JavaScript Library](https://github.com/ableron/ableron/tree/main/ableron-js)
-- the [Spring Boot Plugin](https://github.com/ableron/ableron-spring-boot)
+- the [Spring Boot Plugin for Spring Boot 2](https://github.com/ableron/ableron/tree/main/ableron-spring-boot-2)
+- the [Spring Boot Plugin for Spring Boot 3](https://github.com/ableron/ableron/tree/main/ableron-spring-boot-3)
 - the [express Plugin](https://github.com/ableron/ableron/tree/main/ableron-express)
 - the [fastify Plugin](https://github.com/ableron/ableron/tree/main/ableron-fastify)
 
