@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "dependencies": {
+    "@ableron/fastify": "^1.1.1",
+    "fastify": "^5.2.1"
+  }
+}
