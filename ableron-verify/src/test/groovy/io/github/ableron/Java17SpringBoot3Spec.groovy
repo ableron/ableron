@@ -10,6 +10,6 @@ class Java17SpringBoot3Spec extends BaseSpec {
   @Override
   GenericContainer getContainerUnderTest() {
     return new GenericContainer<>(new ImageFromDockerfile()
-      .withDockerfile(Path.of("java17-spring-boot-3", "Dockerfile")))
+      .withDockerfile(Path.of("..", "Dockerfile-verify-java17-spring-boot-3")))
   }
 }

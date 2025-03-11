@@ -10,6 +10,6 @@ class Java11SpringBoot2Spec extends BaseSpec {
   @Override
   GenericContainer getContainerUnderTest() {
     return new GenericContainer<>(new ImageFromDockerfile()
-      .withDockerfile(Path.of("java11-spring-boot-2", "Dockerfile")))
+      .withDockerfile(Path.of("..", "Dockerfile-verify-java11-spring-boot-2")))
   }
 }

@@ -26,9 +26,9 @@ app.use(
   ableron(
     // custom settings (optional)
     {
-      fragmentRequestTimeoutMillis: 5000,
-      fragmentAdditionalRequestHeadersToPass: ['X-Test-Groups'],
-      cacheVaryByRequestHeaders: ['X-Test-Groups'],
+      requestTimeoutMs: 5000,
+      requestHeadersForward: ['X-Tracking-ID'],
+      requestHeadersForwardVary: ['X-Test-Groups'],
       statsAppendToContent: true
       // ...
     },

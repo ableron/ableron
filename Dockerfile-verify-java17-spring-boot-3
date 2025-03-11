@@ -1,0 +1,14 @@
+FROM gradle:8-jdk17
+
+COPY ./ableron-java /opt/ableron-java
+WORKDIR /opt/ableron-java
+RUN ./mvnw install
+
+COPY ./ableron-spring-boot-3 /opt/ableron-spring-boot-3
+WORKDIR /opt/ableron-spring-boot-3
+RUN ./mvnw install
+
+COPY ./ableron-verify/java17-spring-boot-3 /opt/ableron-verify
+WORKDIR /opt/ableron-verify
+
+ENTRYPOINT ["gradle", "bootRun"]

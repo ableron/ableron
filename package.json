@@ -5,8 +5,8 @@
     "test:ableron-js": "cd ableron-js && npm ci && npm run build && npm test",
     "test:ableron-express": "cd ableron-js && npm ci && npm run build && cd ../ableron-express && npm install ../ableron-js && npm ci && npm run build && npm test",
     "test:ableron-fastify": "cd ableron-js && npm ci && npm run build && cd ../ableron-fastify && npm install ../ableron-js && npm ci && npm run build && npm test",
-    "test:ableron-spring-boot-2": "cd ableron-spring-boot-2 && ./mvnw clean install",
-    "test:ableron-spring-boot-3": "cd ableron-spring-boot-3 && ./mvnw clean install",
+    "test:ableron-spring-boot-2": "cd ableron-java && ./mvnw clean install && cd ../ableron-spring-boot-2 && ./mvnw clean install",
+    "test:ableron-spring-boot-3": "cd ableron-java && ./mvnw clean install && cd ../ableron-spring-boot-3 && ./mvnw clean install",
     "test:ableron-verify": "cd ableron-verify && ./gradlew test"
   }
 }

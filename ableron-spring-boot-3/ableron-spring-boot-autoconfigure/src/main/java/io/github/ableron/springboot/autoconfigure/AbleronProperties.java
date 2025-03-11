@@ -4,6 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.unit.DataSize;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.List;
 
 @ConfigurationProperties(prefix = "ableron")
@@ -17,21 +18,29 @@ public class AbleronProperties {
   /**
    * Timeout for requesting fragments.
    */
-  private Duration fragmentRequestTimeout = Duration.ofSeconds(3);
+  private Duration requestTimeout = Duration.ofSeconds(3);
 
   /**
-   * Request headers that are passed to fragment requests if present.
+   * Request headers that are forwarded to fragment requests, if present.
+   * These request headers are not considered to influence the response and thus will not influence caching.
    */
-  private List<String> fragmentRequestHeadersToPass = List.of(
+  private Collection<String> requestHeadersForward = List.of(
     "Correlation-ID",
     "X-Correlation-ID",
     "X-Request-ID"
   );
 
   /**
-   * Response headers of primary fragments to pass to the page response if present.
+   * Request headers that are forwarded to fragment requests, if present and that influence the
+   * requested fragment aside from its URL.
+   * These request headers are considered to influence the response and thus influence caching.
    */
-  private List<String> primaryFragmentResponseHeadersToPass = List.of(
+  private Collection<String> requestHeadersForwardVary = List.of();
+
+  /**
+   * Response headers of primary fragments to forward to the page response, if present.
+   */
+  private Collection<String> responseHeadersForward = List.of(
     "Content-Language",
     "Location",
     "Refresh"
@@ -49,28 +58,36 @@ public class AbleronProperties {
     this.enabled = enabled;
   }
 
-  public Duration getFragmentRequestTimeout() {
-    return fragmentRequestTimeout;
+  public Duration getRequestTimeout() {
+    return requestTimeout;
   }
 
-  public void setFragmentRequestTimeout(Duration fragmentRequestTimeout) {
-    this.fragmentRequestTimeout = fragmentRequestTimeout;
+  public void setRequestTimeout(Duration requestTimeout) {
+    this.requestTimeout = requestTimeout;
   }
 
-  public List<String> getFragmentRequestHeadersToPass() {
-    return fragmentRequestHeadersToPass;
+  public Collection<String> getRequestHeadersForward() {
+    return requestHeadersForward;
   }
 
-  public void setFragmentRequestHeadersToPass(List<String> fragmentRequestHeadersToPass) {
-    this.fragmentRequestHeadersToPass = fragmentRequestHeadersToPass;
+  public void setRequestHeadersForward(Collection<String> requestHeadersForward) {
+    this.requestHeadersForward = requestHeadersForward;
   }
 
-  public List<String> getPrimaryFragmentResponseHeadersToPass() {
-    return primaryFragmentResponseHeadersToPass;
+  public Collection<String> getRequestHeadersForwardVary() {
+    return requestHeadersForwardVary;
   }
 
-  public void setPrimaryFragmentResponseHeadersToPass(List<String> primaryFragmentResponseHeadersToPass) {
-    this.primaryFragmentResponseHeadersToPass = primaryFragmentResponseHeadersToPass;
+  public void setRequestHeadersForwardVary(Collection<String> requestHeadersForwardVary) {
+    this.requestHeadersForwardVary = requestHeadersForwardVary;
+  }
+
+  public Collection<String> getResponseHeadersForward() {
+    return responseHeadersForward;
+  }
+
+  public void setResponseHeadersForward(Collection<String> responseHeadersForward) {
+    this.responseHeadersForward = responseHeadersForward;
   }
 
   public Cache getCache() {
@@ -87,11 +104,6 @@ public class AbleronProperties {
      * Maximum size, the fragment cache may have.
      */
     private DataSize maxSize = DataSize.ofMegabytes(50);
-
-    /**
-     * Fragment request headers which influence the requested fragment aside from its URL.
-     */
-    private List<String> varyByRequestHeaders = List.of();
 
     /**
      * Whether to enable auto-refreshing of cached fragments, before they expire.
@@ -114,14 +126,6 @@ public class AbleronProperties {
 
     public void setMaxSize(DataSize maxSize) {
       this.maxSize = maxSize;
-    }
-
-    public List<String> getVaryByRequestHeaders() {
-      return varyByRequestHeaders;
-    }
-
-    public void setVaryByRequestHeaders(List<String> varyByRequestHeaders) {
-      this.varyByRequestHeaders = varyByRequestHeaders;
     }
 
     public boolean isAutoRefreshEnabled() {

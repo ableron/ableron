@@ -91,7 +91,7 @@ public class UiCompositionFilter extends OncePerRequestFilter {
     }
 
     transclusionResult.getStatusCodeOverride().ifPresent(responseWrapper::setStatus);
-    transclusionResult.getResponseHeadersToPass().forEach((name, values) -> {
+    transclusionResult.getResponseHeadersToForward().forEach((name, values) -> {
       for (int i = 0; i < values.size(); i++) {
         if (i == 0) {
           responseWrapper.setHeader(name, values.get(i));

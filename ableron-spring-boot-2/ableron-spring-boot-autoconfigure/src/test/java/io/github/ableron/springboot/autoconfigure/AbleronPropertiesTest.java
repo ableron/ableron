@@ -15,12 +15,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
   classes = { AbleronAutoConfiguration.class },
   properties = {
     "ableron.enabled=true",
-    "ableron.fragment-request-timeout=5000",
-    "ableron.fragment-request-headers-to-pass=X-Test-Foo,X-Test-Bar,X-Test-Baz",
-    "ableron.fragment-additional-request-headers-to-pass=X-Foo,X-Bar",
-    "ableron.primary-fragment-response-headers-to-pass=X-Correlation-ID",
+    "ableron.request-timeout=5000",
+    "ableron.request-headers-forward=X-Test-Foo,X-Test-Bar,X-Test-Baz",
+    "ableron.request-headers-forward-vary=X-Foo,X-Bar",
+    "ableron.response-headers-forward=X-Correlation-ID",
     "ableron.cache.max-size=2MB",
-    "ableron.cache.vary-by-request-headers=X-Foo,X-Bar",
     "ableron.cache.auto-refresh-enabled=true",
     "ableron.cache.auto-refresh-max-attempts=5",
     "ableron.cache.auto-refresh-inactive-fragments-max-refreshs=6",
@@ -36,19 +35,18 @@ public class AbleronPropertiesTest {
   @Test
   public void shouldCoverWholeAbleronJavaConfig() {
     assertTrue(ableronConfig.isEnabled());
-    assertEquals(Duration.ofMillis(5000), ableronConfig.getFragmentRequestTimeout());
+    assertEquals(Duration.ofMillis(5000), ableronConfig.getRequestTimeout());
     assertEquals(List.of(
       "X-Test-Foo",
       "X-Test-Bar",
       "X-Test-Baz"
-    ), ableronConfig.getFragmentRequestHeadersToPass());
+    ), ableronConfig.getRequestHeadersForward());
     assertEquals(List.of(
       "X-Foo",
       "X-Bar"
-    ), ableronConfig.getFragmentAdditionalRequestHeadersToPass());
-    assertEquals(List.of("X-Correlation-ID"), ableronConfig.getPrimaryFragmentResponseHeadersToPass());
+    ), ableronConfig.getRequestHeadersForwardVary());
+    assertEquals(List.of("X-Correlation-ID"), ableronConfig.getResponseHeadersForward());
     assertEquals(2097152, ableronConfig.getCacheMaxSizeInBytes());
-    assertEquals(List.of("X-Foo", "X-Bar"), ableronConfig.getCacheVaryByRequestHeaders());
     assertTrue(ableronConfig.cacheAutoRefreshEnabled());
     assertEquals(5, ableronConfig.getCacheAutoRefreshMaxAttempts());
     assertEquals(6, ableronConfig.getCacheAutoRefreshInactiveFragmentsMaxRefreshs());

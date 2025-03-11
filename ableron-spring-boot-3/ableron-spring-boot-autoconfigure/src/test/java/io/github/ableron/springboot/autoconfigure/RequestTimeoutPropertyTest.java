@@ -11,15 +11,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(
   classes = { AbleronAutoConfiguration.class },
-  properties = { "ableron.fragment-request-timeout=4s" }
+  properties = { "ableron.request-timeout=4s" }
 )
-public class FragmentRequestTimeoutPropertyTest {
+public class RequestTimeoutPropertyTest {
 
   @Autowired
   private AbleronConfig ableronConfig;
 
   @Test
   public void shouldInterpretSimpleDurationFormatting() {
-    assertEquals(Duration.ofSeconds(4), ableronConfig.getFragmentRequestTimeout());
+    assertEquals(Duration.ofSeconds(4), ableronConfig.getRequestTimeout());
   }
 }

@@ -17,23 +17,23 @@
 
   <name>ableron-spring-boot</name>
   <description>Spring Boot Support for Ableron UI Composition</description>
-  <url>https://github.com/ableron/ableron-spring-boot</url>
+  <url>https://github.com/ableron/ableron/tree/main/ableron-spring-boot-3</url>
   <inceptionYear>2022</inceptionYear>
 
   <scm>
-    <connection>scm:git:git@github.com:ableron/ableron-spring-boot.git</connection>
-    <developerConnection>scm:git:git@github.com:ableron/ableron-spring-boot.git</developerConnection>
-    <url>https://github.com/ableron/ableron-spring-boot/tree/main</url>
+    <connection>scm:git:git@github.com:ableron/ableron.git</connection>
+    <developerConnection>scm:git:git@github.com:ableron/ableron.git</developerConnection>
+    <url>https://github.com/ableron/ableron/tree/main/ableron-spring-boot-2</url>
   </scm>
 
   <issueManagement>
     <system>GitHub Issues</system>
-    <url>https://github.com/ableron/ableron-spring-boot/issues</url>
+    <url>https://github.com/ableron/ableron/issues</url>
   </issueManagement>
 
   <ciManagement>
     <system>GitHub Actions</system>
-    <url>https://github.com/ableron/ableron-spring-boot/actions</url>
+    <url>https://github.com/ableron/ableron/actions</url>
   </ciManagement>
 
   <distributionManagement>
@@ -82,14 +82,14 @@
   </repositories>
 
   <properties>
-    <ableron.version>1.11.0</ableron.version>
-    <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
-    <maven-gpg-plugin.version>3.2.5</maven-gpg-plugin.version>
+    <ableron.version>2.0.0-SNAPSHOT</ableron.version>
+    <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+    <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
     <maven-javadoc-plugin.version>3.8.0</maven-javadoc-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
     <nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
     <spring-boot.version>3.3.2</spring-boot.version>
-    <spring.version>6.1.12</spring.version>
+    <spring.version>6.2.3</spring.version>
   </properties>
 
   <profiles>
