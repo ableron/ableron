@@ -55,7 +55,7 @@
     "prettier": "3.5.2",
     "ts-jest": "29.2.6",
     "ts-loader": "9.5.2",
-    "typescript": "5.7.3",
+    "typescript": "5.8.2",
     "vitest": "3.0.8"
   },
   "prettier": {
