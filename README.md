@@ -1,9 +1,11 @@
 ## <p align="center">Ableron - Distributed Server Side UI Composition</p>
 <p align="center">
   <a href="https://github.com/ableron/ableron/actions/workflows/ableron-js-verify.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-js-verify.yml/badge.svg" alt="ableron-js Status" /></a>
+  <a href="https://github.com/ableron/ableron/actions/workflows/ableron-java.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-java.yml/badge.svg" alt="ableron-java Status" /></a>
+</p>
+<p align="center">
   <a href="https://github.com/ableron/ableron/actions/workflows/ableron-express-verify.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-express-verify.yml/badge.svg" alt="ableron-express Status" /></a>
   <a href="https://github.com/ableron/ableron/actions/workflows/ableron-fastify-verify.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-fastify-verify.yml/badge.svg" alt="ableron-fastify Status" /></a>
-  <a href="https://github.com/ableron/ableron/actions/workflows/ableron-java.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-java.yml/badge.svg" alt="ableron-java Status" /></a>
 </p>
 
 ## Description
@@ -45,6 +47,7 @@ The technical libs you may want to start with, are:
 * [![ableron-express @ Node.js 22 & Express 4 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-express4.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-express4.yml)
 * [![ableron-express @ Node.js 22 & Express 4 & CJS Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-express4-cjs.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-express4-cjs.yml)
 * [![ableron-fastify @ Node.js 22 & Fastify 4 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-fastify4.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-fastify4.yml)
+* [![ableron-fastify @ Node.js 22 & Fastify 5 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-fastify5.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-fastify5.yml)
 
 ### Contributing
 
