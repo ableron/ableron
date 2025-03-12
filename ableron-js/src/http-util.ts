@@ -20,9 +20,9 @@ export default abstract class HttpUtil {
     url: string,
     requestHeaders: Headers,
     requestTimeoutMs: number,
-    logger?: LoggerInterface
+    logger: LoggerInterface
   ): Promise<Response | null> {
-    logger && logger.debug(`[Ableron] Loading ${url} with timeout ${requestTimeoutMs}ms`);
+    logger.debug(`[Ableron] Loading ${url} with timeout ${requestTimeoutMs}ms`);
     requestHeaders.set('Accept-Encoding', 'gzip');
 
     if (!requestHeaders.has(this.HEADER_USER_AGENT)) {
@@ -36,15 +36,13 @@ export default abstract class HttpUtil {
         signal: AbortSignal.timeout(requestTimeoutMs)
       });
     } catch (e: any) {
-      if (logger) {
-        logger.error(
-          `[Ableron] Unable to load ${url}: ${
-            e?.name === 'TimeoutError'
-              ? `${requestTimeoutMs}ms timeout exceeded`
-              : `${e?.message}${e?.cause ? ` (${e?.cause})` : ''}`
-          }`
-        );
-      }
+      logger.error(
+        `[Ableron] Unable to load ${url}: ${
+          e.name === 'TimeoutError'
+            ? `${requestTimeoutMs}ms timeout exceeded`
+            : `${e.message}${e.cause ? ` (${e.cause.message})` : ''}`
+        }`
+      );
 
       return null;
     }

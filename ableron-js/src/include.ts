@@ -306,9 +306,9 @@ export default class Include {
     const fragmentCacheKey = this.buildFragmentCacheKey(url, requestHeaders, config.requestHeadersForwardVary);
     const fragmentFromCache = fragmentCache.get(fragmentCacheKey);
     const fragmentSource = (fragmentFromCache ? 'cached ' : 'remote ') + urlSource;
-    const fragment: Promise<Fragment | null> = fragmentFromCache
+    const maybeFragment: Promise<Fragment | null> = fragmentFromCache
       ? Promise.resolve(fragmentFromCache)
-      : HttpUtil.loadUrl(url, requestHeaders, requestTimeoutMs)
+      : HttpUtil.loadUrl(url, requestHeaders, requestTimeoutMs, this.logger)
           .then(async (response: Response | null) => {
             if (!response) {
               return null;
@@ -328,16 +328,18 @@ export default class Include {
           .then((fragment) => {
             if (fragment) {
               fragmentCache.set(fragmentCacheKey, fragment, () =>
-                HttpUtil.loadUrl(url, requestHeaders, requestTimeoutMs).then(async (response: Response | null) => {
-                  return response ? this.toFragment(response, url, config.responseHeadersForward) : null;
-                })
+                HttpUtil.loadUrl(url, requestHeaders, requestTimeoutMs, this.logger).then(
+                  async (response: Response | null) => {
+                    return response ? this.toFragment(response, url, config.responseHeadersForward) : null;
+                  }
+                )
               );
             }
 
             return fragment;
           });
 
-    return fragment.then((fragment) => {
+    return maybeFragment.then((fragment) => {
       if (fragment && !this.HTTP_STATUS_CODES_SUCCESS.includes(fragment.statusCode)) {
         this.logger.error(`[Ableron] Fragment '${this.id}' returned status code ${fragment.statusCode}`);
         this.recordErroredPrimaryFragment(fragment, fragmentSource);

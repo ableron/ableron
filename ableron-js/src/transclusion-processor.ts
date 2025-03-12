@@ -83,7 +83,7 @@ export default class TransclusionProcessor {
   ): void {
     this.logger.error(
       `[Ableron] Unable to resolve include '${include.getId()}': ${
-        e.stack || e.message + (e.cause ? ` (${e.cause})` : '')
+        e.stack || e.message + (e.cause ? ` (${e.cause.message})` : '')
       }`
     );
     transclusionResult.addResolvedInclude(
