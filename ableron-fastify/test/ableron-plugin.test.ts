@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import ableron from '../src';
-import Fastify from 'fastify';
+import Fastify, { FastifyRequest } from 'fastify';
 import request from 'supertest';
 import { LoggerInterface } from '@ableron/ableron';
 
@@ -113,7 +113,9 @@ describe('Ableron Fastify Plugin', () => {
     app.get('/', (request, reply) => {
       reply
         .type('text/html; charset=utf-8')
-        .send(`<ableron-include src="${getFragmentBaseUrl(request)}/fragment" headers="X-Test">fallback</ableron-include>`);
+        .send(
+          `<ableron-include src="${getFragmentBaseUrl(request)}/fragment" headers="X-Test">fallback</ableron-include>`
+        );
     });
     app.get('/fragment', (request, reply) => {
       reply.type('text/html; charset=utf-8').send(request.headers['x-test']);
@@ -164,13 +166,13 @@ describe('Ableron Fastify Plugin', () => {
     const app = Fastify({ logger: true });
     app.register(ableron, {
       ableron: {
-        logger: console
+        logger: app.log
       }
     });
     return app;
   }
 
-  function getFragmentBaseUrl(request): string {
-    return request.protocol + '://' + request.hostname;
+  function getFragmentBaseUrl(request: FastifyRequest): string {
+    return `${request.protocol}://${request.hostname}:${request.port}`;
   }
 });

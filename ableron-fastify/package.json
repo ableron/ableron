@@ -49,10 +49,10 @@
   },
   "dependencies": {
     "@ableron/ableron": "^1.10.0",
-    "fastify-plugin": "^4.5.1"
+    "fastify-plugin": "^5.0.1"
   },
   "devDependencies": {
-    "fastify": "4.29.0",
+    "fastify": "5.2.1",
     "prettier": "3.5.3",
     "supertest": "7.0.0",
     "ts-loader": "9.5.2",
