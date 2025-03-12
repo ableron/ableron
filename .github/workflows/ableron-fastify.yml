@@ -18,12 +18,4 @@ jobs:
           node-version: ${{ matrix.nodeVersion }}
           cache: npm
           cache-dependency-path: ableron-fastify/package-lock.json
-      - run: |
-          cd ableron-js
-          npm install
-          npm run build
-          cd ../ableron-fastify
-          npm install ../ableron-js
-          npm install
-          npm run build
-          npm test
+      - run: npm run test:ableron-fastify
