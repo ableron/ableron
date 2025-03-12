@@ -18,8 +18,8 @@ Normally, you do not want to use `ableron-js` directly, because intercepting and
 the response body within your service may be tricky. Instead, you may want to use an existing
 framework integration, which uses `ableron-js` under the hood, e.g.
 
-- [ableron-express](https://github.com/ableron/ableron-express)
-- [ableron-fastify](https://github.com/ableron/ableron-fastify)
+- [ableron-express](https://github.com/ableron/ableron/tree/main/ableron-express)
+- [ableron-fastify](https://github.com/ableron/ableron/tree/main/ableron-fastify)
 
 To use `ableron-js` directly, do something like this:
 

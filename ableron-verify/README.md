@@ -5,11 +5,11 @@ Test suite to verify all implementations of ableron provide a common feature set
 ## Quick Start
 * Run tests
    ```console
-   $ ./gradlew clean test
+   ./gradlew clean test
    ```
 * Check for outdated dependencies via [Gradle Versions Plugin](https://github.com/ben-manes/gradle-versions-plugin)
    ```console
-   $ ./gradlew dependencyUpdates -Drevision=release
+   ./gradlew dependencyUpdates -Drevision=release
    ```
 
 ## How to add new spec

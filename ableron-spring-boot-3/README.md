@@ -1,5 +1,5 @@
 # Ableron Spring Boot
-[![Build Status](https://github.com/ableron/ableron/actions/workflows/ableron-spring-boot-3.yml/badge.svg)](https://github.com/ableron/ableron-spring-boot/actions/workflows/main.yml)
+[![Build Status](https://github.com/ableron/ableron/actions/workflows/ableron-spring-boot-3.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-spring-boot-3.yml)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.ableron/ableron-spring-boot/badge.svg)](https://mvnrepository.com/artifact/io.github.ableron/ableron-spring-boot)
 
 **Spring Boot Support for Ableron Server Side UI Composition**

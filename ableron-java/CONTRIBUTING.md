@@ -3,15 +3,15 @@
 ## Quick Start
 * Compile/test/package
    ```console
-   $ ./mvnw clean install
+   ./mvnw clean install
    ```
 * Check for outdated dependencies via [Versions Maven Plugin](https://www.mojohaus.org/versions/versions-maven-plugin/index.html)
    ```console
-   $ ./mvnw versions:display-dependency-updates
+   ./mvnw versions:display-dependency-updates
    ```
 * Update maven wrapper to newer version
    ```console
-   $ ./mvnw wrapper:wrapper -Dmaven=<version, e.g. 3.9.0>
+   ./mvnw wrapper:wrapper -Dmaven=<version, e.g. 3.9.0>
    ```
 
 ## Tooling
@@ -25,7 +25,7 @@
    2. Update version in maven and gradle dependency declaration code snippets in`README.md`
 3. Merge release branch into `main`
 4. Release and deploy to Maven Central is performed automatically
-5. Manually create [GitHub Release](https://github.com/ableron/ableron-java/releases/new)
+5. Manually create [GitHub Release](https://github.com/ableron/ableron/releases/new)
    1. Set tag name to the version declared in `pom.xml`, e.g. `v0.0.1`
    2. Set release title to the version declared in `pom.xml`, e.g. `0.0.1`
    3. Let GitHub generate the release notes automatically
