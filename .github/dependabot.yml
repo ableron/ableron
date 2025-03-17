@@ -18,11 +18,11 @@ updates:
       interval: 'weekly'
     ignore:
       - dependency-name: 'org.springframework:spring-webmvc'
-        update-types: ['version-update:semver-minor']
+        update-types: ['version-update:semver-major']
       - dependency-name: 'spring-boot.version'
-        update-types: ['version-update:semver-minor']
+        update-types: ['version-update:semver-major']
       - dependency-name: 'org.springframework.boot:spring-boot-starter-parent'
-        update-types: ['version-update:semver-minor']
+        update-types: ['version-update:semver-major']
   - package-ecosystem: 'maven'
     directory: '/ableron-spring-boot-3'
     schedule:
