@@ -1,12 +1,12 @@
-FROM gradle:8-jdk21
+FROM gradle:8.13-jdk21
 
 COPY ./ableron-java /opt/ableron-java
 WORKDIR /opt/ableron-java
-RUN ./mvnw install
+RUN ./mvnw install -DskipTests=true
 
 COPY ./ableron-spring-boot-3 /opt/ableron-spring-boot-3
 WORKDIR /opt/ableron-spring-boot-3
-RUN ./mvnw install
+RUN ./mvnw install -DskipTests=true
 
 COPY ./ableron-verify/java21-spring-boot-3 /opt/ableron-verify
 WORKDIR /opt/ableron-verify

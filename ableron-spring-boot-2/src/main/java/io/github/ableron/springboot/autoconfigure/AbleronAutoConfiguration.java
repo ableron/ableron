@@ -3,7 +3,6 @@ package io.github.ableron.springboot.autoconfigure;
 import io.github.ableron.Ableron;
 import io.github.ableron.AbleronConfig;
 import io.github.ableron.springboot.filter.UiCompositionFilter;
-import java.time.Duration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
