@@ -14,8 +14,8 @@
   <artifactId>ableron-spring-boot-starter</artifactId>
   <version>3.9.0-SNAPSHOT</version>
 
-  <name>ableron-spring-boot-starter</name>
-  <description>Spring Boot Support for Ableron UI Composition</description>
+  <name>Ableron Spring Boot Starter for Spring Boot 3.x</name>
+  <description>Spring Boot 3.x Support for Ableron UI Composition</description>
   <url>https://github.com/ableron/ableron/tree/main/ableron-spring-boot-3</url>
   <inceptionYear>2022</inceptionYear>
 
@@ -128,7 +128,6 @@
       <groupId>io.github.ableron</groupId>
       <artifactId>ableron</artifactId>
       <version>${ableron.version}</version>
-      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
