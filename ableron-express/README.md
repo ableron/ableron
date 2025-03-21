@@ -14,7 +14,7 @@ npm i @ableron/express
 
 ## Usage
 
-Full example using ES Modules
+Full example using **ES Modules**
 
 ```js
 import express from 'express';
@@ -38,7 +38,7 @@ app.use(
 );
 ```
 
-Minimal example using CommonJS
+Minimal example using **CommonJS**
 
 ```js
 const express = require('express');

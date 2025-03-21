@@ -826,6 +826,40 @@ abstract class BaseSpec extends Specification {
       .withHeader("User-Agent", equalTo("Ableron/2.0")))
   }
 
+  def "should forward headers defined via ableron-include attribute to fragment request"() {
+    given:
+    def srcPath = randomIncludeSrcPath()
+    wiremockServer.stubFor(get(srcPath).willReturn(ok()))
+
+    when:
+    performUiIntegration(
+      "<ableron-include src=\"${wiremockAddress}${srcPath}\" headers=\" x-test-1 , X-TEST-2 ,X-Test-3\"/>",
+      ["X-TEST-1": ["test%221"], "x-test-2": ["test%3D2"], "X-Test-3": ["test-3"]]
+    )
+
+    then:
+    wiremockServer.verify(1, getRequestedFor(urlEqualTo(srcPath))
+      .withHeader("x-test-1", equalTo("test%221"))
+      .withHeader("x-test-2", equalTo("test%3D2"))
+      .withHeader("x-test-3", equalTo("test-3")))
+  }
+
+  def "should forward cookies defined via ableron-include attribute to fragment request"() {
+    given:
+    def srcPath = randomIncludeSrcPath()
+    wiremockServer.stubFor(get(srcPath).willReturn(ok()))
+
+    when:
+    performUiIntegration(
+      "<ableron-include src=\"${wiremockAddress}${srcPath}\" cookies=\" x-test-1 , X-TEST-2 ,X-Test-3\"/>",
+      ["Cookie": ["x-test-1=test%221; X-TEST-2=test%3D2;x-test-3=test-3"]]
+    )
+
+    then:
+    wiremockServer.verify(1, getRequestedFor(urlEqualTo(srcPath))
+      .withHeader("Cookie", equalTo("x-test-1=test%221; X-TEST-2=test%3D2")))
+  }
+
   def "should forward header with multiple values to fragment requests"() {
     given:
     wiremockServer.stubFor(get("/pass-req-headers-06").willReturn(ok()))

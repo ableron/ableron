@@ -25,7 +25,7 @@ app.register(ableron, {
     statsAppendToContent: true,
 
     // set optional logger
-    logger: console
+    logger: app.log
   }
 });
 
