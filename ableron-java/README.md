@@ -4,12 +4,12 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.ableron/ableron/badge.svg)](https://mvnrepository.com/artifact/io.github.ableron/ableron)
 [![Java Version](https://img.shields.io/badge/Java-11+-4EB1BA.svg)](https://docs.oracle.com/en/java/javase/11/)
 
-Java implementation for Ableron - The Distributed Server Side UI Composition Library.
+Java implementation of Ableron Distributed Server Side UI Composition.
 
 ## Installation
 Gradle:
 ```groovy
-implementation 'io.github.ableron:ableron:1.11.0'
+implementation 'io.github.ableron:ableron:2.0.0'
 ```
 
 Maven:
@@ -17,7 +17,7 @@ Maven:
 <dependency>
   <groupId>io.github.ableron</groupId>
   <artifactId>ableron</artifactId>
-  <version>1.11.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 

@@ -4,7 +4,7 @@
 [![npm version](https://badge.fury.io/js/@ableron%2Fexpress.svg)](https://badge.fury.io/js/@ableron%2Fexpress)
 [![Node.js Version](https://img.shields.io/badge/Node.js-18+-4EB1BA.svg)](https://nodejs.org/docs/latest-v18.x/api/)
 
-Express Middleware for Ableron Server Side UI Composition
+Express Middleware for Ableron Distributed Server Side UI Composition.
 
 ## Installation
 

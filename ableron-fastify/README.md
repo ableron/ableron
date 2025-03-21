@@ -4,7 +4,7 @@
 [![npm version](https://badge.fury.io/js/@ableron%2Ffastify.svg)](https://badge.fury.io/js/@ableron%2Ffastify)
 [![Node.js Version](https://img.shields.io/badge/Node.js-18+-4EB1BA.svg)](https://nodejs.org/docs/latest-v18.x/api/)
 
-Fastify Middleware for Ableron Server Side UI Composition
+Fastify Middleware for Ableron Distributed Server Side UI Composition.
 
 ## Installation
 
