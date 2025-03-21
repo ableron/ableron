@@ -48,7 +48,7 @@
       <p class="mb-4">
         Compared to Server Side Includes via nginx and thus an architecture where a dedicated infrastructure component is performing UI composition:
       <ul>
-        <li><span class="fw-bold">Lean Infrastructure</span>: No need to route all your traffic through the infrastructure component which is performing the UI composition</li>
+        <li><span class="fw-bold">Lean Infrastructure</span>: No need to route all your traffic through an infrastructure component which is performing the UI composition</li>
         <li><span class="fw-bold">Easy Local Development</span>: Includes are resolved directly in your service. This works fine for local development and increases developer experience.</li>
         <li><span class="fw-bold">Easy Configuration</span>: Your can easily define different timeouts, fallback fragments or static fallback content for each of your includes.</li>
         <li><span class="fw-bold">Local Caching</span>: All fragments are cached in memory directly within your service according to the cache policy of the fragments. This saves HTTP calls and thus money as well as latency.</li>

@@ -11,19 +11,18 @@
   </parent>
 
   <groupId>io.github.ableron</groupId>
-  <artifactId>ableron-spring-boot</artifactId>
-  <version>3.8.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <artifactId>ableron-spring-boot-starter</artifactId>
+  <version>3.9.0-SNAPSHOT</version>
 
-  <name>ableron-spring-boot</name>
-  <description>Spring Boot Support for Ableron UI Composition</description>
+  <name>Ableron Spring Boot Starter for Spring Boot 3.x</name>
+  <description>Spring Boot 3.x Support for Ableron UI Composition</description>
   <url>https://github.com/ableron/ableron/tree/main/ableron-spring-boot-3</url>
   <inceptionYear>2022</inceptionYear>
 
   <scm>
     <connection>scm:git:git@github.com:ableron/ableron.git</connection>
     <developerConnection>scm:git:git@github.com:ableron/ableron.git</developerConnection>
-    <url>https://github.com/ableron/ableron/tree/main/ableron-spring-boot-2</url>
+    <url>https://github.com/ableron/ableron/tree/main/ableron-spring-boot-3</url>
   </scm>
 
   <issueManagement>
@@ -61,11 +60,6 @@
     </developer>
   </developers>
 
-  <modules>
-    <module>ableron-spring-boot-autoconfigure</module>
-    <module>ableron-spring-boot-starter</module>
-  </modules>
-
   <repositories>
     <repository>
       <id>ossrh-snapshots</id>
@@ -82,6 +76,7 @@
   </repositories>
 
   <properties>
+    <java.version>17</java.version>
     <ableron.version>2.0.0-SNAPSHOT</ableron.version>
     <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
     <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
@@ -91,6 +86,70 @@
     <spring-boot.version>3.4.3</spring-boot.version>
     <spring.version>6.2.4</spring.version>
   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot</artifactId>
+      <version>${spring-boot.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+      <version>${spring-boot.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+      <version>${spring-boot.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <version>${spring-boot.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>${spring.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.1.0</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>io.github.ableron</groupId>
+      <artifactId>ableron</artifactId>
+      <version>${ableron.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <version>${spring-boot.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
   <profiles>
     <profile>

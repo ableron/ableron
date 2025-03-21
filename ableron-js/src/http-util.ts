@@ -37,7 +37,7 @@ export default abstract class HttpUtil {
       });
     } catch (e: any) {
       logger.error(
-        `[Ableron] Unable to load ${url}: ${
+        `[Ableron] Unable to load '${url}': ${
           e.name === 'TimeoutError'
             ? `${requestTimeoutMs}ms timeout exceeded`
             : `${e.message}${e.cause ? ` (${e.cause.message})` : ''}`

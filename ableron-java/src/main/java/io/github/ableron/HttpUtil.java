@@ -68,10 +68,10 @@ public class HttpUtil {
       var httpResponse = httpClient.sendAsync(httpRequestBuilder.GET().build(), HttpResponse.BodyHandlers.ofByteArray());
       return Optional.of(httpResponse.get(requestTimeout.toMillis(), TimeUnit.MILLISECONDS));
     } catch (TimeoutException e) {
-      logger.error("[Ableron] Unable to load {}: {}ms timeout exceeded", uri, requestTimeout.toMillis());
+      logger.error("[Ableron] Unable to load '{}': {}ms timeout exceeded", uri, requestTimeout.toMillis());
       return Optional.empty();
     } catch (Exception e) {
-      logger.error("[Ableron] Unable to load {}: {}", uri, Optional.ofNullable(e.getMessage()).orElse(e.getClass().getSimpleName()));
+      logger.error("[Ableron] Unable to load '{}': {}", uri, Optional.ofNullable(e.getMessage()).orElse(e.getClass().getSimpleName()));
       return Optional.empty();
     }
   }
