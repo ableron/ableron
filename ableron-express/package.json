@@ -48,13 +48,13 @@
     "url": "https://github.com/ableron/ableron/issues"
   },
   "dependencies": {
-    "@ableron/ableron": "^1.10.0"
+    "@ableron/ableron": "^2.0.0"
   },
   "devDependencies": {
-    "@types/express": "5.0.0",
+    "@types/express": "5.0.1",
     "express": "4.21.2",
     "prettier": "3.5.3",
-    "supertest": "7.0.0",
+    "supertest": "7.1.0",
     "ts-loader": "9.5.2",
     "typescript": "5.8.2",
     "vitest": "3.0.9"

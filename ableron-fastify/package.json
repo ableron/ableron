@@ -1,6 +1,6 @@
 {
   "name": "@ableron/fastify",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "Ableron Server Side UI Composition - Fastify Plugin",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -48,13 +48,13 @@
     "url": "https://github.com/ableron/ableron/issues"
   },
   "dependencies": {
-    "@ableron/ableron": "^1.10.0",
+    "@ableron/ableron": "^2.0.0",
     "fastify-plugin": "^5.0.1"
   },
   "devDependencies": {
     "fastify": "5.2.1",
     "prettier": "3.5.3",
-    "supertest": "7.0.0",
+    "supertest": "7.1.0",
     "ts-loader": "9.5.2",
     "typescript": "5.8.2",
     "vitest": "3.0.9"
