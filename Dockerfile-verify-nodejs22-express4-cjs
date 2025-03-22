@@ -13,7 +13,6 @@ RUN npm run build
 
 COPY ./ableron-verify/nodejs22-express4-cjs /opt/ableron-verify
 WORKDIR /opt/ableron-verify
-RUN npm install /opt/ableron-js
 RUN npm install /opt/ableron-express
 RUN npm install
 
