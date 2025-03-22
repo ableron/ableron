@@ -12,7 +12,7 @@
 
   <groupId>io.github.ableron</groupId>
   <artifactId>ableron-spring-boot-starter</artifactId>
-  <version>3.9.0</version>
+  <version>3.9.1-SNAPSHOT</version>
 
   <name>Ableron Spring Boot Starter for Spring Boot 3.x</name>
   <description>Spring Boot 3.x Support for Ableron UI Composition</description>
@@ -77,7 +77,7 @@
 
   <properties>
     <java.version>17</java.version>
-    <ableron.version>2.0.0</ableron.version>
+    <ableron.version>2.0.1-SNAPSHOT</ableron.version>
     <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
     <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
     <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
