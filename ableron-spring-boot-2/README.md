@@ -9,7 +9,7 @@
 ## Installation
 Gradle:
 ```groovy
-implementation 'io.github.ableron:ableron-spring-boot-starter:2.8.0'
+implementation 'io.github.ableron:ableron-spring-boot-starter:2.9.0'
 ```
 
 Maven:
@@ -17,7 +17,7 @@ Maven:
 <dependency>
   <groupId>io.github.ableron</groupId>
   <artifactId>ableron-spring-boot-starter</artifactId>
-  <version>2.8.0</version>
+  <version>2.9.0</version>
 </dependency>
 ```
 

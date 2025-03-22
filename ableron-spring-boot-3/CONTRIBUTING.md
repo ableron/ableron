@@ -17,17 +17,3 @@
 ## Tooling
 * See `io.github.ableron:ableron-spring-boot-starter` in [MvnRepository](https://mvnrepository.com/artifact/io.github.ableron/ableron-spring-boot-starter)
 * See Artifacts in [nexus repository manager](https://s01.oss.sonatype.org/index.html#nexus-search;gav~io.github.ableron~ableron-spring-boot*~~~)
-
-## Perform Release
-1. Create new release branch (`git checkout -b release-x.x.x`)
-2. Prepare code:
-   1. Set release version in `pom.xml`, `ableron-spring-boot-starter/pom.xml` and `ableron-spring-boot-autoconfigure/pom.xml` (remove `-SNAPSHOT`)
-   2. Update version in maven and gradle dependency declaration code snippets in`README.md`
-3. Merge release branch into `main`
-4. Release and deploy to Maven Central is performed automatically
-5. Manually create [GitHub Release](https://github.com/ableron/ableron/releases/new)
-   1. Set tag name to the version declared in `pom.xml`, e.g. `v0.0.1`
-   2. Set release title to the version declared in `pom.xml`, e.g. `0.0.1`
-   3. Let GitHub generate the release notes automatically
-   4. Publish release
-6. Set artifact version in `main` branch to next `-SNAPSHOT` version via new commit
