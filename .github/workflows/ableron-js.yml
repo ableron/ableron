@@ -10,7 +10,7 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-        nodeVersion: [18.x, 19.x, 20.x, 21.x, 22.x]
+        nodeVersion: [18.x, 20.x, 22.x, 23.x]
     defaults:
       run:
         working-directory: ableron-js
@@ -19,8 +19,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.nodeVersion }}
-          cache: npm
-          cache-dependency-path: ableron-js/package-lock.json
       - run: npm ci
       - run: npm run build
       - run: npm test
