@@ -16,4 +16,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.nodeVersion }}
+          cache: npm
+          cache-dependency-path: ableron-fastify/package-lock.json
       - run: npm run test:ableron-fastify

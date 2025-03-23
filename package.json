@@ -3,8 +3,8 @@
     "test": "npm run test:ableron-java && npm run test:ableron-js && npm run test:ableron-express && npm run test:ableron-fastify && npm run test:ableron-spring-boot-2 && npm run test:ableron-spring-boot-3",
     "test:ableron-java": "cd ableron-java && ./mvnw clean install",
     "test:ableron-js": "cd ableron-js && npm ci && npm run build && npm test",
-    "test:ableron-express": "mkdir -p ableron-express-temp && cp -r ableron-express/. ableron-express-temp && cd ableron-js && npm ci && npm run build && cd ../ableron-express-temp && npm install ../ableron-js && npm ci && npm run build && npm test && cd .. && rm -rf ableron-express-temp",
-    "test:ableron-fastify": "mkdir -p ableron-fastify-temp && cp -r ableron-fastify/. ableron-fastify-temp && cd ableron-js && npm ci && npm run build && cd ../ableron-fastify-temp && npm install ../ableron-js && npm ci && npm run build && npm test && cd .. && rm -rf ableron-fastify-temp",
+    "test:ableron-express": "mkdir -p ableron-express-temp && cp -r ableron-express/. ableron-express-temp && cd ableron-js && npm install && npm run build && cd ../ableron-express-temp && npm install ../ableron-js && npm install && npm run build && npm test && cd .. && rm -rf ableron-express-temp",
+    "test:ableron-fastify": "mkdir -p ableron-fastify-temp && cp -r ableron-fastify/. ableron-fastify-temp && cd ableron-js && npm install && npm run build && cd ../ableron-fastify-temp && npm install ../ableron-js && npm install && npm run build && npm test && cd .. && rm -rf ableron-fastify-temp",
     "test:ableron-spring-boot-2": "cd ableron-java && ./mvnw clean install && cd ../ableron-spring-boot-2 && ./mvnw clean install",
     "test:ableron-spring-boot-3": "cd ableron-java && ./mvnw clean install && cd ../ableron-spring-boot-3 && ./mvnw clean install",
     "ableron-verify": "cd ableron-verify && ./gradlew test"
