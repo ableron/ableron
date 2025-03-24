@@ -22,7 +22,7 @@ async function ableron(app, opts) {
       }
 
       try {
-        return ableron
+        return await ableron
           .resolveIncludes(payload, request.headers)
           .then((transclusionResult) => {
             transclusionResult
@@ -38,10 +38,6 @@ async function ableron(app, opts) {
             }
 
             return transclusionResult.getContent();
-          })
-          .catch((e) => {
-            ableron.getLogger().error(`[Ableron] Unable to perform UI composition: ${e.stack || e.message}`);
-            return payload;
           });
       } catch (e: any) {
         ableron.getLogger().error(`[Ableron] Unable to perform UI composition: ${e.stack || e.message}`);
