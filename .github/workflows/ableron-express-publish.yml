@@ -16,7 +16,8 @@ jobs:
           cache: npm
           cache-dependency-path: ableron-express/package-lock.json
           registry-url: https://registry.npmjs.org
-      - run: npm ci
+      - name: Remove package-lock.json as it may contain OS specific dependency of @rollup/rollup-* and thus needs to be rewritten
+        run: npm install
       - run: npm run build
       - run: npm test
       - name: Publish to npm
