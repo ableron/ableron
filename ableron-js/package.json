@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "@types/node": "22.14.1",
-    "fastify": "5.3.0",
+    "fastify": "5.3.2",
     "prettier": "3.5.3",
     "ts-jest": "29.3.2",
     "ts-loader": "9.5.2",
