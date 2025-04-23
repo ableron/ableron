@@ -1,195 +1,387 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ableron - Distributed Server Side UI Composition</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
-  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
-  <script>hljs.highlightAll();</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ableron – Decentralized UI Composition</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Fira+Code&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    code, pre {
+      font-family: 'Fira Code', monospace;
+    }
+  </style>
 </head>
-<body>
-<main class="my-4">
-  <div class="px-4 pt-5 text-center border-bottom">
-    <h1 class="display-5 fw-bold text-body-emphasis">Ableron UI Composition</h1>
-    <h2 class="display-6 text-body-emphasis">Server Side. Dynamic. Distributed.</h2>
-    <div class="col-lg-6 mx-auto">
-      <p class="lead mb-4">Your way to bring your micro frontends together using distributed server side UI composition.</p>
+<body class="bg-gray-900 text-white">
+
+<!-- Hero -->
+<section class="text-center py-20 px-6 bg-gray-800">
+  <h1 class="text-4xl md:text-6xl font-bold mb-4">Ableron</h1>
+  <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">Decentralized server-side UI composition – no gateway, no central controller.</p>
+  <a href="https://github.com/ableron/ableron" target="_blank" class="inline-block mt-6 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded">
+    View on GitHub
+  </a>
+</section>
+
+<!-- What is Ableron -->
+<section class="max-w-4xl mx-auto px-6 pt-16">
+  <h2 class="text-3xl font-semibold mb-4 text-purple-400">What is Ableron?</h2>
+  <p class="text-gray-300">
+    Ableron is a library for decentralized server-side UI composition. Unlike traditional solutions like <code>nginx SSI</code>, there’s no central component. Each service is capable of composing its own HTML using <code>&lt;ableron-include&gt;</code> tags, resolved internally. This is achieved by installing Ableron as a dependency in your service.
+  </p>
+</section>
+
+<!-- Why Ableron -->
+<section class="max-w-4xl mx-auto px-6 pt-16">
+  <h2 class="text-3xl font-semibold mb-6 text-purple-400">Why Ableron?</h2>
+
+  <!-- TL;DR Callout Box -->
+  <div class="bg-gray-800 p-4 rounded-lg mb-8 text-yellow-300">
+    <p class="text-lg font-semibold">TL;DR: Ableron is a decentralized, efficient solution for dynamic, server-side UI composition with local caching, easy configuration, and great developer experience.</p>
+  </div>
+
+  <!-- Key Features -->
+  <div class="space-y-6 text-gray-300">
+    <div class="flex items-start">
+      <span class="mr-4 text-purple-500 text-2xl">💡</span>
+      <div>
+        <h3 class="text-xl font-semibold text-white mb-1">Lean Infrastructure</h3>
+        <p>
+          No need to route all traffic through a centralized infrastructure component for UI composition. Services stay independent and scalable.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-start">
+      <span class="mr-4 text-purple-500 text-2xl">🚀</span>
+      <div>
+        <h3 class="text-xl font-semibold text-white mb-1">Easy Local Development</h3>
+        <p>
+          Since includes are resolved directly within your service, local development works out of the box — without needing to run complex infrastructure setups.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-start">
+      <span class="mr-4 text-purple-500 text-2xl">⚙️</span>
+      <div>
+        <h3 class="text-xl font-semibold text-white mb-1">Simple Configuration</h3>
+        <p>
+          Configure per-include settings like timeouts, fallback fragments, or static fallback content with minimal effort — no central coordination required.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-start">
+      <span class="mr-4 text-purple-500 text-2xl">💾</span>
+      <div>
+        <h3 class="text-xl font-semibold text-white mb-1">Local Caching</h3>
+        <p>
+          All fragments can be cached in memory directly inside your service, based on their individual cache policy. This reduces HTTP overhead and latency — saving both time and money.
+        </p>
+      </div>
     </div>
   </div>
 
-  <div class="px-4 pt-3 border-bottom">
-    <div class="col-lg-8 mx-auto">
-      <p class="mb-4"><b>Server Side</b> - Happens in your services before sending the response to the client.</p>
-      <p class="mb-4"><b>Dynamic</b> - Composition is performed during runtime of the services instead of compile time. This makes quality assurance a bit harder, but brings significant value regarding decoupling of your teams and services.</p>
-      <p class="mb-4"><b>Distributed</b> - No centralized infrastructure component which is performing the UI composition. Instead, each service is performing UI composition itself using an Ableron library.</p>
-    </div>
+  <!-- Comparison with nginx SSI -->
+  <h3 class="text-2xl font-semibold mt-12 text-purple-400">Ableron vs nginx SSI</h3>
+  <div class="overflow-x-auto mt-6 bg-gray-800 rounded-lg shadow-md">
+    <table class="min-w-full text-left text-gray-300">
+      <thead>
+      <tr>
+        <th class="px-6 py-3 border-b text-purple-400">Feature</th>
+        <th class="px-6 py-3 border-b text-purple-400">Ableron</th>
+        <th class="px-6 py-3 border-b text-purple-400">nginx SSI</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="px-6 py-3 border-b">Centralized vs Distributed</td>
+        <td class="px-6 py-3 border-b">Decentralized (each service composes its own UI)</td>
+        <td class="px-6 py-3 border-b">Centralized (nginx manages UI composition)</td>
+      </tr>
+      <tr>
+        <td class="px-6 py-3 border-b">Developer Experience</td>
+        <td class="px-6 py-3 border-b">Easy local development with no extra infrastructure</td>
+        <td class="px-6 py-3 border-b">Requires complex infrastructure setup for local development</td>
+      </tr>
+      <tr>
+        <td class="px-6 py-3 border-b">Scalability</td>
+        <td class="px-6 py-3 border-b">Scalable by design, no bottlenecks</td>
+        <td class="px-6 py-3 border-b">Potential bottleneck at the centralized server</td>
+      </tr>
+      <tr>
+        <td class="px-6 py-3 border-b">Caching</td>
+        <td class="px-6 py-3 border-b">In-memory fragment caching per service</td>
+        <td class="px-6 py-3 border-b">Caching typically done at the centralized infrastructure level</td>
+      </tr>
+      <tr>
+        <td class="px-6 py-3 border-b">Complexity</td>
+        <td class="px-6 py-3 border-b">Low complexity (library-based, no additional infrastructure)</td>
+        <td class="px-6 py-3 border-b">Higher complexity with nginx or similar infrastructure</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
+</section>
 
-  <div class="px-4 pt-3 border-bottom">
-    <p class="fw-bold text-center text-body-emphasis">Find me on GitHub - <a href="https://github.com/ableron">github.com/ableron</a></p>
-  </div>
+<!-- Quickstart -->
+<section class="max-w-4xl mx-auto px-6 pt-16">
+  <h2 class="text-3xl font-semibold mb-4 text-purple-400">Quickstart</h2>
+  <p class="text-gray-300 mb-4">Ableron provides framework integrations for
+    <a class="text-purple-400" href="https://github.com/ableron/ableron/tree/main/ableron-spring-boot-2">Spring Boot 2</a>,
+    <a class="text-purple-400" href="https://github.com/ableron/ableron/tree/main/ableron-spring-boot-3">Spring Boot 3</a>,
+    <a class="text-purple-400" href="https://github.com/ableron/ableron/tree/main/ableron-express">express</a> and
+    <a class="text-purple-400" href="https://github.com/ableron/ableron/tree/main/ableron-fastify">fastify</a> as well as low level implementations for
+    <a class="text-purple-400" href="https://github.com/ableron/ableron/tree/main/ableron-java">Java</a> and
+    <a class="text-purple-400" href="https://github.com/ableron/ableron/tree/main/ableron-js">JavaScript</a>.
+  </p>
+  <p class="text-gray-300 mb-4">Minimal usage example with express:</p>
+  <pre class="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto text-sm"><code>import express from 'express';
+import ableron from '@ableron/express';
 
-  <div class="px-4 pt-3 border-bottom">
-    <h2 class="display-6 fw-bold text-center text-body-emphasis">How It Works</h2>
-    <div class="col-lg-8 mx-auto">
-      <p class="mb-4">Ableron intercepts the HTTP response sent by your service and resolves all <code>&lt;ableron-include&gt;</code>-HTML-tags
-        with their respective remote fragment. This is achieved via installing Ableron as a dependency in your service, which is doing the magic</p>
-      <p class="mb-4">
-        <img src="resources/Ableron-Flow-drawio.png" alt="UI Composition Flow" />
+const app = express();
+app.use(ableron());
+
+app.get('/', function(req, res) {
+  res.send('&lt;ableron-include src="http://user-service/profile"/&gt;');
+});
+
+app.listen(port);</code></pre>
+  <p class="text-gray-400 mt-4">More examples and documentation available in the <a href="https://github.com/ableron/ableron" target="_blank" class="text-purple-400 underline">GitHub repository</a>.</p>
+</section>
+
+<!-- Ableron-Tag Properties -->
+<section class="max-w-4xl mx-auto px-6 pt-16">
+  <h2 class="text-3xl font-semibold mb-6 text-purple-400">Ableron-Tag Properties</h2>
+  <p class="text-gray-300 mb-6">
+    The <code>&lt;ableron-include&gt;</code> tag is used to include fragments from external URLs into your page. It comes with various attributes and fallback options.
+  </p>
+
+  <div class="space-y-8 text-gray-300">
+    <div>
+      <h3 class="text-xl font-semibold text-white mb-2">Required Closing Tag</h3>
+      <p>
+        The <code>&lt;ableron-include&gt;</code> tag must be properly closed. You can either use the self-closing syntax <code>&lt;ableron-include ... /&gt;</code> or explicitly close the tag with <code>&lt;ableron-include ...&gt;&lt;/ableron-include&gt;</code>.
       </p>
     </div>
-  </div>
 
-  <div class="px-4 pt-3 border-bottom">
-    <h2 class="display-6 fw-bold text-center text-body-emphasis">Why Ableron?</h2>
-    <div class="col-lg-8 mx-auto">
-      <p class="mb-4">
-        Compared to Server Side Includes via nginx and thus an architecture where a dedicated infrastructure component is performing UI composition:
-      <ul>
-        <li><span class="fw-bold">Lean Infrastructure</span>: No need to route all your traffic through an infrastructure component which is performing the UI composition</li>
-        <li><span class="fw-bold">Easy Local Development</span>: Includes are resolved directly in your service. This works fine for local development and increases developer experience.</li>
-        <li><span class="fw-bold">Easy Configuration</span>: Your can easily define different timeouts, fallback fragments or static fallback content for each of your includes.</li>
-        <li><span class="fw-bold">Local Caching</span>: All fragments are cached in memory directly within your service according to the cache policy of the fragments. This saves HTTP calls and thus money as well as latency.</li>
-      </ul>
+    <div>
+      <h3 class="text-xl font-semibold text-white mb-2">Fallback Content</h3>
+      <p>
+        Content placed between <code>&lt;ableron-include&gt;</code> and <code>&lt;/ableron-include&gt;</code> is used as fallback content in case the fragment cannot be loaded due to request timeout or erroneous response.
       </p>
     </div>
-  </div>
 
-  <div class="px-4 pt-3 border-bottom">
-    <h2 class="display-6 fw-bold text-center text-body-emphasis">How To Use</h2>
-    <div class="col-lg-8 mx-auto">
-      <p class="mb-4">In order to use Ableron in your service, there needs to be an Ableron library which is compatible
-        with the technology used in your service.</p>
-      <p class="mb-4">Available framework integrations:
-      <ul>
-      <li><a href="https://github.com/ableron/ableron/tree/main/ableron-spring-boot-2">Spring Boot 2</a></li>
-      <li><a href="https://github.com/ableron/ableron/tree/main/ableron-spring-boot-3">Spring Boot 3</a></li>
-        <li><a href="https://github.com/ableron/ableron/tree/main/ableron-express">express</a></li>
-        <li><a href="https://github.com/ableron/ableron/tree/main/ableron-fastify">fastify</a></li>
-      </ul>
-      </p>
-      <p class="mb-4">Available basic implementations:
-      <ul>
-        <li><a href="https://github.com/ableron/ableron/tree/main/ableron-java">Java</a></li>
-        <li><a href="https://github.com/ableron/ableron/tree/main/ableron-js">JavaScript</a></li>
-      </ul>
-      </p>
-    </div>
-  </div>
-
-  <div class="px-4 pt-3 border-bottom">
-    <h2 class="display-6 fw-bold text-center text-body-emphasis">The <code>&lt;ableron-include&gt;</code> Tag</h2>
-    <div class="col-lg-8 mx-auto">
-      <ul>
-        <li>Must be closed, i.e. either <code>&lt;ableron-include ... /&gt;</code> or <code>&lt;ableron-include ...&gt;&lt;/ableron-include&gt;</code></li>
-        <li>Content between <code>&lt;ableron-include&gt;</code> and <code>&lt;/ableron-include&gt;</code> is used as fallback content</li>
-        <li>Attributes
-          <ul>
-            <li><code>id</code>: Unique name of the include used within log messages</li>
-            <li><code>src</code>: URL of the fragment to include</li>
-            <li><code>src-timeout</code>: Timeout for requesting the <code>src</code> URL. Defaults to global <code>requestTimeout</code>
-              set via config. Value can either be a plain number (e.g. <code>2000</code> - treated as milliseconds), a number suffixed
-              with <code>ms</code> (e.g. <code>2000ms</code> - treated as milliseconds) or a number suffixed with <code>s</code> (e.g.
-              <code>2s</code> - treated as seconds)
-            </li>
-            <li><code>fallback-src</code>: URL of the fragment to include in case the request to <code>src</code> failed</li>
-            <li><code>fallback-src-timeout</code>: Timeout for requesting the <code>fallback-src</code> URL. Defaults to global <code>requestTimeout</code>
-              set via config. Value can either be a plain number (e.g. <code>2000</code> - treated as milliseconds), a number suffixed
-              with <code>ms</code> (e.g. <code>2000ms</code> - treated as milliseconds) or a number suffixed with <code>s</code> (e.g.
-              <code>2s</code> - treated as seconds)
-            </li>
-            <li><code>primary</code>: Denotes a fragment whose response code is set as response code for the page</li>
-            <li><code>headers</code>: Comma-separated list of request headers, that shall be forwarded from the parent
-              request to fragment requests. These Headers become part of the cache key for the requested URL.</li>
-            <li><code>cookies</code>: Comma-separated list of cookies, that shall be forwarded from the parent
-              request to fragment requests. These Cookies become part of the cache key for the requested URL.</li>
-          </ul>
+    <div>
+      <h3 class="text-xl font-semibold text-white mb-2">Attributes</h3>
+      <ul class="list-disc list-inside space-y-2">
+        <li>
+          <strong>id</strong>: A unique identifier for the include tag. This is useful for log messages and debugging.
         </li>
-        <li>Precedence for resolving: <code>src</code> → <code>fallback-src</code> → fallback content</li>
+        <li>
+          <strong>src</strong>: The URL of the fragment to be included. This is the primary source of the fragment content.
+        </li>
+        <li>
+          <strong>src-timeout</strong>: Timeout for requesting the fragment URL. This can be specified in milliseconds (e.g., <code>2000</code> or <code>2000ms</code>) or seconds (e.g., <code>2s</code>). Defaults to the global request timeout.
+        </li>
+        <li>
+          <strong>fallback-src</strong>: The URL to a fallback fragment, in case the primary <code>src</code> fails to load.
+        </li>
+        <li>
+          <strong>fallback-src-timeout</strong>: Timeout for requesting the <code>fallback-src</code> URL. The value can be specified similarly to <code>src-timeout</code>.
+        </li>
+        <li>
+          <strong>primary</strong>: Denotes a fragment whose response code will be set as the HTTP response code for the entire page.
+        </li>
+        <li>
+          <strong>headers</strong>: A comma-separated list of headers that should be forwarded from the parent request to the fragment request. These headers become part of the cache key for the requested URL.
+        </li>
+        <li>
+          <strong>cookies</strong>: A comma-separated list of cookies that should be forwarded to the fragment request. These cookies also become part of the cache key for the requested URL.
+        </li>
       </ul>
-      <p>Examples:</p>
-      <pre><code>&lt;ableron-include
-        id="header"
-        src="https://example.com/api/fragments/header"
-        fallback-src="https://cdn.example.com/static/fallback-header"
-        headers="x-ab-test-groups,x-country"
-        cookies="device,consent"&gt;
-        &lt;header&gt;Static fallback header&lt;/header&gt;&lt;/ableron-include&gt;</code></pre>
-      <pre><code>&lt;ableron-include id="header" src="https://example.com/api/fragments/header" src-timeout="2s" /&gt;</code></pre>
     </div>
-  </div>
 
-  <div class="px-4 pt-3 border-bottom">
-    <h2 class="display-6 fw-bold text-center text-body-emphasis">Primary Includes</h2>
-    <div class="col-lg-8 mx-auto">
-      <p class="mb-4">Treating an include as primary leads to not only include the fragment but also to let the fragment
-        control the HTTP response status code as well as response headers. How primary includes work:
-      <ul>
-        <li>If <code>src</code> returns success status, this status code is set as response code for the page</li>
-        <li>If <code>src</code> returns error status, <code>fallback-src</code> is defined and returns success status, this status code is set as response code for the page</li>
-        <li>If <code>src</code> and <code>fallback-src</code> return error status, the status code returned by <code>src</code> is set as response code for the page</li>
-        <li>If <code>src</code> and <code>fallback-src</code> return error status, the fragment content equals the body returned by <code>src</code>. Fallback content is ignored</li>
-      </ul>
+    <div>
+      <h3 class="text-xl font-semibold text-white mb-2">Resolution Precedence</h3>
+      <p>
+        When resolving the fragment content, the precedence is as follows: <strong>src → fallback-src → fallback content</strong>. This ensures a robust fallback mechanism in case of failures.
       </p>
     </div>
   </div>
+</section>
 
-  <div class="px-4 pt-3 border-bottom">
-    <h2 class="display-6 fw-bold text-center text-body-emphasis">Caching of fragments</h2>
-    <div class="col-lg-8 mx-auto">
-      <p class="mb-4">Fragments are considered cacheable if they have HTTP status code:
-      <ul>
-        <li><code>200</code>, <code>203</code>, <code>204</code>, <code>206</code></li>
-        <li><code>300</code></li>
-        <li><code>404</code>, <code>405</code>, <code>410</code>, <code>414</code></li>
-        <li><code>501</code></li>
-      </ul>
-      </p>
-    </div>
-    <h3 class="display-7 fw-bold text-center text-body-emphasis">Cache Auto Refresh</h3>
-    <div class="col-lg-8 mx-auto">
-      <p class="mb-4">Cached fragments are being refreshed automatically, if enabled. By default, auto refreshing is disabled.<br>
-        If auto refresh is enabled, cached fragments are getting asynchronously refreshed before they expire. This reduces the cache miss
-        rate and thus has a positive impact on latency. On the other hand, additional traffic is introduced, because the cached
-        fragments are loaded again even before their actual expiration time<br>
-        Fragments are tried to be refreshed when only 15% of their initial time to live remains. In case of failure, refresh is
-        repeated three times with a static delay of one second.<br><br>
-        The maximum number of consecutive refreshs of inactive cached fragments can be configured. Fragments are considered inactive,
-        if they have not been read from cache between writing to cache and a refresh attempt.
-      </p>
-    </div>
+<!-- Ableron-Tag Example -->
+<section class="max-w-4xl mx-auto px-6 pt-16">
+  <h2 class="text-3xl font-semibold mb-6 text-purple-400">Ableron-Tag Example</h2>
+  <p class="text-gray-300 mb-6">
+    Here's an example of how you can use the <code>&lt;ableron-include&gt;</code> tag to include external fragments into your service response. This example demonstrates the use of several important attributes, such as <code>src</code>, <code>fallback-src</code>, <code>headers</code>, <code>cookies</code>, and fallback content.
+  </p>
+
+  <div class="bg-gray-800 p-4 rounded-lg mb-8">
+    <pre class="text-green-400 font-mono overflow-x-auto">
+<code>&lt;ableron-include
+  id="header"
+  src="https://header-service/api/fragments/header"
+  src-timeout="2s"
+  fallback-src="https://cdn-proxy/static/fallback-header"
+  headers="x-ab-test-groups,x-country"
+  cookies="device,consent"&gt;
+  &lt;header&gt;Static fallback header&lt;/header&gt;
+&lt;/ableron-include&gt;</code>
+    </pre>
   </div>
 
-  <div class="px-4 pt-3 border-bottom">
-    <h2 class="display-6 fw-bold text-center text-body-emphasis">FAQ</h2>
-    <div class="col-lg-8 mx-auto mb-4">
-      <p>Q: When <code>src</code> or <code>fallback-src</code> of an <code>&lt;ableron-include&gt;</code>-tag return
-        a redirect, will that redirect be followed?</p>
-      <p>A: No. Redirects will not be followed when requesting fragments because they may introduce unwanted latency.</p>
-    </div>
-    <div class="col-lg-8 mx-auto mb-4">
-      <p>Q: Does Ableron influence <code>Cache-Control</code> of my pages?</p>
-      <p>A: Yes. The transclusion result provides a max-age for the content with all includes resolved, based on the
-        fragment with the lowest expiration time. I.e., the fragment with the lowest expiration time defines the max-age
-        of the page in case max age of the page is not below it.</p>
-    </div>
+  <p class="text-gray-300">
+    In this example:
+  </p>
+  <ul class="list-disc list-inside text-gray-300">
+    <li><strong>id</strong>: The unique identifier for this include, which can be helpful for logging and debugging (in this case, "header").</li>
+    <li><strong>src</strong>: The primary URL from which the fragment will be fetched. In this case, it's an API endpoint for the header fragment.</li>
+    <li><strong>src-timeout</strong>: The request timeout for the fragment URL. In this case, the request will is considered failed after two seconds.</li>
+    <li><strong>fallback-src</strong>: A fallback URL for the header fragment in case the primary request fails. Here, a CDN URL might be a good choice.</li>
+    <li><strong>headers</strong>: A comma-separated list of headers to forward from the parent request to the fragment request. Useful, if headers are part of the API and the fragment response differs in regard to the provided headers.</li>
+    <li><strong>cookies</strong>: A comma-separated list of cookies to forward to the fragment request. Same logic as with headers.</li>
+    <li><strong>Fallback Content</strong>: If the <code>src</code> and <code>fallback-src</code> both fail, the content between the opening and closing <code>&lt;ableron-include&gt;</code> tags will be used as a static fallback. In this case, it’s a simple static <code>&lt;header&gt;</code> element.</li>
+  </ul>
+</section>
+
+<!-- Advanced Features -->
+<section class="max-w-4xl mx-auto px-6 pt-16">
+  <h2 class="text-3xl font-semibold mb-6 text-purple-400">Advanced Features</h2>
+
+  <!-- Primary Includes -->
+  <div class="mb-10">
+    <h3 class="text-xl font-semibold text-white mb-2">⭐ Primary Includes</h3>
+    <p class="text-gray-300">
+      Ableron supports marking an <code>&lt;ableron-include&gt;</code> as primary. Primary includes are considered to be the main part of the finally composed page and thus define the HTTP response status and influence response headers.
+    </p>
+    <ul class="list-disc list-inside text-gray-300 mt-4 space-y-2">
+      <li>
+        If <code>src</code> returns success status, this status code is set as response code for the entire page.
+      </li>
+      <li>
+        If <code>src</code> returns error status, <code>fallback-src</code> is defined and returns success status, this status code is set as response code for the entire page.
+      </li>
+      <li>
+        If <code>src</code> and <code>fallback-src</code> both return error status, the status code returned by <code>src</code> is set as response code for the entire page and the fragment content is set to the body returned by <code>src</code>. Fallback content is ignored.
+      </li>
+      <li>
+        Response headers will be forwarded to the finally composed page, in case they are whitelisted in global configuration.
+      </li>
+    </ul>
   </div>
 
-  <div class="px-4 pt-3 border-bottom">
-    <h2 class="display-6 fw-bold text-center text-body-emphasis">Contributing</h2>
-    <div class="col-lg-8 mx-auto mb-4">
-      <p>All contributions are greatly appreciated. To contribute you can either simply open an issue or fork the corresponding repository and create a pull request:</p>
-      <ol>
-        <li>Fork the respective repository</li>
-        <li>Create your feature branch: <code>git checkout -b feature/amazing-feature</code></li>
-        <li>Commit your changes: <code>git commit -m 'Added some amazing feature'</code></li>
-        <li>Push to your branch: <code>git push origin feature/amazing-feature</code></li>
-        <li>Open a pull request</li>
-      </ol>
+  <!-- Cache Auto Refresh -->
+  <div class="mb-10">
+    <h3 class="text-xl font-semibold text-white mb-2">🔁 Cache Auto Refresh</h3>
+    <p class="text-gray-300">
+      Ableron supports automatic cache refreshing for included fragments — a feature designed to keep response times low and cache hit rates high.
+    </p>
+    <ul class="list-disc list-inside text-gray-300 mt-4 space-y-2">
+      <li>
+        Auto refresh is <strong>disabled by default</strong> and must be explicitly enabled via configuration.
+      </li>
+      <li>
+        If enabled, cached fragments are <strong>refreshed asynchronously</strong> <em>before</em> their TTL expires — reducing the chance of a cache miss.
+      </li>
+      <li>
+        Refresh attempts are triggered when <strong>only 15% of the original TTL</strong> is remaining.
+      </li>
+      <li>
+        In case of refresh failure, <strong>up to 3 retries</strong> are made with a static 1-second delay.
+      </li>
+      <li>
+        Ableron limits refreshing for <strong>inactive fragments</strong> — i.e., those that have not been accessed since the last cache write — based on a configurable threshold.
+      </li>
+      <li>
+        This strategy keeps latency low while avoiding excessive backend load.
+      </li>
+    </ul>
+  </div>
+
+  <!-- Statistics -->
+  <div class="mb-10">
+    <h3 class="text-xl font-semibold text-white mb-2">📊 Statistics</h3>
+    <p class="text-gray-300 mb-6">
+      To provide insights into what is happening during page composition, Ableron provides the opportunity to add composition statistics to the finally composed page via HTML comment. This feature is disabled by default, as you may not want to expose those statistics in your production environment.
+    </p>
+
+    <div class="bg-gray-800 p-4 rounded-lg mb-8">
+      <pre class="text-green-400 font-mono overflow-x-auto"><code>&lt;!-- Processed 4 includes in 93ms
+
+Time | Include | Resolved With | Fragment Cacheability | Fragment URL
+------------------------------------------------------
+0ms | header | fallback content | - | -
+56ms | main | remote src | not cacheable | https://content-service/main
+93ms | footer | remote src | expires in 600s | https://content-service/footer
+0ms | nav | cached fallback-src | expires in 10s | https://content-service/nav
+
+Cache: 3 items, 1 hits, 3 misses, 0 successful refreshs, 0 failed refreshs
+--&gt;</code></pre>
     </div>
   </div>
-</main>
+</section>
+
+<!-- FAQ -->
+<section class="max-w-4xl mx-auto px-6 pt-16">
+  <h2 class="text-3xl font-semibold mb-6 text-purple-400">FAQ</h2>
+  <div class="mb-10">
+    <h3 class="text-xl font-semibold text-white mb-2">Which fragments will be cached?</h3>
+    <p class="text-gray-300">
+      Fragments will be cached, if their cache policy allows caching and if the response code is one of <code>200, 203, 204, 206, 300, 404, 405, 410, 414, 501</code>.
+    </p>
+  </div>
+
+  <div class="mb-10">
+    <h3 class="text-xl font-semibold text-white mb-2">How are redirects being handled?</h3>
+    <p class="text-gray-300">
+      In order to not introduce unwanted latency, redirects returned by <code>src</code> or <code>fallback-src</code> URLs will not be followed. Instead, the request is considered failed.
+    </p>
+  </div>
+
+  <div class="mb-10">
+    <h3 class="text-xl font-semibold text-white mb-2">Does Ableron influence the Cache-Control of my page?</h3>
+    <p class="text-gray-300">
+      As each fragment brings its own cache policy, Ableron will adjust the cache policy of the finally composed page accordingly. The fragment with the lowest TTL defines the <code>max-age</code> of the page, in case max age of the page is not below it.
+    </p>
+  </div>
+</section>
+
+<!-- Contributing -->
+<section class="max-w-4xl mx-auto px-6 pt-16">
+  <h2 class="text-3xl font-semibold mb-6 text-purple-400">Contributing</h2>
+  <p class="text-gray-300 mb-6">
+    All contributions are greatly appreciated. To contribute, either open an issue or fork <a href="https://github.com/ableron/ableron" class="underline text-purple-400">the repository</a> and create a pull request:
+  </p>
+  <ol class="list-decimal list-inside text-gray-300 mt-4 space-y-2">
+    <li>
+      Fork <a href="https://github.com/ableron/ableron" class="underline text-purple-400">the repository</a>
+    </li>
+    <li>
+      Create your feature branch: <code>git checkout -b feature/amazing-feature</code>
+    </li>
+    <li>
+      Commit your changes: <code>git commit -m 'Added some amazing feature'</code>
+    </li>
+    <li>
+      Push to your branch: <code>git push origin feature/amazing-feature</code>
+    </li>
+    <li>
+      Open a pull request
+    </li>
+  </ol>
+</section>
+
+<!-- Footer -->
+<footer class="text-center text-gray-500 text-sm py-12">
+  © 2025 Ableron Project – <a href="https://github.com/ableron/ableron" class="underline text-purple-400">GitHub</a>
+</footer>
+
 </body>
 </html>

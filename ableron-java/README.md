@@ -4,7 +4,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.ableron/ableron/badge.svg)](https://mvnrepository.com/artifact/io.github.ableron/ableron)
 [![Java Version](https://img.shields.io/badge/Java-11+-4EB1BA.svg)](https://docs.oracle.com/en/java/javase/11/)
 
-Java implementation of Ableron Distributed Server Side UI Composition.
+Java implementation of Ableron Decentralized Server-Side UI Composition.
 
 ## Installation
 Gradle:

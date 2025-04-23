@@ -1,4 +1,4 @@
-## <p align="center">Ableron - Distributed Server Side UI Composition</p>
+## <p align="center">Ableron - Decentralized Server-Side UI Composition</p>
 <p align="center">
   <a href="https://github.com/ableron/ableron/actions/workflows/ableron-js.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-js.yml/badge.svg" alt="ableron-js Status" /></a>
   <a href="https://github.com/ableron/ableron/actions/workflows/ableron-java.yml" target="_blank"><img src="https://github.com/ableron/ableron/actions/workflows/ableron-java.yml/badge.svg" alt="ableron-java Status" /></a>
@@ -12,8 +12,8 @@
 
 ## Description
 
-Ableron is a library (or a set of libraries) which glues together your micro frontends using distributed
-server side UI composition.<br>
+Ableron is a library (or a set of libraries) which glues together your micro frontends using decentralized
+server-side UI composition.<br>
 It does the job via intercepting the output of your microservice and resolving <code>&lt;ableron-include&gt;</code>-tags
 used to load content from remote sources and substitute the <code>&lt;ableron-include&gt;</code>-tags with
 the remote content.
