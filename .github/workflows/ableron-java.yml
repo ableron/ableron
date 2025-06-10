@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        javaVersion: [11, 17, 21, 23]
+        javaVersion: [11, 17, 21, 24]
     defaults:
       run:
         working-directory: ableron-java
