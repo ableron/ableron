@@ -45,14 +45,14 @@ jobs:
           distribution: temurin
           cache: maven
           cache-dependency-path: ableron-java/pom.xml
-          server-id: ossrh # value of the distributionManagement/repository/id field of the pom.xml
-          server-username: OSSRH_USERNAME # env variable for username in deploy
-          server-password: OSSRH_PASSWORD # env variable for password in deploy
+          server-id: central
+          server-username: MAVEN_CENTRAL_TOKEN_USERNAME # env variable for username in deploy
+          server-password: MAVEN_CENTRAL_TOKEN_PASSWORD # env variable for password in deploy
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }} # value of the GPG private key to import
           gpg-passphrase: GPG_PASSPHRASE # env variable for GPG private key passphrase
       - name: Publish to Apache Maven Central
         run: mvn --batch-mode --update-snapshots deploy -Prelease -DskipTests=true
         env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          MAVEN_CENTRAL_TOKEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_TOKEN_USERNAME }}
+          MAVEN_CENTRAL_TOKEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_TOKEN_PASSWORD }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
