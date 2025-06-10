@@ -10,6 +10,10 @@
 * `npm run test:ableron-spring-boot-3` to build and test `ableron-spring-boot` for Spring Boot 3
 * `npm run ableron-verify` to test all projects against the common `ableron-verify` test base
 
+## Tooling
+* Java Components
+  * Find available `ableron-java` SNAPSHOT versions [here](https://central.sonatype.com/service/rest/repository/browse/maven-snapshots/io/github/ableron/ableron/)
+
 ## Perform Release
 1. Release `ableron-js`
    1. Make sure, `package.json` → `version` reflects the version to be published
