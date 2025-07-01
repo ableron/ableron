@@ -8,6 +8,9 @@ updates:
     directory: '/ableron-js'
     schedule:
       interval: 'weekly'
+    groups:
+      development-dependencies:
+        dependency-type: "development"
   - package-ecosystem: 'maven'
     directory: '/ableron-java'
     schedule:
@@ -29,14 +32,25 @@ updates:
     directory: '/ableron-express'
     schedule:
       interval: 'weekly'
+    groups:
+      development-dependencies:
+        dependency-type: "development"
   - package-ecosystem: 'npm'
     directory: '/ableron-fastify'
     schedule:
       interval: 'weekly'
+    groups:
+      development-dependencies:
+        dependency-type: "development"
   - package-ecosystem: 'gradle'
     directory: '/ableron-verify'
     schedule:
       interval: 'weekly'
+    groups:
+      testcontainers:
+        applies-to: version-updates
+        patterns:
+          - "org.testcontainers:*"
   - package-ecosystem: 'gradle'
     directory: '/ableron-verify/java17'
     schedule:
