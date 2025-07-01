@@ -59,6 +59,11 @@ updates:
     directory: '/ableron-verify/java17-spring-boot-3'
     schedule:
       interval: 'weekly'
+    groups:
+      spring-boot:
+        applies-to: version-updates
+        patterns:
+          - "org.springframework.boot*"
   - package-ecosystem: 'gradle'
     directory: '/ableron-verify/java21'
     schedule:
@@ -67,3 +72,32 @@ updates:
     directory: '/ableron-verify/java21-spring-boot-3'
     schedule:
       interval: 'weekly'
+    groups:
+      spring-boot:
+        applies-to: version-updates
+        patterns:
+          - "org.springframework.boot*"
+  - package-ecosystem: 'gradle'
+    directory: '/ableron-verify/java11-spring-boot-2'
+    schedule:
+      interval: 'weekly'
+    ignore:
+      - dependency-name: 'org.springframework.boot*'
+        versions: [ '>=3.0.0' ]
+    groups:
+      spring-boot:
+        applies-to: version-updates
+        patterns:
+          - "org.springframework.boot*"
+  - package-ecosystem: 'gradle'
+    directory: '/ableron-verify/java21-spring-boot-2'
+    schedule:
+      interval: 'weekly'
+    ignore:
+      - dependency-name: 'org.springframework.boot*'
+        versions: [ '>=3.0.0' ]
+    groups:
+      spring-boot:
+        applies-to: version-updates
+        patterns:
+          - "org.springframework.boot*"
