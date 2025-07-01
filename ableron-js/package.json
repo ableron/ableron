@@ -52,7 +52,7 @@
   "devDependencies": {
     "@types/node": "22.15.30",
     "fastify": "5.3.3",
-    "prettier": "3.5.3",
+    "prettier": "3.6.2",
     "ts-jest": "29.3.4",
     "ts-loader": "9.5.2",
     "typescript": "5.8.3",
