@@ -7,18 +7,18 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/ableron-js'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
     groups:
       development-dependencies:
         dependency-type: "development"
   - package-ecosystem: 'maven'
     directory: '/ableron-java'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
   - package-ecosystem: 'maven'
     directory: '/ableron-spring-boot-2'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
     ignore:
       - dependency-name: 'org.springframework:spring-webmvc'
         versions: [ '>=6.0.0' ]
@@ -27,25 +27,25 @@ updates:
   - package-ecosystem: 'maven'
     directory: '/ableron-spring-boot-3'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
   - package-ecosystem: 'npm'
     directory: '/ableron-express'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
     groups:
       development-dependencies:
         dependency-type: "development"
   - package-ecosystem: 'npm'
     directory: '/ableron-fastify'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
     groups:
       development-dependencies:
         dependency-type: "development"
   - package-ecosystem: 'gradle'
     directory: '/ableron-verify'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
     groups:
       testcontainers:
         applies-to: version-updates
@@ -54,7 +54,7 @@ updates:
   - package-ecosystem: 'gradle'
     directory: '/ableron-verify/java11'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
     groups:
       spring-boot:
         applies-to: version-updates
@@ -63,7 +63,7 @@ updates:
   - package-ecosystem: 'gradle'
     directory: '/ableron-verify/java17'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
     groups:
       spring-boot:
         applies-to: version-updates
@@ -72,7 +72,7 @@ updates:
   - package-ecosystem: 'gradle'
     directory: '/ableron-verify/java17-spring-boot-3'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
     groups:
       spring-boot:
         applies-to: version-updates
@@ -81,7 +81,7 @@ updates:
   - package-ecosystem: 'gradle'
     directory: '/ableron-verify/java21'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
     groups:
       spring-boot:
         applies-to: version-updates
@@ -90,7 +90,7 @@ updates:
   - package-ecosystem: 'gradle'
     directory: '/ableron-verify/java21-spring-boot-3'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
     groups:
       spring-boot:
         applies-to: version-updates
@@ -99,7 +99,7 @@ updates:
   - package-ecosystem: 'gradle'
     directory: '/ableron-verify/java11-spring-boot-2'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
     ignore:
       - dependency-name: 'org.springframework.boot*'
         versions: [ '>=3.0.0' ]
@@ -113,7 +113,7 @@ updates:
   - package-ecosystem: 'gradle'
     directory: '/ableron-verify/java21-spring-boot-2'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
     ignore:
       - dependency-name: 'org.springframework.boot*'
         versions: [ '>=3.0.0' ]
