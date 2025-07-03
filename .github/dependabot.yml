@@ -55,6 +55,9 @@ updates:
     directory: '/ableron-verify/java11'
     schedule:
       interval: 'monthly'
+    ignore:
+      - dependency-name: 'org.springframework.boot:*'
+        versions: [ '>=3.0.0' ]
     groups:
       spring-boot:
         applies-to: version-updates
