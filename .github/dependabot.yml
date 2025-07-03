@@ -28,6 +28,11 @@ updates:
     directory: '/ableron-spring-boot-3'
     schedule:
       interval: 'monthly'
+    groups:
+      spring-boot:
+        applies-to: version-updates
+        patterns:
+          - "org.springframework.boot*"
   - package-ecosystem: 'npm'
     directory: '/ableron-express'
     schedule:
