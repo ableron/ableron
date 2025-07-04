@@ -61,7 +61,7 @@ updates:
     schedule:
       interval: 'monthly'
     ignore:
-      - dependency-name: 'org.springframework.boot:*'
+      - dependency-name: 'org.springframework.boot*'
         versions: [ '>=3.0.0' ]
     groups:
       spring-boot:
