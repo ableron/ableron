@@ -50,12 +50,12 @@
     "@isaacs/ttlcache": "1.4.1"
   },
   "devDependencies": {
-    "@types/node": "24.0.10",
+    "@types/node": "24.1.0",
     "fastify": "5.4.0",
     "prettier": "3.6.2",
     "ts-jest": "29.4.0",
     "ts-loader": "9.5.2",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
     "vitest": "3.2.4"
   },
   "prettier": {
