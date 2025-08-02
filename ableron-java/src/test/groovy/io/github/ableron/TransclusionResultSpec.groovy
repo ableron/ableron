@@ -1,9 +1,9 @@
 package io.github.ableron
 
-import okhttp3.mockwebserver.Dispatcher
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
+import mockwebserver3.Dispatcher
+import mockwebserver3.MockResponse
+import mockwebserver3.MockWebServer
+import mockwebserver3.RecordedRequest
 import spock.lang.Specification
 
 import java.time.Duration
@@ -160,30 +160,34 @@ class TransclusionResultSpec extends Specification {
   def "should append stats to content"() {
     given:
     def mockWebServer = new MockWebServer()
-    def baseUrl = mockWebServer.url("/").toString()
     mockWebServer.setDispatcher(new Dispatcher() {
       @Override
       MockResponse dispatch(RecordedRequest recordedRequest) throws InterruptedException {
-        switch (recordedRequest.getPath()) {
+        switch (recordedRequest.url.encodedPath()) {
           case "/uncacheable-fragment":
-            return new MockResponse()
-              .setResponseCode(200)
+            return new MockResponse.Builder()
+              .code(200)
               .setHeader("Cache-Control", "no-store")
-              .setBody("uncacheable-fragment")
+              .body("uncacheable-fragment")
+              .build()
           case "/cacheable-fragment-1":
-            return new MockResponse()
-              .setResponseCode(200)
+            return new MockResponse.Builder()
+              .code(200)
               .setHeader("Expires", "Wed, 12 Oct 2050 07:28:00 GMT")
-              .setBody("cacheable-fragment-1")
+              .body("cacheable-fragment-1")
+              .build()
           case "/cacheable-fragment-2":
-            return new MockResponse()
-              .setResponseCode(200)
+            return new MockResponse.Builder()
+              .code(200)
               .setHeader("Cache-Control", "max-age=10")
-              .setBody("cacheable-fragment-2")
+              .body("cacheable-fragment-2")
+              .build()
         }
-        return new MockResponse().setResponseCode(404)
+        return new MockResponse.Builder().code(404).build()
       }
     })
+    mockWebServer.start()
+    def baseUrl = mockWebServer.url("/").toString()
     def transclusionProcessor = new TransclusionProcessor(AbleronConfig.builder()
       .statsAppendToContent(true)
       .statsExposeFragmentUrl(true)
@@ -223,7 +227,7 @@ class TransclusionResultSpec extends Specification {
       "-->"
 
     cleanup:
-    mockWebServer.shutdown()
+    mockWebServer.close()
   }
 
   def "should not expose fragment URL to stats by default"() {

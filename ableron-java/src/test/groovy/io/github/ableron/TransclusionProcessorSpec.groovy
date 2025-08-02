@@ -1,9 +1,9 @@
 package io.github.ableron
 
-import okhttp3.mockwebserver.Dispatcher
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
+import mockwebserver3.Dispatcher
+import mockwebserver3.MockResponse
+import mockwebserver3.MockWebServer
+import mockwebserver3.RecordedRequest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Timeout
@@ -183,28 +183,32 @@ class TransclusionProcessorSpec extends Specification {
   def "should populate TransclusionResult with primary include status code"() {
     given:
     def mockWebServer = new MockWebServer()
-    def baseUrl = mockWebServer.url("/").toString()
     mockWebServer.setDispatcher(new Dispatcher() {
       @Override
       MockResponse dispatch(RecordedRequest recordedRequest) throws InterruptedException {
-        switch (recordedRequest.getPath()) {
+        switch (recordedRequest.url.encodedPath()) {
           case "/header":
-            return new MockResponse()
-              .setResponseCode(200)
-              .setBody("header-fragment")
+            return new MockResponse.Builder()
+              .code(200)
+              .body("header-fragment")
+              .build()
           case "/footer":
-            return new MockResponse()
-              .setResponseCode(200)
-              .setBody("footer-fragment")
+            return new MockResponse.Builder()
+              .code(200)
+              .body("footer-fragment")
+              .build()
           case "/main":
-            return new MockResponse()
-              .setResponseCode(301)
+            return new MockResponse.Builder()
+              .code(301)
               .addHeader("Location", "/foobar")
-              .setBody("main-fragment")
+              .body("main-fragment")
+              .build()
         }
-        return new MockResponse().setResponseCode(500)
+        return new MockResponse.Builder().code(500).build()
       }
     })
+    mockWebServer.start()
+    def baseUrl = mockWebServer.url("/").toString()
 
     when:
     def result = transclusionProcessor.resolveIncludes("""
@@ -224,36 +228,40 @@ class TransclusionProcessorSpec extends Specification {
     result.getResponseHeadersToForward() == ["location": ["/foobar"]]
 
     cleanup:
-    mockWebServer.shutdown()
+    mockWebServer.close()
   }
 
   def "should set content expiration time to lowest fragment expiration time"() {
     given:
     def mockWebServer = new MockWebServer()
-    def baseUrl = mockWebServer.url("/").toString()
     mockWebServer.setDispatcher(new Dispatcher() {
       @Override
       MockResponse dispatch(RecordedRequest recordedRequest) throws InterruptedException {
-        switch (recordedRequest.getPath()) {
+        switch (recordedRequest.url.encodedPath()) {
           case "/header":
-            return new MockResponse()
-              .setResponseCode(200)
+            return new MockResponse.Builder()
+              .code(200)
               .setHeader("Cache-Control", "max-age=120")
-              .setBody("header-fragment")
+              .body("header-fragment")
+              .build()
           case "/footer":
-            return new MockResponse()
-              .setResponseCode(200)
+            return new MockResponse.Builder()
+              .code(200)
               .setHeader("Cache-Control", "max-age=60")
-              .setBody("footer-fragment")
+              .body("footer-fragment")
+              .build()
           case "/main":
-            return new MockResponse()
-              .setResponseCode(200)
+            return new MockResponse.Builder()
+              .code(200)
               .setHeader("Cache-Control", "max-age=30")
-              .setBody("main-fragment")
+              .body("main-fragment")
+              .build()
         }
-        return new MockResponse().setResponseCode(500)
+        return new MockResponse.Builder().code(500).build()
       }
     })
+    mockWebServer.start()
+    def baseUrl = mockWebServer.url("/").toString()
 
     when:
     def result = transclusionProcessor.resolveIncludes("""
@@ -274,36 +282,40 @@ class TransclusionProcessorSpec extends Specification {
     }
 
     cleanup:
-    mockWebServer.shutdown()
+    mockWebServer.close()
   }
 
   def "should set content expiration time to past if a fragment must not be cached"() {
     given:
     def mockWebServer = new MockWebServer()
-    def baseUrl = mockWebServer.url("/").toString()
     mockWebServer.setDispatcher(new Dispatcher() {
       @Override
       MockResponse dispatch(RecordedRequest recordedRequest) throws InterruptedException {
-        switch (recordedRequest.getPath()) {
+        switch (recordedRequest.url.encodedPath()) {
           case "/header":
-            return new MockResponse()
-              .setResponseCode(200)
+            return new MockResponse.Builder()
+              .code(200)
               .setHeader("Cache-Control", "max-age=120")
-              .setBody("header-fragment")
+              .body("header-fragment")
+              .build()
           case "/footer":
-            return new MockResponse()
-              .setResponseCode(200)
+            return new MockResponse.Builder()
+              .code(200)
               .setHeader("Cache-Control", "max-age=60")
-              .setBody("footer-fragment")
+              .body("footer-fragment")
+              .build()
           case "/main":
-            return new MockResponse()
-              .setResponseCode(200)
+            return new MockResponse.Builder()
+              .code(200)
               .setHeader("Cache-Control", "no-store, no-cache, must-revalidate")
-              .setBody("main-fragment")
+              .body("main-fragment")
+              .build()
         }
-        return new MockResponse().setResponseCode(500)
+        return new MockResponse.Builder().code(500).build()
       }
     })
+    mockWebServer.start()
+    def baseUrl = mockWebServer.url("/").toString()
 
     when:
     def result = transclusionProcessor.resolveIncludes("""
@@ -321,33 +333,37 @@ class TransclusionProcessorSpec extends Specification {
     result.contentExpirationTime.get() == Instant.EPOCH
 
     cleanup:
-    mockWebServer.shutdown()
+    mockWebServer.close()
   }
 
   def "should prevent caching if no fragment provides explicit caching information"() {
     given:
     def mockWebServer = new MockWebServer()
-    def baseUrl = mockWebServer.url("/").toString()
     mockWebServer.setDispatcher(new Dispatcher() {
       @Override
       MockResponse dispatch(RecordedRequest recordedRequest) throws InterruptedException {
-        switch (recordedRequest.getPath()) {
+        switch (recordedRequest.url.encodedPath()) {
           case "/header":
-            return new MockResponse()
-              .setResponseCode(200)
-              .setBody("header-fragment")
+            return new MockResponse.Builder()
+              .code(200)
+              .body("header-fragment")
+              .build()
           case "/footer":
-            return new MockResponse()
-              .setResponseCode(200)
-              .setBody("footer-fragment")
+            return new MockResponse.Builder()
+              .code(200)
+              .body("footer-fragment")
+              .build()
           case "/main":
-            return new MockResponse()
-              .setResponseCode(200)
-              .setBody("main-fragment")
+            return new MockResponse.Builder()
+              .code(200)
+              .body("main-fragment")
+              .build()
         }
-        return new MockResponse().setResponseCode(500)
+        return new MockResponse.Builder().code(500).build()
       }
     })
+    mockWebServer.start()
+    def baseUrl = mockWebServer.url("/").toString()
 
     when:
     def result = transclusionProcessor.resolveIncludes("""
@@ -365,7 +381,7 @@ class TransclusionProcessorSpec extends Specification {
     result.contentExpirationTime.get() == Instant.EPOCH
 
     cleanup:
-    mockWebServer.shutdown()
+    mockWebServer.close()
   }
 
   def "should replace identical includes"() {
@@ -404,22 +420,25 @@ class TransclusionProcessorSpec extends Specification {
   def "should perform only one request per URL"() {
     given:
     def mockWebServer = new MockWebServer()
-    def baseUrl = mockWebServer.url("/").toString()
     mockWebServer.setDispatcher(new Dispatcher() {
       @Override
       MockResponse dispatch(RecordedRequest recordedRequest) throws InterruptedException {
-        switch (recordedRequest.getPath()) {
+        switch (recordedRequest.url.encodedPath()) {
           case "/1":
-            return new MockResponse()
-              .setResponseCode(200)
-              .setBody("fragment-1")
-              .setHeadersDelay(200, TimeUnit.MILLISECONDS)
+            return new MockResponse.Builder()
+              .code(200)
+              .body("fragment-1")
+              .headersDelay(200, TimeUnit.MILLISECONDS)
+              .build()
         }
-        return new MockResponse()
-          .setResponseCode(404)
-          .setBody("404")
+        return new MockResponse.Builder()
+          .code(404)
+          .body("404")
+          .build()
       }
     })
+    mockWebServer.start()
+    def baseUrl = mockWebServer.url("/").toString()
 
     when:
     def result = transclusionProcessor.resolveIncludes("""
@@ -452,47 +471,53 @@ class TransclusionProcessorSpec extends Specification {
     """
 
     cleanup:
-    mockWebServer.shutdown()
+    mockWebServer.close()
   }
 
   @Timeout(value = 5000, unit = TimeUnit.MILLISECONDS)
   def "should resolve includes in parallel"() {
     given:
     def mockWebServer = new MockWebServer()
-    def baseUrl = mockWebServer.url("/").toString()
     mockWebServer.setDispatcher(new Dispatcher() {
       @Override
       MockResponse dispatch(RecordedRequest recordedRequest) throws InterruptedException {
-        switch (recordedRequest.getPath()) {
+        switch (recordedRequest.url.encodedPath()) {
           case "/503-route":
-            return new MockResponse()
-              .setResponseCode(503)
-              .setBody("fragment-1")
-              .setHeadersDelay(2000, TimeUnit.MILLISECONDS)
+            return new MockResponse.Builder()
+              .code(503)
+              .body("fragment-1")
+              .headersDelay(2000, TimeUnit.MILLISECONDS)
+              .build()
           case "/1000ms-delay-route":
-            return new MockResponse()
-              .setResponseCode(200)
-              .setBody("fragment-2")
-              .setHeadersDelay(1000, TimeUnit.MILLISECONDS)
+            return new MockResponse.Builder()
+              .code(200)
+              .body("fragment-2")
+              .headersDelay(1000, TimeUnit.MILLISECONDS)
+              .build()
           case "/2000ms-delay-route":
-            return new MockResponse()
-              .setResponseCode(200)
-              .setBody("fragment-3")
-              .setHeadersDelay(2000, TimeUnit.MILLISECONDS)
+            return new MockResponse.Builder()
+              .code(200)
+              .body("fragment-3")
+              .headersDelay(2000, TimeUnit.MILLISECONDS)
+              .build()
           case "/2100ms-delay-route":
-            return new MockResponse()
-              .setResponseCode(200)
-              .setBody("fragment-4")
-              .setHeadersDelay(2100, TimeUnit.MILLISECONDS)
+            return new MockResponse.Builder()
+              .code(200)
+              .body("fragment-4")
+              .headersDelay(2100, TimeUnit.MILLISECONDS)
+              .build()
           case "/2200ms-delay-route":
-            return new MockResponse()
-              .setResponseCode(200)
-              .setBody("fragment-5")
-              .setHeadersDelay(2200, TimeUnit.MILLISECONDS)
+            return new MockResponse.Builder()
+              .code(200)
+              .body("fragment-5")
+              .headersDelay(2200, TimeUnit.MILLISECONDS)
+              .build()
         }
-        return new MockResponse().setResponseCode(404)
+        return new MockResponse.Builder().code(404).build()
       }
     })
+    mockWebServer.start()
+    def baseUrl = mockWebServer.url("/").toString()
 
     when:
     def result = transclusionProcessor.resolveIncludes("""
@@ -529,7 +554,7 @@ class TransclusionProcessorSpec extends Specification {
     """
 
     cleanup:
-    mockWebServer.shutdown()
+    mockWebServer.close()
   }
 
   def "should handle unresolvable include"() {
@@ -556,32 +581,37 @@ class TransclusionProcessorSpec extends Specification {
       .statsAppendToContent(true)
       .build())
     def mockWebServer = new MockWebServer()
-    def baseUrl = mockWebServer.url("/").toString()
     mockWebServer.setDispatcher(new Dispatcher() {
       @Override
       MockResponse dispatch(RecordedRequest recordedRequest) throws InterruptedException {
-        switch (recordedRequest.getPath()) {
+        switch (recordedRequest.url.encodedPath()) {
           case "/200-cacheable":
-            return new MockResponse()
-              .setResponseCode(200)
+            return new MockResponse.Builder()
+              .code(200)
               .setHeader("Cache-Control", "max-age=60")
-              .setBody("200-cacheable")
+              .body("200-cacheable")
+              .build()
           case "/200-not-cacheable":
-            return new MockResponse()
-              .setResponseCode(200)
-              .setBody("200-not-cacheable")
+            return new MockResponse.Builder()
+              .code(200)
+              .body("200-not-cacheable")
+              .build()
           case "/404":
-            return new MockResponse()
-              .setResponseCode(404)
-              .setBody("404")
+            return new MockResponse.Builder()
+              .code(404)
+              .body("404")
+              .build()
           case "/503":
-            return new MockResponse()
-              .setResponseCode(503)
-              .setBody("503")
+            return new MockResponse.Builder()
+              .code(503)
+              .body("503")
+              .build()
         }
-        return new MockResponse().setResponseCode(404)
+        return new MockResponse.Builder().code(404).build()
       }
     })
+    mockWebServer.start()
+    def baseUrl = mockWebServer.url("/").toString()
 
     when:
     transclusionProcessor.resolveIncludes("""
@@ -633,6 +663,6 @@ Cache: 3 items, 5 hits, 18 misses, 0 successful refreshs, 0 failed refreshs
 -->"""
 
     cleanup:
-    mockWebServer.shutdown()
+    mockWebServer.close()
   }
 }

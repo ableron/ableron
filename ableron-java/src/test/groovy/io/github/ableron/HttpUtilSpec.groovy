@@ -1,7 +1,7 @@
 package io.github.ableron
 
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
+import mockwebserver3.MockResponse
+import mockwebserver3.MockWebServer
 import okio.Buffer
 import spock.lang.Specification
 
@@ -99,9 +99,11 @@ class HttpUtilSpec extends Specification {
   def "should get plain text response body as string from http response"() {
     given:
     def mockWebServer = new MockWebServer()
-    mockWebServer.enqueue(new MockResponse()
-      .setResponseCode(200)
-      .setBody("plain text body"))
+    mockWebServer.enqueue(new MockResponse.Builder()
+      .code(200)
+      .body("plain text body")
+      .build())
+    mockWebServer.start()
 
     when:
     def httpResponse = HttpClient.newHttpClient()
@@ -113,16 +115,18 @@ class HttpUtilSpec extends Specification {
     HttpUtil.getResponseBodyAsString(httpResponse) == "plain text body"
 
     cleanup:
-    mockWebServer.shutdown()
+    mockWebServer.close()
   }
 
   def "should get gzipped response body as string from http response"() {
     given:
     def mockWebServer = new MockWebServer()
-    mockWebServer.enqueue(new MockResponse()
-      .setResponseCode(200)
+    mockWebServer.enqueue(new MockResponse.Builder()
+      .code(200)
       .addHeader("Content-Encoding", "gzip")
-      .setBody(new Buffer().write(gzip("gzipped body"))))
+      .body(new Buffer().write(gzip("gzipped body")))
+      .build())
+    mockWebServer.start()
 
     when:
     def httpResponse = HttpClient.newHttpClient()
@@ -134,16 +138,18 @@ class HttpUtilSpec extends Specification {
     HttpUtil.getResponseBodyAsString(httpResponse) == "gzipped body"
 
     cleanup:
-    mockWebServer.shutdown()
+    mockWebServer.close()
   }
 
   def "should return empty response body from http response if gzip decoding failed"() {
     given:
     def mockWebServer = new MockWebServer()
-    mockWebServer.enqueue(new MockResponse()
-      .setResponseCode(200)
+    mockWebServer.enqueue(new MockResponse.Builder()
+      .code(200)
       .addHeader("Content-Encoding", "gzip")
-      .setBody(new Buffer().write(Arrays.copyOfRange(gzip("gzipped body"), 4, 10))))
+      .body(new Buffer().write(Arrays.copyOfRange(gzip("gzipped body"), 4, 10)))
+      .build())
+    mockWebServer.start()
 
     when:
     def httpResponse = HttpClient.newHttpClient()
@@ -155,16 +161,18 @@ class HttpUtilSpec extends Specification {
     HttpUtil.getResponseBodyAsString(httpResponse) == ""
 
     cleanup:
-    mockWebServer.shutdown()
+    mockWebServer.close()
   }
 
   def "should return empty response body from http response if content encoding is unknown"() {
     given:
     def mockWebServer = new MockWebServer()
-    mockWebServer.enqueue(new MockResponse()
-      .setResponseCode(200)
+    mockWebServer.enqueue(new MockResponse.Builder()
+      .code(200)
       .addHeader("Content-Encoding", "br")
-      .setBody("plain text body but with wrong content-encoding"))
+      .body("plain text body but with wrong content-encoding")
+      .build())
+    mockWebServer.start()
 
     when:
     def httpResponse = HttpClient.newHttpClient()
@@ -176,7 +184,7 @@ class HttpUtilSpec extends Specification {
     HttpUtil.getResponseBodyAsString(httpResponse) == ""
 
     cleanup:
-    mockWebServer.shutdown()
+    mockWebServer.close()
   }
 
   def "getCookieHeaderValue() should extract cookie header value"() {
