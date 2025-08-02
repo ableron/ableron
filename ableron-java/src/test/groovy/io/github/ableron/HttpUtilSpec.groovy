@@ -203,7 +203,7 @@ class HttpUtilSpec extends Specification {
     ["Cookie": [" uid=1  ;TEST=A;  Foo=Bar  ;"]] | ["TEST", "Foo", "uid"] | Optional.of("uid=1; TEST=A; Foo=Bar")
   }
 
-  private byte[] gzip(String data) {
+  private static byte[] gzip(String data) {
     def bos = new ByteArrayOutputStream(data.length())
     def gzipOutputStream = new GZIPOutputStream(bos)
     gzipOutputStream.write(data.getBytes())
