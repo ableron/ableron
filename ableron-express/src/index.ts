@@ -17,7 +17,7 @@ export default function ableron(config?: Partial<AbleronConfig>, logger?: Logger
     let isIntercepting = false;
     let isFirstWrite = true;
 
-    function intercept(chunk, encoding) {
+    function intercept(chunk: string | Buffer | Uint8Array, encoding?: BufferEncoding | ((error: Error | null | undefined) => void)) {
       if (isFirstWrite) {
         isFirstWrite = false;
         isIntercepting =
@@ -71,6 +71,7 @@ export default function ableron(config?: Partial<AbleronConfig>, logger?: Logger
     ) {
       if (intercept(chunkOrCallback, encodingOrCallback)) {
         isIntercepting = false;
+        // @ts-ignore
         const originalBody = Buffer.concat(chunks).toString('utf8');
         let callbackToPass;
 
