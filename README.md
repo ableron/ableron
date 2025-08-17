@@ -51,6 +51,7 @@ The technical libs you may want to start with, are:
 * [![ableron-express @ Node.js 22 & Express 4 & CJS Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-express4-cjs.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-express4-cjs.yml)
 * [![ableron-fastify @ Node.js 22 & Fastify 4 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-fastify4.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-fastify4.yml)
 * [![ableron-fastify @ Node.js 22 & Fastify 5 Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-fastify5.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs22-fastify5.yml)
+* [![ableron-nestjs-fastify @ Node.js 24 & NestJS 11 & Fastify Status](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs24-nestjs11-fastify.yml/badge.svg)](https://github.com/ableron/ableron/actions/workflows/ableron-verify-nodejs24-nestjs11-fastify.yml)
 
 ### Contributing
 

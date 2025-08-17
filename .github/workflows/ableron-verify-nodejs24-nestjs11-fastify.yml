@@ -1,4 +1,4 @@
-name: "ableron-verify: ableron-spring-boot @ Java 21 & Spring Boot 2"
+name: "ableron-verify: ableron-nestjs-fastify @ Node.js 24 & NestJS 11 & Fastify 5"
 
 on: push
 
@@ -17,4 +17,4 @@ jobs:
           distribution: temurin
           cache: gradle
           cache-dependency-path: ableron-verify/build.gradle
-      - run: ./gradlew test --tests '*.Java21SpringBoot2Spec' --info
+      - run: ./gradlew test --tests '*.NodeJs24NestJs11FastifySpec' --info

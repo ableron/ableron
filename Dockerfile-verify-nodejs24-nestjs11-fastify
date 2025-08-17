@@ -1,0 +1,19 @@
+FROM node:24-alpine
+
+COPY ./ableron-js /opt/ableron-js
+WORKDIR /opt/ableron-js
+RUN npm install
+RUN npm run build
+
+COPY ./ableron-fastify /opt/ableron-fastify
+WORKDIR /opt/ableron-fastify
+RUN npm install /opt/ableron-js
+RUN npm install
+RUN npm run build
+
+COPY ./ableron-verify/nodejs24-nestjs11-fastify /opt/ableron-verify
+WORKDIR /opt/ableron-verify
+RUN npm install /opt/ableron-fastify
+RUN npm install
+
+ENTRYPOINT ["npm", "run", "start"]
