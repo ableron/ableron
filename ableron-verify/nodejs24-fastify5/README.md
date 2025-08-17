@@ -1,3 +1,3 @@
-# Test App for `ableron-fastify` @ Node.js 22 & Fastify 5
+# Test App for `ableron-fastify` @ Node.js 24 & Fastify 5
 
 `docker compose up --build` to run using local `ableron-js` and `ableron-fastify`

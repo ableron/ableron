@@ -1,4 +1,4 @@
-name: "ableron-verify: ableron-fastify @ Node.js 22 & Fastify 5"
+name: "ableron-verify: ableron-fastify @ Node.js 24 & Fastify 5"
 
 on: push
 
@@ -17,4 +17,4 @@ jobs:
           distribution: temurin
           cache: gradle
           cache-dependency-path: ableron-verify/build.gradle
-      - run: ./gradlew test --tests '*.NodeJs22Fastify5Spec' --info
+      - run: ./gradlew test --tests '*.NodeJs24Fastify5Spec' --info
