@@ -1,4 +1,4 @@
-name: "ableron-verify: ableron-nestjs-fastify @ Node.js 24 & NestJS 11 & Fastify 5"
+name: "ableron-verify: ableron-fastify @ Node.js 24 & NestJS 11"
 
 on: push
 
