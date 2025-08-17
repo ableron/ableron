@@ -1,0 +1,5 @@
+services:
+  ableron:
+    build:
+      context: ../..
+      dockerfile: Dockerfile-verify-nodejs24-express4-cjs

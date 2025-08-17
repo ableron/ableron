@@ -5,11 +5,11 @@ import org.testcontainers.images.builder.ImageFromDockerfile
 
 import java.nio.file.Path
 
-class NodeJs22CommonJsSpec extends BaseSpec {
+class NodeJs24CommonJsSpec extends BaseSpec {
 
   @Override
   GenericContainer getContainerUnderTest() {
     return new GenericContainer<>(new ImageFromDockerfile()
-      .withDockerfile(Path.of("..", "Dockerfile-verify-nodejs22-cjs")))
+      .withDockerfile(Path.of("..", "Dockerfile-verify-nodejs24-cjs")))
   }
 }

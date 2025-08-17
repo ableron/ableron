@@ -2,4 +2,4 @@ services:
   ableron:
     build:
       context: ../..
-      dockerfile: Dockerfile-verify-nodejs22-esm
+      dockerfile: Dockerfile-verify-nodejs24-esm

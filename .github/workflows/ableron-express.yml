@@ -10,7 +10,7 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-        nodeVersion: [20.x, 22.x, 23.x]
+        nodeVersion: [20.x, 22.x, 24.x]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4

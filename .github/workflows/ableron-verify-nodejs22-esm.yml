@@ -1,4 +1,4 @@
-name: "ableron-verify: ableron-js @ Node.js 22 using ES Modules"
+name: "ableron-verify: ableron-js @ Node.js 24 using ES Modules"
 
 on: push
 
@@ -17,4 +17,4 @@ jobs:
           distribution: temurin
           cache: gradle
           cache-dependency-path: ableron-verify/build.gradle
-      - run: ./gradlew test --tests '*.NodeJs22EsModulesSpec' --info
+      - run: ./gradlew test --tests '*.NodeJs24EsModulesSpec' --info

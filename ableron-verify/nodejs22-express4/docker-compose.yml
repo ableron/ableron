@@ -1,5 +1,0 @@
-services:
-  ableron:
-    build:
-      context: ../..
-      dockerfile: Dockerfile-verify-nodejs22-express4

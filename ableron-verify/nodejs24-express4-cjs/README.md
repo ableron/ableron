@@ -1,3 +1,3 @@
-# Test App for `ableron-express` @ Node.js 22 & Express 4 & CommonJS integration
+# Test App for `ableron-express` @ Node.js 24 & Express 4 & CommonJS integration
 
 `docker compose up --build` to run using local `ableron-js` and `ableron-express`

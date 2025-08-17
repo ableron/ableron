@@ -1,11 +1,11 @@
-FROM node:22-alpine
+FROM node:24-alpine
 
 COPY ./ableron-js /opt/ableron-js
 WORKDIR /opt/ableron-js
 RUN npm install
 RUN npm run build
 
-COPY ./ableron-verify/nodejs22-cjs /opt/ableron-verify
+COPY ./ableron-verify/nodejs24-cjs /opt/ableron-verify
 WORKDIR /opt/ableron-verify
 RUN npm install /opt/ableron-js
 RUN npm install

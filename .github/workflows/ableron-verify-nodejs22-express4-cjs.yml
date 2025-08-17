@@ -1,4 +1,4 @@
-name: "ableron-verify: ableron-express @ Node.js 22 & Express 4 & CommonJS"
+name: "ableron-verify: ableron-express @ Node.js 24 & Express 4 & CommonJS"
 
 on: push
 
@@ -17,4 +17,4 @@ jobs:
           distribution: temurin
           cache: gradle
           cache-dependency-path: ableron-verify/build.gradle
-      - run: ./gradlew test --tests '*.NodeJs22Express4CjsSpec' --info
+      - run: ./gradlew test --tests '*.NodeJs24Express4CjsSpec' --info
