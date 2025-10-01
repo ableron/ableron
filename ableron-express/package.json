@@ -55,8 +55,8 @@
     "express": "5.1.0",
     "prettier": "3.6.2",
     "supertest": "7.1.4",
-    "ts-loader": "9.5.2",
-    "typescript": "5.9.2",
+    "ts-loader": "9.5.4",
+    "typescript": "5.9.3",
     "vitest": "3.2.4"
   },
   "prettier": {
