@@ -55,7 +55,7 @@
     <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
     <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
-    <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
+    <central-publishing-maven-plugin.version>0.9.0</central-publishing-maven-plugin.version>
     <okhttp-mockwebserver.version>5.1.0</okhttp-mockwebserver.version>
     <slf4j.version>2.0.17</slf4j.version>
     <spock.version>2.4-M6-groovy-4.0</spock.version>
