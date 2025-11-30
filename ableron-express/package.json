@@ -51,13 +51,13 @@
     "@ableron/ableron": "^2.0.0"
   },
   "devDependencies": {
-    "@types/express": "5.0.3",
+    "@types/express": "5.0.5",
     "express": "5.1.0",
     "prettier": "3.6.2",
     "supertest": "7.1.4",
     "ts-loader": "9.5.4",
     "typescript": "5.9.3",
-    "vitest": "3.2.4"
+    "vitest": "4.0.6"
   },
   "prettier": {
     "printWidth": 120,
