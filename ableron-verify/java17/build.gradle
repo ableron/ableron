@@ -1,6 +1,6 @@
 plugins {
   id 'java'
-  id 'org.springframework.boot' version '3.5.7'
+  id 'org.springframework.boot' version '4.0.1'
 }
 
 group = 'io.github.ableron'
@@ -12,5 +12,5 @@ repositories {
 
 dependencies {
   implementation 'io.github.ableron:ableron:2.0.1-SNAPSHOT'
-  implementation 'org.springframework.boot:spring-boot-starter-web:3.5.7'
+  implementation 'org.springframework.boot:spring-boot-starter-web:4.0.1'
 }
