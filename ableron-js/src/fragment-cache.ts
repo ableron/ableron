@@ -1,4 +1,4 @@
-import TTLCache from '@isaacs/ttlcache';
+import { TTLCache } from '@isaacs/ttlcache'
 import Fragment from './fragment.js';
 import { LoggerInterface } from './logger.js';
 import { clearTimeout } from 'timers';
