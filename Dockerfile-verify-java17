@@ -1,4 +1,4 @@
-FROM gradle:8.13-jdk17
+FROM gradle:9.3-jdk17
 
 COPY ./ableron-java /opt/ableron-java
 WORKDIR /opt/ableron-java

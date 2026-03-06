@@ -5,11 +5,11 @@ import org.testcontainers.images.builder.ImageFromDockerfile
 
 import java.nio.file.Path
 
-class Java17SpringBoot3Spec extends BaseSpec {
+class Java17SpringBoot4Spec extends BaseSpec {
 
   @Override
   GenericContainer getContainerUnderTest() {
     return new GenericContainer<>(new ImageFromDockerfile()
-      .withDockerfile(Path.of("..", "Dockerfile-verify-java17-spring-boot-3")))
+      .withDockerfile(Path.of("..", "Dockerfile-verify-java17-spring-boot-4")))
   }
 }

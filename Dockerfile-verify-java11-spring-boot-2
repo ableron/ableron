@@ -1,4 +1,4 @@
-FROM gradle:8.13-jdk11
+FROM gradle:8.14-jdk11
 
 COPY ./ableron-java /opt/ableron-java
 WORKDIR /opt/ableron-java

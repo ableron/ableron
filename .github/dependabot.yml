@@ -78,7 +78,7 @@ updates:
         patterns:
           - "org.springframework.boot*"
   - package-ecosystem: 'gradle'
-    directory: '/ableron-verify/java17-spring-boot-3'
+    directory: '/ableron-verify/java17-spring-boot-4'
     schedule:
       interval: 'monthly'
     groups:
