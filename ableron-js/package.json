@@ -47,7 +47,7 @@
     "url": "https://github.com/ableron/ableron/issues"
   },
   "dependencies": {
-    "@isaacs/ttlcache": "2.1.4"
+    "@isaacs/ttlcache": "2.1.5"
   },
   "devDependencies": {
     "@types/node": "25.3.5",
